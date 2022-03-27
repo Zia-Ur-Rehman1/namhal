@@ -71,6 +71,7 @@ class Complains {
     data['desc'] = this.desc;
     data['service'] = this.service;
     data['address'] = this.address;
+    data['manager'] = this.manager;
     data['img'] = this.img;
     data['worker'] = this.worker;
     data['status'] = this.status;

@@ -7,6 +7,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 
 class PdfApi {
@@ -16,9 +17,7 @@ class PdfApi {
     final font = await PdfGoogleFonts.arimoRegular();
     final boldFont = await PdfGoogleFonts.arimoBold();
     final pdf = Document();
-    // final image =  MemoryImage(
-    //   File('assets/images/logo.png').readAsBytesSync(),
-    // );
+
 
     pdf.addPage(MultiPage(
         pageFormat: PdfPageFormat.a4,
@@ -37,15 +36,16 @@ class PdfApi {
     return saveDocument(name: id, pdf: pdf);
   }
 
-  static   Widget buildCustomReport(Complains complain, Font font, Font bold )  =>  Column(
-
+  static  Widget buildCustomReport(Complains complain, Font font, Font bold )  =>  Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildRichText("Title: ", complain.title.toString()),
+
           Table(
             children: [
               TableRow(children: [
-                buildRichText("Name: ", complain.username.toString()),
-                buildRichText("Address: ", complain.address.toString()),
+                buildRichText("Complained By: ", complain.username.toString()),
+                buildRichText("From ", complain.address.toString()),
               ]),
               TableRow(children: [
                 buildRichText("Priority: ", complain.priority.toString()),
@@ -55,34 +55,52 @@ class PdfApi {
                 buildRichText("Worker: ", complain.worker.toString()),
                 buildRichText("Service: ", complain.worker.toString())
               ]),
+              TableRow(children: [
+                buildRichText("StartTime: ", complain.startDate.toString()),
+                buildRichText("StartDate: ", complain.startTime.toString())
+              ]),
+              TableRow(children: [
+                buildRichText("EndTime: ", complain.endTime.toString()),
+                buildRichText("EndDate: ", complain.endDate.toString())
+              ]),
+
             ],
+
           ),
+          buildRichText("Managed By: ", complain.manager.toString()),
+
           Paragraph(
             text: "Description ",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,font: bold),
           ),
           Paragraph(
             text: complain.desc.toString(),
-            style: TextStyle(fontSize: 15, font: font),
+            style: TextStyle(fontSize: 14, font: font),
+
           ),
-          complain.img != null
-              ? UrlLink(
-                  destination: complain.img.toString(),
-                  child: Text('Attached Image',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: PdfColors.blue,
-                      )))
-              : Text("No Image Attached",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: PdfColors.black,
-                  )),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: complain.img != null
+                ? UrlLink(
+                destination: complain.img.toString(),
+                child: Text('Attached Image',
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: PdfColors.blue,
+                    )))
+                : Text("No Image Attached",
+                style: TextStyle(
+                  decoration: TextDecoration.none,
+                  color: PdfColors.black,
+                )),
+          ),
+
           Paragraph(
             text: "Feedback ",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           ),
           Paragraph(
+
             text: complain.feedback.toString(),
           ),
         ],

@@ -249,6 +249,7 @@ class _AddComplainState extends State<AddComplain> {
     CollectionReference complaint =
     FirebaseFirestore.instance.collection('Complains');
     User user =  FirebaseAuth.instance.currentUser!;
+
     Complains complains = Complains(
       username: user.email!.substring(0, user.email!.indexOf('@')),
       title: _titleController.text,
