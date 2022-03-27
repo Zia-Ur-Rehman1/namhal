@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "395310708522",
+    "project_id": "namhal",
+    "storage_bucket": "namhal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395310708522:android:4c6ea6decee3545ac91053",
+        "android_client_info": {
+          "package_name": "com.example.namhal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395310708522-7lq108o80ed8blq2j3a3g8nvkab9mlog.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqpj1wZc29ehs3bHwc2RMQn6Cf6qCk5B0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395310708522-7lq108o80ed8blq2j3a3g8nvkab9mlog.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
