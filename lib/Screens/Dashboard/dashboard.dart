@@ -5,6 +5,7 @@ import 'package:namhal/Components/side_menu.dart';
 import 'package:namhal/Screens/Add_Complain_Screen/add_Complain.dart';
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
 import 'package:namhal/Screens/Report/report.dart';
+import 'package:namhal/api/TokenHandling.dart';
 
 import 'package:namhal/model/complaint.dart';
 
@@ -24,6 +25,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  String? token;
   User? user;
   int pending=0;
   int Inprogress=0;
@@ -35,10 +37,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     user = auth.currentUser;
+
     loadData();
-
-
+    Token.GetToken(user!.email!, token);
   }
+
   void loadData(){
     FirebaseFirestore.instance.collection("Complains").where('username',isEqualTo: user!.email!.substring(0, user!.email!.indexOf('@'))).get().then((value) {
       if(mounted){
@@ -62,6 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -293,6 +297,7 @@ class ComplaintDetails extends StatelessWidget {
                 ),
               ),
               onPressed: () {
+
                 Navigator.push(
                     context, MaterialPageRoute(builder: (_) => AddComplain()));
               },

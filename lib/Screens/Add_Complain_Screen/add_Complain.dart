@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
+import 'package:namhal/api/notifyUser.dart';
 
 import '../../Utlities/Utils.dart';
 import '../../model/complaint.dart';
@@ -220,7 +221,9 @@ class _AddComplainState extends State<AddComplain> {
     );
   }
   Future setComplaint()  async {
+    //check connectivity
 
+    String? token;
     final isValid = formKey.currentState?.validate();
     if (!isValid!) return;
     if (selectedService== null) {
@@ -266,21 +269,27 @@ class _AddComplainState extends State<AddComplain> {
       address: Provider.of<add>(context,listen: false).address,
 
       img: image!=null?url:"No Image Attached",);
-    print(complains.toJson().toString());
-    await complaint.add(complains.toJson()).then((value) {
+
+    await complaint.add(complains.toJson()).then((value) async {
+      Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+      print("Getting user token");
+      await FirebaseFirestore.instance.collection('User').doc(serviceManager[selectedService]).get().then((
+          value) {
+        token = value.get('token');
+      });
+      if(token?.isNotEmpty??true){
+       await NotifyUser().Notify();
 
+       await NotifyUser.sendPushMessage(token!, complains.title.toString(), complains.username.toString()+"    "+complains.service.toString());
+      }
       Utils.showSnackBar("Complaint Added Successfully",Colors.green);
     }).catchError((e) {
 
       Navigator.pop(context);
       Utils.showSnackBar("Error Occured",Colors.red);
     });
-    // return users.add(data).then((value) async {
-    //   await Token();
-    //   NotifyUser.sendPushMessage(token!, complains.title.toString(), result);
-    // }).catchError((error) => print("Failed to add Complaint: $error"));
   }
 
 }

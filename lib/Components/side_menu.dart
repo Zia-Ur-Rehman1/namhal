@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:namhal/Screens/login.dart';
 class SideMenu extends StatelessWidget {
   const SideMenu({
     Key? key,
@@ -9,7 +10,7 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.blue,
       child: ListView(
         children: [
           DrawerHeader(
@@ -23,7 +24,7 @@ class SideMenu extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white54),
+                    color: Colors.white),
               ),
             ],
           )),
@@ -72,8 +73,10 @@ class SideMenu extends StatelessWidget {
             svgSrc: "assets/icons/menu_profile.svg",
             press: () async {
               await FirebaseAuth.instance.signOut();
-                Navigator.pop(context);
-                },
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
+            },
 
           ),
         ],
@@ -107,7 +110,7 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white54),
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

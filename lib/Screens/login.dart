@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -40,8 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Flexible(
                     child: Image.asset(
-                      'assets/images/logo.png',
-                    )),
+                  'assets/images/logo.png',
+                )),
                 Text(
                   "Namhal",
                   style: TextStyle(
@@ -91,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         onPressed: () {
                           setState(
-                                  () => this._showPassword = !this._showPassword);
+                              () => this._showPassword = !this._showPassword);
                         },
                       ),
                     ),
@@ -105,7 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 ElevatedButton(
                   onPressed: signIn,
-
                   child: Text(
                     "Login",
                     style: TextStyle(fontSize: 25, color: Colors.white),
@@ -137,27 +135,24 @@ class _LoginScreenState extends State<LoginScreen> {
       context: context,
       barrierDismissible: false,
       builder: (context) => Center(
-        child: isLoading
-            ? CircularProgressIndicator()
-            : SizedBox(),
+        child: isLoading ? CircularProgressIndicator() : SizedBox(),
       ),
     );
     setState(() {
       isLoading = true;
     });
     try {
-   await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text.trim(),
         password: pass.text.trim(),
       );
-
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
     }
-setState(() {
-  isLoading = false;
-});
-
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         //add dashboard and pass user object

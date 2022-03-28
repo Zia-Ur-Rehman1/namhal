@@ -8,12 +8,12 @@ import 'package:http/http.dart' as http;
 class NotifyUser {
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  NotifyUser() {
+   Future Notify()  async {
     requestPermission();
-    loadFCM();
-    listenFCM();
+    await loadFCM();
+    await listenFCM();
   }
-  static void sendPushMessage(String token, String body, String title) async {
+  static Future<void> sendPushMessage(String token, String body, String title) async {
     print("Send Push Message");
     try {
       await http.post(
@@ -21,7 +21,7 @@ class NotifyUser {
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization':
-              'key=AAAAHihaq7s:APA91bFPai91Lyz_Gqx9uQ0PctxCxVOVLGG29cssSU4Ilz9MknEjoHaDpGnlCSpLQfqU4oSLrOlC1TApeK_U5Xg-HHRfbVt3h-H2WNb9RZiFEJwCA0x4ajTQagyEbOA96xNNsfa289bd',
+              'key=AAAAXApatyo:APA91bGQBsooKjdgs0v2g0dEdQg8RhmTKvJdX1llWdwCp05_U_bD8u1jyPAYqIhQ66vdUUKuiL-NIf9_ilm_hk5d_Q4Hmsa58lHTEmYeu1OsCciouZtpuID3jrHiKlcgSXk8X6q7Hbz5',
         },
         body: jsonEncode(
           <String, dynamic>{
@@ -44,7 +44,7 @@ class NotifyUser {
     }
   }
 
-  void listenFCM() async {
+  Future listenFCM() async {
     print("Listen FCM");
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -67,9 +67,14 @@ class NotifyUser {
         );
       }
     });
-  }
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      print('Message: ${message.data}');
+    });
+   }
 
-  void loadFCM() async {
+
+  Future loadFCM() async {
     print("Load FCM");
     if (!kIsWeb) {
       channel = const AndroidNotificationChannel(
@@ -101,7 +106,7 @@ class NotifyUser {
     }
   }
 
-  void requestPermission() async {
+  static void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     NotificationSettings settings = await messaging.requestPermission(

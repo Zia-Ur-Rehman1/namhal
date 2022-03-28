@@ -43,7 +43,7 @@ class PdfApi {
             children: [
               TableRow(children: [
                 buildRichText("Complained By: ", complain.username.toString()),
-                buildRichText("From ", complain.address.toString()),
+                buildRichText("Address ", complain.address.toString()),
               ]),
               TableRow(children: [
                 buildRichText("Priority: ", complain.priority.toString()),
@@ -172,7 +172,7 @@ class PdfApi {
 
   static Future openFile(File file) async {
     final url = file.path;
-
+    print("File Path: $url");
     await OpenFile.open(url);
   }
 }
