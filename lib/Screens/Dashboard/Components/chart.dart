@@ -70,7 +70,7 @@ class Chart extends StatelessWidget {
     );
     sections.add(
       PieChartSectionData(
-        color: Colors.yellow,
+        color: Colors.orangeAccent,
         value: pending,
         radius: 15,
         showTitle: false,

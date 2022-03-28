@@ -52,6 +52,7 @@ dependencies:
   path_provider: ^2.0.9
   open_file: ^3.2.1
   printing: ^5.7.4
+  flutter_local_notifications: ^9.4.0
 
 dev_dependencies:
   flutter_test:

@@ -130,29 +130,34 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn() async {
-
+    bool isLoading = false;
     final isValid = formkey.currentState!.validate();
     if (!isValid) return;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => Center(
-        child: CircularProgressIndicator(),
+        child: isLoading
+            ? CircularProgressIndicator()
+            : SizedBox(),
       ),
     );
-
+    setState(() {
+      isLoading = true;
+    });
     try {
    await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text.trim(),
         password: pass.text.trim(),
       );
 
-
-
-
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
     }
+setState(() {
+  isLoading = false;
+});
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         //add dashboard and pass user object

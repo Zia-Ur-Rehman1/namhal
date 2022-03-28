@@ -7,7 +7,6 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-import 'package:intl/intl.dart';
 import 'package:printing/printing.dart';
 
 class PdfApi {
@@ -28,7 +27,7 @@ class PdfApi {
                   byteList,
                 ),height: 50,width: 50,),
                 SizedBox(width: 0.5 * PdfPageFormat.cm),
-                Text("Complaint Report"),
+                Text("Complaint Report" , style: TextStyle (font: boldFont,fontSize: 15),),
               ])),
               buildCustomReport(complain, font, boldFont),
             ]));
@@ -40,7 +39,6 @@ class PdfApi {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           buildRichText("Title: ", complain.title.toString()),
-
           Table(
             children: [
               TableRow(children: [
@@ -53,34 +51,70 @@ class PdfApi {
               ]),
               TableRow(children: [
                 buildRichText("Worker: ", complain.worker.toString()),
-                buildRichText("Service: ", complain.worker.toString())
+                buildRichText("Service: ", complain.service.toString())
               ]),
               TableRow(children: [
-                buildRichText("StartTime: ", complain.startDate.toString()),
-                buildRichText("StartDate: ", complain.startTime.toString())
+                buildRichText("StartDate: ", complain.startDate.toString()),
+                buildRichText("StartTime: ", complain.startTime.toString())
               ]),
               TableRow(children: [
-                buildRichText("EndTime: ", complain.endTime.toString()),
-                buildRichText("EndDate: ", complain.endDate.toString())
+                buildRichText("EndDate: ", complain.endDate==null?"---":complain.endDate.toString()),
+                buildRichText("EndTime: ", complain.endTime==null?"---":complain.endDate.toString())
               ]),
 
             ],
-
           ),
           buildRichText("Managed By: ", complain.manager.toString()),
-
           Paragraph(
+            margin: EdgeInsets.symmetric(vertical: 5),
             text: "Description ",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,font: bold),
           ),
-          Paragraph(
-            text: complain.desc.toString(),
-            style: TextStyle(fontSize: 14, font: font),
-
+          Container(
+            //add width in mm
+            width: (PdfPageFormat.a4.width - 2 * PdfPageFormat.cm) * 0.8,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: PdfColors.grey,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Paragraph(
+              padding: EdgeInsets.all(5),
+              text:complain.desc.toString(),
+              style: TextStyle(fontSize: 14, font: font),
+            ),
           ),
+
+
+
+          Paragraph(
+            margin: EdgeInsets.symmetric(vertical: 5),
+
+            text: "User Feedback ",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            //add width in mm
+            width: (PdfPageFormat.a4.width - 2 * PdfPageFormat.cm) * 0.8,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: PdfColors.grey,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Paragraph(
+              padding: EdgeInsets.all(5),
+              text:complain.feedback!=null?complain.feedback.toString():"No Feedback",
+              style: TextStyle(fontSize: 14, font: font),
+            ),
+          ),
+          SizedBox(height: 10),
           Align(
             alignment: Alignment.centerLeft,
-            child: complain.img != null
+            child: complain.img != "No Image Attached"
                 ? UrlLink(
                 destination: complain.img.toString(),
                 child: Text('Attached Image',
@@ -94,35 +128,30 @@ class PdfApi {
                   color: PdfColors.black,
                 )),
           ),
-
-          Paragraph(
-            text: "Feedback ",
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          Paragraph(
-
-            text: complain.feedback.toString(),
-          ),
         ],
       );
-  static RichText buildRichText(String title, String subtitle) {
+  static RichText buildRichText(String title, String subtitle)  {
     return RichText(
       text: TextSpan(
         text: title,
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: PdfColors.black,
-        ),
+
         children: [
           TextSpan(
             text: subtitle,
             style: TextStyle(
               fontSize: 15,
               color: PdfColors.black,
+              fontWeight: FontWeight.values[0],
+
             ),
           ),
         ],
+        style: TextStyle(
+          fontSize: 15,
+          color: PdfColors.black,
+          fontWeight: FontWeight.values[1],
+
+        ),
       ),
     );
   }

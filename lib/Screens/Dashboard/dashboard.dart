@@ -112,7 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: StreamBuilder<QuerySnapshot?>(
                                 stream: FirebaseFirestore.instance
                                     .collection('Complains')
-                                    .orderBy("startTime", descending: true)
+                                    .orderBy("timestamp", descending: true)
                                     .limitToLast(10)
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -139,11 +139,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                   as Map<String, dynamic>);
                                       return GestureDetector(
                                         onTap: (){
+
                                           Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complain,id: snapshot.data!.docs[index].id,)));
 
                                         },
                                         child: Card(
-
                                           elevation: 5,
                                           color: kSecondaryColor,
                                           shape: RoundedRectangleBorder(
@@ -184,7 +184,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                                 .toString()),
                                                         buildRichText(
                                                             "Service: ",
-                                                            complain.worker
+                                                            complain.service
                                                                 .toString())
                                                       ]),
                                                     ],
@@ -364,79 +364,3 @@ class ComplaintsCardGridView extends StatelessWidget {
     );
   }
 }
-// class ComplaintsCardGridView extends StatefulWidget {
-//   const ComplaintsCardGridView({
-//     Key? key,
-//     this.crossAxisCount = 4,
-//     this.childAspectRatio = 1,
-//   }) : super(key: key);
-//
-//   final int crossAxisCount;
-//   final double childAspectRatio;
-//
-//   @override
-//   State<ComplaintsCardGridView> createState() => _ComplaintsCardGridViewState();
-// }
-//
-// class _ComplaintsCardGridViewState extends State<ComplaintsCardGridView> {
-//   int pending=0;
-//   int Inprogress=0;
-//   int Completed=0;
-//   int Rejected=0;
-//   int total=0;
-//   User? user;
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     user=FirebaseAuth.instance.currentUser;
-//     FirebaseFirestore.instance.collection("Complains").where('username',isEqualTo: user!.email).get().then((value) {
-//       if(this.mounted){
-//       setState(() {
-//         total=value.docs.length;
-//         for(int i=0;i<value.docs.length;i++){
-//           if(value.docs[i].data()['status']=="Pending"){
-//             pending++;
-//           }
-//           if(value.docs[i].data()['status']=="Inprogress"){
-//             Inprogress++;
-//           }
-//           if(value.docs[i].data()['status']=="Completed"){
-//             Completed++;
-//           }
-//           if(value.docs[i].data()['status']=="Rejected"){
-//             Rejected++;
-//           }
-//         }
-//       });}
-//
-//     });
-//   }
-//   @override
-//   Widget build(BuildContext context) {
-//     return GridView.builder(
-//       physics: NeverScrollableScrollPhysics(),
-//       shrinkWrap: true,
-//       itemCount: ComplaintsDetails.length,
-//       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//         crossAxisCount: widget.crossAxisCount,
-//         crossAxisSpacing: kDefaultPadding,
-//         mainAxisSpacing: kDefaultPadding,
-//         childAspectRatio: widget.childAspectRatio,
-//       ),
-//       itemBuilder: (context, index) {
-//         ComplaintsStorageInfo info = ComplaintsDetails[index];
-//       if(info.title=="Pending"  )
-//         info.numOfFiles=pending;
-//       else if(info.title=="Inprogress" )
-//         info.numOfFiles=Inprogress;
-//       else if(info.title=="Completed" )
-//         info.numOfFiles=Completed;
-//       else if(info.title=="Rejected" )
-//         info.numOfFiles=Rejected;
-//
-//         return ComplaintsInfoCard(info: ComplaintsDetails[index],);
-//       },
-//     );
-//   }
-// }

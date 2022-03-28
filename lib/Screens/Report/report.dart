@@ -63,7 +63,7 @@ class _ReportState extends State<Report> {
                                 buildRichText("Worker: ",
                                     widget.complains.worker.toString()),
                                 buildRichText("Service: ",
-                                    widget.complains.worker.toString())
+                                    widget.complains.service.toString())
                               ]),
                               TableRow(children: [
                                 buildRichText("Date: ",
@@ -113,9 +113,9 @@ class _ReportState extends State<Report> {
                         height: MediaQuery.of(context).size.height / 4,
                         width: MediaQuery.of(context).size.width / 1.2,
                         child: CachedNetworkImage(
-                          imageUrl: widget.complains.img != null
+                          imageUrl: widget.complains.img != "No Image Attached"
                               ? widget.complains.img.toString()
-                              : "",
+                              : "No Image Attached",
                           fit: BoxFit.cover,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
@@ -172,6 +172,7 @@ class _ReportState extends State<Report> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
+                Center(child:isLoading? CircularProgressIndicator():SizedBox() ,),
 
                 Container(
                   height: 150,
@@ -198,7 +199,6 @@ class _ReportState extends State<Report> {
                         side: BorderSide(color: Colors.blue, width: 2)),
                   ),
                 ),
-                Center(child:isLoading? CircularProgressIndicator():SizedBox() ,),
 
               ],
             ),

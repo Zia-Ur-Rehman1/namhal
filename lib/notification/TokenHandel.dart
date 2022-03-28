@@ -1,19 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TokenHandel {
-  static Future<String> getUserToken(String email) async {
+  static Future<String> getUserToken(String uid) async {
     DocumentSnapshot snap = await FirebaseFirestore.instance
         .collection("UserPermission")
-        .doc(email)
+        .doc(uid)
         .get();
     return snap['token'];
   }
 
-  static Future<void> saveTokenToDatabase(String token, String email) async {
-    await FirebaseFirestore.instance
-        .collection('UserPermission')
-        .doc(email)
-        .set({
+  static Future<void> saveTokenToDatabase(String token, String uid) async {
+    // Assume user is logged in for this example
+
+    await FirebaseFirestore.instance.collection('UserPermission').doc(uid).set({
       'token': token,
       // FieldValue.arrayUnion([token])
     });

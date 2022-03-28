@@ -223,6 +223,14 @@ class _AddComplainState extends State<AddComplain> {
 
     final isValid = formKey.currentState?.validate();
     if (!isValid!) return;
+    if (selectedService== null) {
+      Utils.showSnackBar("Kindly add service ",Colors.red);
+      return;
+    }
+    if(Provider.of<add>(context,listen: false).address=="Not Set"){
+      Utils.showSnackBar("Kindly set address",Colors.red);
+      return;
+    }
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -230,11 +238,7 @@ class _AddComplainState extends State<AddComplain> {
         child: CircularProgressIndicator(),
       ),
     );
-    if (selectedService== null ) {
-      Utils.showSnackBar("Kindly fill all the fields",Colors.red);
-      Navigator.pop(context);
-      return;
-    }
+
     DateTime now = DateTime.now();
 
       if(image!=null){
@@ -245,26 +249,25 @@ class _AddComplainState extends State<AddComplain> {
         url = await refe.getDownloadURL();
       }
 
-
     CollectionReference complaint =
     FirebaseFirestore.instance.collection('Complains');
     User user =  FirebaseAuth.instance.currentUser!;
-
     Complains complains = Complains(
       username: user.email!.substring(0, user.email!.indexOf('@')),
       title: _titleController.text,
       desc: _descriptionController.text,
       status: "Pending",
-      worker: "Not Set",
+      worker: "Not Assign",
+      timestamp: Timestamp.now(),
       manager: serviceManager[selectedService],
       startDate: DateFormat.yMMMd().format(now),
       startTime: DateFormat().add_jm().format(now),
       service: selectedService,
       address: Provider.of<add>(context,listen: false).address,
 
-      img: image!=null?url:"No Image attached",);
-
-    complaint.add(complains.toJson()).then((value) {
+      img: image!=null?url:"No Image Attached",);
+    print(complains.toJson().toString());
+    await complaint.add(complains.toJson()).then((value) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
 

@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Report/report.dart';
 import '/model/complaint.dart';
 import 'Components/searchData.dart';
 import 'package:flutter/material.dart';
-import '/Components/side_menu.dart';
 
 class AdvanceSearch extends StatefulWidget {
   @override
@@ -16,10 +13,10 @@ class AdvanceSearch extends StatefulWidget {
 class _AdvanceSearchState extends State<AdvanceSearch> {
   List<Complains> complains = [];
 
-  Stream<QuerySnapshot> rightnow=FirebaseFirestore.instance.collection('Complains').orderBy("startTime", descending: true).snapshots();
+  Stream<QuerySnapshot> rightnow=FirebaseFirestore.instance.collection('Complains').orderBy("timestamp", descending: true).snapshots();
   String? sorting;
   Map<String, dynamic>? data;
-  final List<String> sortby = ["Alphabet", "Time", "Priority"];
+  final List<String> sortby = [ "Time", "Priority"];
   @override
   void initState() {
     // TODO: implement initState
@@ -85,43 +82,43 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             padding: EdgeInsets.all(8.0),
                             margin: EdgeInsets.all(10.0),
                           ),
-                          Container(
-                            margin: EdgeInsets.all(10.0),
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.blue,
-                                shape: BoxShape.rectangle,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0))),
-                            padding: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: DropdownButton(
-                              underline: SizedBox(),
-                              dropdownColor: Colors.blue,
-                              hint: Text(
-                                "Sort By",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              value: sorting,
-                              icon: Icon(
-                                Icons.arrow_drop_down_circle_outlined,
-                                color: Colors.white,
-                              ),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  sorting = newValue;
-                                });
-                              },
-                              items: sortby.map((valueItem) {
-                                return DropdownMenuItem(
-                                  value: valueItem,
-                                  child: Text(
-                                    valueItem,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
+                          // Container(
+                          //   margin: EdgeInsets.all(10.0),
+                          //   height: 40,
+                          //   decoration: BoxDecoration(
+                          //       color: Colors.blue,
+                          //       shape: BoxShape.rectangle,
+                          //       borderRadius:
+                          //           BorderRadius.all(Radius.circular(5.0))),
+                          //   padding: EdgeInsets.symmetric(horizontal: 5.0),
+                          //   child: DropdownButton(
+                          //     underline: SizedBox(),
+                          //     dropdownColor: Colors.blue,
+                          //     hint: Text(
+                          //       "Sort By",
+                          //       style: TextStyle(color: Colors.white),
+                          //     ),
+                          //     value: sorting,
+                          //     icon: Icon(
+                          //       Icons.arrow_drop_down_circle_outlined,
+                          //       color: Colors.white,
+                          //     ),
+                          //     onChanged: (String? newValue) {
+                          //       setState(() {
+                          //         sorting = newValue;
+                          //       });
+                          //     },
+                          //     items: sortby.map((valueItem) {
+                          //       return DropdownMenuItem(
+                          //         value: valueItem,
+                          //         child: Text(
+                          //           valueItem,
+                          //           style: TextStyle(color: Colors.white),
+                          //         ),
+                          //       );
+                          //     }).toList(),
+                          //   ),
+                          // ),
                           Container(
                             child: ElevatedButton(
                               onPressed: () {
@@ -210,7 +207,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                         TableRow(children: [
                                           buildRichText("Worker: ",
                                               complain.worker.toString()),
-                                          buildRichText("Service: ", complain.worker.toString())
+                                          buildRichText("Service: ", complain.service.toString())
                                         ]),
                                       ],
                                     ),
