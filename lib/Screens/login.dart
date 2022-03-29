@@ -128,19 +128,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn() async {
-    bool isLoading = false;
+
     final isValid = formkey.currentState!.validate();
     if (!isValid) return;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => Center(
-        child: isLoading ? CircularProgressIndicator() : SizedBox(),
+        child: CircularProgressIndicator(),
       ),
     );
-    setState(() {
-      isLoading = true;
-    });
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text.trim(),
@@ -148,10 +146,11 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      return;
     }
-    setState(() {
-      isLoading = false;
-    });
+
+
     Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
@@ -160,13 +159,5 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
     Utils.showSnackBar("User Authorized", Colors.green);
-
-    //pass email to load screen
-
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => LoadingScreen(),
-    //     ));
   }
 }

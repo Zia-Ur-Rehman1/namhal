@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:namhal/Screens/Add_Complain_Screen/add_Complain.dart';
-import 'package:provider/provider.dart';
 
 class Address extends StatefulWidget {
 
@@ -76,9 +76,7 @@ class _AddressState extends State<Address> {
                           onTap: () {
                             setState(() {
                               addressController.text = _filter[index];
-                              Provider.of<add>(context, listen: false)
-                                  .setAddress(_filter[index]);
-
+                              Provider.of<add>(context, listen: false).address = _filter[index];
                               _focusNode.unfocus();
                             });
                           },
@@ -94,8 +92,9 @@ class _AddressState extends State<Address> {
     return CompositedTransformTarget(
       link: this._layerLink,
       child: TextFormField(
+        autofocus: true,
+        textInputAction: TextInputAction.next,
         controller: addressController,
-
         focusNode: this._focusNode,
         decoration: InputDecoration(
           labelText: 'Address',
@@ -107,9 +106,15 @@ class _AddressState extends State<Address> {
           setState(() {
             if(_debounce?.isActive ?? false) _debounce!.cancel();
           _debounce = Timer( const Duration(microseconds: 500), () {
-            setState(() {
-              _filter = _hostel.where((hostel) => hostel.toLowerCase().replaceAll(RegExp(r'[^\w\\s]+'), '').contains(value.toLowerCase().replaceAll(RegExp(r'[^\w\\s]+'), ''))).toList();
-            });
+            if(mounted) {
+              setState(() {
+                _filter = _hostel.where((hostel) =>
+                    hostel.toLowerCase()
+                        .replaceAll(RegExp(r'[^\w\\s]+'), '')
+                        .contains(value.toLowerCase().replaceAll(
+                        RegExp(r'[^\w\\s]+'), ''))).toList();
+              });
+            }
           });
           });
         },

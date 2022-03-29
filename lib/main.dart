@@ -8,20 +8,23 @@ import 'package:provider/provider.dart';
 
 import 'Screens/login.dart';
 import 'Utlities/Utils.dart';
-import '/Screens/Add_Complain_Screen/add_Complain.dart';
+import 'providers/providers.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
   print(message.data);
   print('Handling a background message ${message.messageId}');
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
 }
+
+
+
+
 
 Future<void> main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
 
   runApp(const MyApp());
 
@@ -34,11 +37,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<add>(
-      create: (context) => add(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<add>(create: (_) => add()),
+        ChangeNotifierProvider<ComplaintObject>(create: (_) => ComplaintObject()),
+        ChangeNotifierProvider<Status>(create: (_) => Status()),
+      ],
 
       child: MaterialApp(
         scaffoldMessengerKey: Utils.messengerKey,
+        debugShowCheckedModeBanner: false,
+
         theme: ThemeData.light().copyWith(
           primaryColor: kPrimaryColor,
         ),

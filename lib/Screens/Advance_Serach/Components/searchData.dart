@@ -1,14 +1,13 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Screens/Report/report.dart';
-import 'package:namhal/model/complaint.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 
 class DataSearch extends SearchDelegate<String> {
 
-
+String? email;
+DataSearch({this.email});
 
 
 
@@ -56,8 +55,9 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
   // stream builder
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Complains').snapshots(),
-      builder: (context, snapshot) {
+      stream: FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo: email.toString().substring(0, email!.indexOf('@'))).snapshots(),
+        // stream: FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo: email).snapshots(),
+        builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(),
@@ -73,8 +73,8 @@ class DataSearch extends SearchDelegate<String> {
     itemBuilder: (context, index) {
     return  GestureDetector(
       onTap: (){
-        Complains complains = Complains.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complains,id: snapshot.data!.docs[index].id,)));
+
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(id: suggestions[index].id,)));
 
       },
       child: Card(

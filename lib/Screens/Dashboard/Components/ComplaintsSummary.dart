@@ -1,24 +1,19 @@
+import 'package:provider/provider.dart';
+
 import '/Components/complaints_summary_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Constants/constants.dart';
 import 'chart.dart';
+import '/providers/providers.dart';
 
 class ComplaintsSummary extends StatelessWidget {
-  final int total;
-  final int pending;
-  final int completed;
-  final int rejected;
-  final int inprogress;
+
 
   const ComplaintsSummary({
 
     Key? key,
-    required this.total,
-    required this.pending,
-    required this.completed,
-    required this.rejected,
-    required this.inprogress,
+
   }) : super(key: key);
 
   @override
@@ -41,36 +36,36 @@ class ComplaintsSummary extends StatelessWidget {
             ),
           ),
           SizedBox(height: kDefaultPadding),
-          Chart(total: total.toDouble(),pending: pending.toDouble(),completed: completed.toDouble(),rejected: rejected.toDouble(),inprogress: inprogress.toDouble(),),
+          Chart(),
           ComplaintsSummaryCard(
             svgSrc: kSvg,
             title: "Total Complaints",
             color: kPrimaryColor,
-            numOfFiles: total,
+            numOfFiles: context.read<Status>().total,
           ),
           ComplaintsSummaryCard(
             svgSrc: kSvg,
             title: "In progress Complaints",
             color: Colors.cyan,
-            numOfFiles: inprogress,
+            numOfFiles: context.read<Status>().InProgress,
           ),
           ComplaintsSummaryCard(
             svgSrc: kSvg,
             title: "Pending Complaints",
             color: Color(0xFFFFA113),
-            numOfFiles: pending,
+            numOfFiles: context.read<Status>().pending,
           ),
           ComplaintsSummaryCard(
             svgSrc: kSvg,
             title: "Completed Complaints",
             color: Colors.green,
-            numOfFiles: completed,
+            numOfFiles: context.read<Status>().completed,
           ),
           ComplaintsSummaryCard(
               title: "Rejected Complaints",
               svgSrc: kSvg,
               color: Colors.red,
-              numOfFiles: rejected),
+              numOfFiles: context.read<Status>().rejected),
         ],
       ),
     );

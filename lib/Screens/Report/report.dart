@@ -1,17 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:namhal/api/pdf_api.dart';
-import 'package:namhal/model/complaint.dart';
 import 'package:namhal/model/log.dart';
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
 import '../../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+
 class Report extends StatefulWidget {
-  final Complains complains;
+
   final String id;
 
-  const Report({Key? key, required this.complains, required this.id}) : super(key: key);
+  const Report({Key? key, required this.id})
+      : super(key: key);
 
   @override
   _ReportState createState() => _ReportState();
@@ -19,6 +23,7 @@ class Report extends StatefulWidget {
 
 class _ReportState extends State<Report> {
   bool isLoading = false;
+  double rating = 0;
   TextEditingController message = TextEditingController();
 
   @override
@@ -44,32 +49,32 @@ class _ReportState extends State<Report> {
                       child: Column(
                         children: [
                           buildRichText(
-                              "Title: ", widget.complains.title.toString()),
+                              "Title: ", context.read<ComplaintObject>().complaint.title.toString()),
                           Table(
                             children: [
                               TableRow(children: [
                                 buildRichText("Name: ",
-                                    widget.complains.username.toString()),
+                                    context.read<ComplaintObject>().complaint.username.toString()),
                                 buildRichText("Address: ",
-                                    widget.complains.address.toString()),
+                                    context.read<ComplaintObject>().complaint.address.toString()),
                               ]),
                               TableRow(children: [
                                 buildRichText("Priority: ",
-                                    widget.complains.priority.toString()),
+                                    context.read<ComplaintObject>().complaint.priority.toString()),
                                 buildRichText("Status: ",
-                                    widget.complains.status.toString()),
+                                    context.read<ComplaintObject>().complaint.status.toString()),
                               ]),
                               TableRow(children: [
                                 buildRichText("Worker: ",
-                                    widget.complains.worker.toString()),
+                                    context.read<ComplaintObject>().complaint.worker.toString()),
                                 buildRichText("Service: ",
-                                    widget.complains.service.toString())
+                                    context.read<ComplaintObject>().complaint.service.toString())
                               ]),
                               TableRow(children: [
                                 buildRichText("Date: ",
-                                    widget.complains.startDate.toString()),
+                                    context.read<ComplaintObject>().complaint.startDate.toString()),
                                 buildRichText("Time: ",
-                                    widget.complains.startTime.toString())
+                                    context.read<ComplaintObject>().complaint.startTime.toString())
                               ]),
                             ],
                           ),
@@ -95,7 +100,7 @@ class _ReportState extends State<Report> {
                     child: Container(
                       margin: EdgeInsets.all(10),
                       child: Text(
-                        widget.complains.desc.toString(),
+                        context.read<ComplaintObject>().complaint.desc.toString(),
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
                     ),
@@ -113,8 +118,8 @@ class _ReportState extends State<Report> {
                         height: MediaQuery.of(context).size.height / 4,
                         width: MediaQuery.of(context).size.width / 1.2,
                         child: CachedNetworkImage(
-                          imageUrl: widget.complains.img != "No Image Attached"
-                              ? widget.complains.img.toString()
+                          imageUrl: context.read<ComplaintObject>().complaint.img != "No Image Attached"
+                              ? context.read<ComplaintObject>().complaint.img.toString()
                               : "No Image Attached",
                           fit: BoxFit.cover,
                           progressIndicatorBuilder:
@@ -141,30 +146,42 @@ class _ReportState extends State<Report> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
-                    OutlinedButton.icon(onPressed: () async {
-                      await openDialog("Log");
-                      if(message.text.isNotEmpty){
-                        AddLog(widget.id, message.text);
-                        message.clear();
-                      }
-                    }, icon: Icon(Icons.add), label: Text("Add Log")),
-                    OutlinedButton.icon(onPressed: () async{
-                      await openDialog("Feedback");
-                      if(message.text.isNotEmpty){
-                        FirebaseFirestore.instance.collection("Complains").doc(widget.id).update({
-                          "feedback": message.text,
-                        }).then((value) => print("User Updated"))
-                            .catchError((error) => print("Failed to update user: $error"));
-                        setState(() {
-                          widget.complains.feedback = message.text;
-                        });
-                        message.clear();
-                      }
-                    },icon: Icon(Icons.add), label: Text("Give Feedback")),
-
-                ],),
-
+                    OutlinedButton.icon(
+                        onPressed: () async {
+                          await openDialog("Log");
+                          if (message.text.isNotEmpty) {
+                            AddLog(widget.id, message.text);
+                            message.clear();
+                          }
+                        },
+                        icon: Icon(Icons.add),
+                        label: Text("Add Log")),
+                    OutlinedButton.icon(
+                        onPressed: () async {
+                          await openDialog("Feedback");
+                          if (message.text.isNotEmpty) {
+                            FirebaseFirestore.instance
+                                .collection("Complains")
+                                .doc(widget.id)
+                                .update({
+                                  "feedback": message.text,
+                                })
+                                .then((value) => print("User Updated"))
+                                .catchError((error) =>
+                                    print("Failed to update user: $error"));
+                            setState(() {
+                              context.read<ComplaintObject>().complaint.feedback = message.text;
+                            });
+                            message.clear();
+                          }
+                        },
+                        icon: Icon(Icons.add),
+                        label: Text("Give Feedback")),
+                  ],
+                ),
+                Center(
+                  child: isLoading ? CircularProgressIndicator() : SizedBox(),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: Text(
@@ -172,7 +189,6 @@ class _ReportState extends State<Report> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                Center(child:isLoading? CircularProgressIndicator():SizedBox() ,),
 
                 Container(
                   height: 150,
@@ -184,9 +200,9 @@ class _ReportState extends State<Report> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Container(
-                          child: widget.complains.feedback != null
+                          child: context.read<ComplaintObject>().complaint.feedback != null
                               ? Text(
-                                  widget.complains.feedback.toString(),
+                            context.read<ComplaintObject>().complaint.feedback.toString(),
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black),
                                 )
@@ -199,21 +215,20 @@ class _ReportState extends State<Report> {
                         side: BorderSide(color: Colors.blue, width: 2)),
                   ),
                 ),
-
+                buildRating(true),
+                //add rating here
+               OutlinedButton.icon(onPressed: showRating, icon:Text("Rate It!") , label: Icon(Icons.thumb_up_alt_outlined))
               ],
             ),
           ),
-
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
-
         onPressed: () async {
           setState(() {
             isLoading = true;
           });
-          final pdf= await PdfApi.generate(widget.complains, widget.id);
+          final pdf = await PdfApi.generate(context.read<ComplaintObject>().complaint, widget.id);
           setState(() {
             isLoading = false;
           });
@@ -247,7 +262,6 @@ class _ReportState extends State<Report> {
   }
 
   Widget buildLog(BuildContext context) => ExpansionTile(
-
         title: Text(
           "Logs",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -258,14 +272,14 @@ class _ReportState extends State<Report> {
         children: [
           StreamBuilder<QuerySnapshot?>(
             stream: FirebaseFirestore.instance
-                .collection('Logs').where("id", isEqualTo: widget.id)
+                .collection('Logs')
+                .where("id", isEqualTo: widget.id)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 Text("Error");
               }
-              if (snapshot.connectionState ==
-                  ConnectionState.waiting) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
@@ -279,17 +293,15 @@ class _ReportState extends State<Report> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
-                  final Logs log =
-                  Logs.fromMap(
-                      snapshot.data!.docs[index].data()
-                      as Map<String, dynamic>) ;
+                  final Logs log = Logs.fromMap(snapshot.data!.docs[index]
+                      .data() as Map<String, dynamic>);
                   return Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                           log.user.toString(),
+                            log.user.toString(),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(log.date.toString()),
@@ -308,35 +320,107 @@ class _ReportState extends State<Report> {
               );
             },
           ),
-
-
         ],
       );
-  Future<String?> openDialog(String text)=> showDialog<String>(context: context, builder: (context)=>AlertDialog(
-  title: Text("Add "+ text),
-    content: TextField(
-      controller: message,
-      autofocus: true,
-    decoration: InputDecoration(
-      hintText: "Enter "+text,
-    ),
-  ),
-    actions: [
-      TextButton(
-        onPressed: (){
-          Navigator.of(context).pop(message.text);
-        },
-        child: Text("Submit"),
-      ),
-    ],
-  ));
+  Future<String?> openDialog(String text) => showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text("Add " + text),
+            content: TextField(
+              controller: message,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Enter " + text,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(message.text);
+                },
+                child: Text("Submit"),
+              ),
+            ],
+          ));
   @override
   void dispose() {
     super.dispose();
     message.dispose();
   }
+
+  Widget buildRating(bool gesture){
+    return     Center(
+      child: RatingBar.builder(
+        initialRating: context.read<ComplaintObject>().complaint.rating?.toDouble() ?? 0,
+        itemCount: 5,
+        ignoreGestures: gesture,
+        updateOnDrag: true,
+        allowHalfRating: true,
+        itemBuilder: (context, index) {
+          switch (index) {
+            case 0:
+              return Icon(
+                Icons.sentiment_very_dissatisfied,
+                color: Colors.red,
+              );
+            case 1:
+              return Icon(
+                Icons.sentiment_dissatisfied,
+                color: Colors.orange,
+              );
+            case 2:
+              return Icon(
+                Icons.sentiment_neutral,
+                color: Colors.amber,
+              );
+            case 3:
+              return Icon(
+                Icons.sentiment_satisfied,
+                color: Colors.lightGreen,
+              );
+            case 4:
+              return Icon(
+                Icons.sentiment_very_satisfied,
+                color: Colors.green,
+              );
+            default:
+              return Icon(
+                Icons.sentiment_neutral,
+                color: Colors.green,
+              );
+          }
+        },
+        glow: true,
+        onRatingUpdate: (newRating) {
+          setState(() {
+            context.read<ComplaintObject>().complaint.rating = newRating;
+          });
+        },
+      ),
+    );
+  }
+
+  void showRating() => showDialog(context: context, builder: (context) => AlertDialog(
+    title: Text("Rate this Complain"),
+    content:  Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text("Please rate the quality of the service"),
+        SizedBox(height: 10,),
+        buildRating(false),
+      ],),
+    actions: [
+      TextButton(onPressed: (){
+        FirebaseFirestore.instance.collection('Complains').doc(widget.id).update({'rating': context.read<ComplaintObject>().complaint.rating});
+        Navigator.of(context).pop();
+      }, child: Text("Submit")),
+    ],
+  ));
+
 }
-AddLog(String id,String message){
+
+AddLog(String id, String message) {
   User? user = FirebaseAuth.instance.currentUser;
   DateTime now = DateTime.now();
   Logs log = Logs(
@@ -347,12 +431,7 @@ AddLog(String id,String message){
     time: DateFormat().add_jm().format(now),
   );
   FirebaseFirestore.instance.collection('Logs').add(log.toJson());
-
-
-
 }
-
-
 DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
       value: item,
       alignment: Alignment.center,

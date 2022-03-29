@@ -4,12 +4,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:namhal/Constants/constants.dart';
+import 'package:namhal/Utlities/Utils.dart';
 
 class NotifyUser {
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-   Future Notify()  async {
-    requestPermission();
+   Future Notify( )  async {
     await loadFCM();
     await listenFCM();
   }
@@ -40,15 +41,17 @@ class NotifyUser {
         ),
       );
     } catch (e) {
-      print("error push notification");
+    Utils.showSnackBar("Notification Error $e", kSecondaryColor);
     }
   }
 
   Future listenFCM() async {
     print("Listen FCM");
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("On Message");
+
+      RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null && !kIsWeb) {
         flutterLocalNotificationsPlugin.show(
@@ -59,18 +62,18 @@ class NotifyUser {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
+              playSound: true,
+              priority: Priority.max,
               // TODO add a proper drawable resource to android, for now using
               //      one that already exists in example app.
-              icon: 'launch_background',
+              icon: '@mipmap/ic_launcher',
             ),
           ),
         );
       }
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      print('Message: ${message.data}');
-    });
+
+
    }
 
 
@@ -80,8 +83,9 @@ class NotifyUser {
       channel = const AndroidNotificationChannel(
         'high_importance_channel', // id
         'High Importance Notifications', // title
-        importance: Importance.high,
+        importance: Importance.max,
         enableVibration: true,
+        playSound: true,
       );
 
       flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();

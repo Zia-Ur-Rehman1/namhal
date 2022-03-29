@@ -1,21 +1,16 @@
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
+
 import '/Constants/constants.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class Chart extends StatelessWidget {
-  final double total;
-  final double pending;
-  final double completed;
-  final double rejected;
-  final double inprogress;
+
 
   const Chart({
     Key? key,
-    required this.total,
-    required this.pending,
-    required this.completed,
-    required this.rejected,
-    required this.inprogress,
+
   }) : super(key: key);
 
   @override
@@ -29,7 +24,7 @@ class Chart extends StatelessWidget {
               sectionsSpace: 0,
               centerSpaceRadius: 70,
               startDegreeOffset: -90,
-              sections:getSection(total, pending, completed, rejected, inprogress),
+              sections:getSection(context.read<Status>().total.toDouble(), context.read<Status>().pending.toDouble(), context.read<Status>().completed.toDouble(), context.read<Status>().rejected.toDouble(), context.read<Status>().InProgress.toDouble()),
             ),
           ),
           Positioned.fill(
@@ -39,7 +34,7 @@ class Chart extends StatelessWidget {
                 SizedBox(height: kDefaultPadding),
                 Text(
                   //parse as int
-                  '${(completed).toStringAsFixed(0)}'+ " Completed",
+                  '${(context.read<Status>().completed).toStringAsFixed(0)}'+ " Completed",
                   style: TextStyle(
                     color: kSecondaryColor,
                     fontWeight: FontWeight.w600,
@@ -47,7 +42,7 @@ class Chart extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "out of "+'${(total).toStringAsFixed(0)}' + " Total",
+                  "out of "+'${(context.read<Status>().completed).toStringAsFixed(0)}' + " Total",
                   style: TextStyle(color: kSecondaryColor),
                 )
               ],
@@ -78,6 +73,7 @@ class Chart extends StatelessWidget {
     );
     sections.add(
       PieChartSectionData(
+
         color: Colors.green,
         value: completed,
         radius: 10,

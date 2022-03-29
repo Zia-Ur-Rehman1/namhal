@@ -21,7 +21,7 @@ class Complains {
   Timestamp? timestamp;
   bool? isComplete;
   int? reissue;
-
+  double? rating;
   Complains({
     this.username,
     this.title,
@@ -42,6 +42,8 @@ class Complains {
     this.feedback,
     this.isComplete = false,
     this.reissue = 0,
+    this.rating=0.0,
+
   });
 
 
@@ -50,6 +52,7 @@ class Complains {
     data['username'] = this.username;
     data['title'] = this.title;
     data['desc'] = this.desc;
+
     data['service'] = this.service;
     data['address'] = this.address;
     data['manager'] = this.manager;
@@ -65,6 +68,7 @@ class Complains {
     data['feedback'] = this.feedback;
     data['isComplete'] = this.isComplete;
     data['reissue'] = this.reissue;
+    data['rating'] = this.rating;
     // data['notification'] = this.notification;
     return data;
   }
@@ -90,11 +94,12 @@ class Complains {
     this.feedback = map['feedback'];
     this.isComplete = map['isComplete'] as bool;
     this.reissue = map['reissue'] as int;
+    this.rating = map['rating'] as double;
     // this.notification = map['notification'];
   }
 
   @override
   String toString() {
-    return 'Complains{username: $username, title: $title, desc: $desc, service: $service, address: $address, img: $img, worker: $worker, status: $status, manager: $manager, priority: $priority, startTime: $startTime, startDate: $startDate, endTime: $endTime, endDate: $endDate, feedback: $feedback, timestamp: $timestamp, isComplete: $isComplete, reissue: $reissue}';
+    return 'Complains{username: $username, title: $title, desc: $desc, service: $service, address: $address, img: $img, worker: $worker, status: $status, manager: $manager, priority: $priority, startTime: $startTime, startDate: $startDate, endTime: $endTime, endDate: $endDate, feedback: $feedback, timestamp: $timestamp, isComplete: $isComplete, reissue: $reissue, rating: $rating}';
   }
 }
