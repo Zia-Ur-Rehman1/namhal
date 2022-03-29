@@ -10,18 +10,21 @@ import 'Screens/login.dart';
 import 'Utlities/Utils.dart';
 import '/Screens/Add_Complain_Screen/add_Complain.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
   print(message.data);
   print('Handling a background message ${message.messageId}');
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
 }
+
+
+
+
 
 Future<void> main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
 
   runApp(const MyApp());
 

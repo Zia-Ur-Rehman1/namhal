@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
+import 'package:namhal/api/TokenHandling.dart';
 import 'package:namhal/api/notifyUser.dart';
 
 import '../../Utlities/Utils.dart';
@@ -45,7 +46,7 @@ class _AddComplainState extends State<AddComplain> {
         this.image = imageTemporary;
       });
     } on PlatformException catch (e) {
-      print("Failed to pick image: $e");
+      Utils.showSnackBar("Failed to pick image: $e", Colors.red);
     }
   }
 
@@ -63,7 +64,7 @@ class _AddComplainState extends State<AddComplain> {
           child: Form(
             key: formKey,
             child: Column(
-
+              mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
                   height: 10,
@@ -107,11 +108,16 @@ class _AddComplainState extends State<AddComplain> {
                     prefixIcon: Icon(Icons.insert_comment_outlined),
                   ),
                 ),
+
+                SizedBox(
+                  height: 10,
+                ),
+                Address(),
                 SizedBox(
                   height: 10,
                 ),
                 Container(
-
+                  height: 60,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.blue, width: 2),
                       borderRadius: BorderRadius.circular(5)),
@@ -144,14 +150,15 @@ class _AddComplainState extends State<AddComplain> {
                         );
                       }
                       return DropdownButtonFormField<dynamic>(
+
                           menuMaxHeight: 300.0,
                           decoration: InputDecoration(
-
                             prefixIcon: Icon(Icons.engineering_outlined),
                           ),
                           iconSize: 50,
                           elevation: 5,
-                          isExpanded: true,
+                          isExpanded: false,
+
                           hint: Text("Select Service"),
                           isDense: true,
                           value: selectedService,
@@ -163,16 +170,6 @@ class _AddComplainState extends State<AddComplain> {
                           });
                     },
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-
-            Address(),
-           // get value
-
-                SizedBox(
-                  height: 10.0,
                 ),
 
                 if (image != null)
@@ -223,7 +220,6 @@ class _AddComplainState extends State<AddComplain> {
   Future setComplaint()  async {
     //check connectivity
 
-    String? token;
     final isValid = formKey.currentState?.validate();
     if (!isValid!) return;
     if (selectedService== null) {
@@ -274,15 +270,16 @@ class _AddComplainState extends State<AddComplain> {
       Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-      print("Getting user token");
+      String? token;
       await FirebaseFirestore.instance.collection('User').doc(serviceManager[selectedService]).get().then((
           value) {
         token = value.get('token');
       });
-      if(token?.isNotEmpty??true){
-       await NotifyUser().Notify();
-
-       await NotifyUser.sendPushMessage(token!, complains.title.toString(), complains.username.toString()+"    "+complains.service.toString());
+      if(token!.length>2) {
+        NotifyUser().Notify();
+        NotifyUser.sendPushMessage(token!,
+            complains.username.toString() + "   " +
+                complains.service.toString(), complains.title.toString());
       }
       Utils.showSnackBar("Complaint Added Successfully",Colors.green);
     }).catchError((e) {
@@ -295,7 +292,6 @@ class _AddComplainState extends State<AddComplain> {
 }
 class add extends ChangeNotifier{
   String address="Not Set";
-
   void setAddress(String new_address){
     address = new_address;
     notifyListeners();

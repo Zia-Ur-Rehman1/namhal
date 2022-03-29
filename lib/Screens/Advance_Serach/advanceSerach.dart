@@ -6,6 +6,8 @@ import 'Components/searchData.dart';
 import 'package:flutter/material.dart';
 
 class AdvanceSearch extends StatefulWidget {
+  String? email;
+  AdvanceSearch({required this.email});
   @override
   _AdvanceSearchState createState() => _AdvanceSearchState();
 }
@@ -13,7 +15,7 @@ class AdvanceSearch extends StatefulWidget {
 class _AdvanceSearchState extends State<AdvanceSearch> {
   List<Complains> complains = [];
 
-  Stream<QuerySnapshot> rightnow=FirebaseFirestore.instance.collection('Complains').orderBy("timestamp", descending: true).snapshots();
+  late Stream<QuerySnapshot> rightnow;
   String? sorting;
   Map<String, dynamic>? data;
   final List<String> sortby = [ "Time", "Priority"];
@@ -21,7 +23,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+  rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).orderBy("timestamp", descending: true).snapshots();
   }
 
   @override
@@ -60,7 +62,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').orderBy("startTime", descending: true).snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).orderBy("timestamp", descending: true).snapshots();
                                 });
                               },
                               child: Text("All"),
@@ -72,7 +74,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("status",isEqualTo: "Pending").snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Pending").snapshots();
 
                                 });
 
@@ -123,7 +125,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("status",isEqualTo: "InProgress").snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "InProgress").snapshots();
 
                                 });
                               },
@@ -136,7 +138,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("status",isEqualTo: "Completed").snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Completed").snapshots();
 
                                 });
                               },

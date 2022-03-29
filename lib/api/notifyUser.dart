@@ -4,12 +4,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
+import 'package:namhal/Constants/constants.dart';
+import 'package:namhal/Utlities/Utils.dart';
 
 class NotifyUser {
   late AndroidNotificationChannel channel;
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
    Future Notify()  async {
-    requestPermission();
     await loadFCM();
     await listenFCM();
   }
@@ -40,7 +41,7 @@ class NotifyUser {
         ),
       );
     } catch (e) {
-      print("error push notification");
+    Utils.showSnackBar("Notification Error $e", kSecondaryColor);
     }
   }
 
@@ -59,18 +60,40 @@ class NotifyUser {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
+              playSound: true,
+              priority: Priority.max,
               // TODO add a proper drawable resource to android, for now using
               //      one that already exists in example app.
-              icon: 'launch_background',
+              icon: '@mipmap/ic_launcher',
             ),
           ),
         );
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
-      print('Message: ${message.data}');
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null && !kIsWeb) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              playSound: true,
+              priority: Priority.max,
+              // TODO add a proper drawable resource to android, for now using
+              //      one that already exists in example app.
+              icon: '@mipmap/ic_launcher',
+            ),
+          ),
+        );
+      }
     });
+
+
    }
 
 
@@ -80,7 +103,7 @@ class NotifyUser {
       channel = const AndroidNotificationChannel(
         'high_importance_channel', // id
         'High Importance Notifications', // title
-        importance: Importance.high,
+        importance: Importance.max,
         enableVibration: true,
       );
 

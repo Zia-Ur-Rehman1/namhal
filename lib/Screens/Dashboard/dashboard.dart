@@ -27,8 +27,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String? token;
   User? user;
-  int pending=0;
-  int Inprogress=0;
+  int Pending=0;
+  int InProgress=0;
   int Completed=0;
   int Rejected=0;
   int total=0;
@@ -37,22 +37,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     user = auth.currentUser;
-
     loadData();
     Token.GetToken(user!.email!, token);
   }
+  Future<void> loadData() async {
 
-  void loadData(){
-    FirebaseFirestore.instance.collection("Complains").where('username',isEqualTo: user!.email!.substring(0, user!.email!.indexOf('@'))).get().then((value) {
+    Pending=0;
+    InProgress=0;
+    Completed=0;
+    Rejected=0;
+    total=0;
+   await FirebaseFirestore.instance.collection("Complains").where('manager',isEqualTo: user!.email!).get().then((value) {
+   //  await FirebaseFirestore.instance.collection("Complains").where('username',isEqualTo: user!.email!.substring(0, user!.email!.indexOf('@'))).get().then((value) {
+
       if(mounted){
         setState(() {
           total=value.docs.length;
           for(int i=0;i<value.docs.length;i++){
             if(value.docs[i].data()['status']=="Pending"){
-              pending++;
+    Pending++;
             }
             else if(value.docs[i].data()['status']=="InProgress"){
-              Inprogress++;
+    InProgress++;
             }
             else if(value.docs[i].data()['status']=="Completed"){
               Completed++;
@@ -71,163 +77,166 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      drawer: SideMenu(),
+      drawer: const SideMenu(),
 
-      backgroundColor: Color(0xFFE5E5E5),
+      backgroundColor:const Color(0xFFE5E5E5),
       appBar: AppBar(
         backgroundColor: Colors.blue,
         centerTitle: true,
-        title: Text("NAMHAL"),
+        title: const Text( "NAMHAL"),
       ),
       body: Center(
         child: Scrollbar(
-          child: SingleChildScrollView(
-            //show scrolls
+          child: RefreshIndicator(
+            onRefresh: loadData,
+            child: SingleChildScrollView(
+              //show scrolls
 
-            padding: EdgeInsets.all(kDefaultPadding),
-            child: Column(
-              children: [
-                SizedBox(height: kDefaultPadding),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          ComplaintDetails(total: total,pending: pending,completed: Completed,rejected: Rejected,inprogress: Inprogress,),
-                          SizedBox(height: kDefaultPadding),
-                          const Text(
-                            "Recent Complaints",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blueGrey),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: kDefaultPadding),
-                          Card(
-                            color: Colors.blueGrey[50],
-                            elevation: 5,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 300,
-                              child: StreamBuilder<QuerySnapshot?>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('Complains')
-                                    .orderBy("timestamp", descending: true)
-                                    .limitToLast(10)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasError) {
-                                    Text("Error");
-                                  }
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  if (snapshot.data?.docs.length == 0)
-                                    return Center(
-                                      child: Text("No Complaints"),
-                                    );
-                                  return ListView.builder(
-                                    itemCount: snapshot.data!.docs.length,
-                                    itemBuilder: (context, index) {
-
-                                      final Complains complain =
-                                          Complains.fromMap(
-                                              snapshot.data!.docs[index].data()
-                                                  as Map<String, dynamic>);
-                                      return GestureDetector(
-                                        onTap: (){
-
-                                          Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complain,id: snapshot.data!.docs[index].id,)));
-
-                                        },
-                                        child: Card(
-                                          elevation: 5,
-                                          color: kSecondaryColor,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(12.0))),
-                                          child: Container(
-                                              padding: EdgeInsets.all(10),
-                                              child: Column(
-                                                children: [
-                                                  buildRichText("Title: ",
-                                                      complain.title.toString()),
-                                                  Table(
-                                                    children: [
-                                                      TableRow(children: [
-                                                        buildRichText(
-                                                            "Name: ",
-                                                            complain.username
-                                                                .toString()),
-                                                        buildRichText(
-                                                            "Address: ",
-                                                            complain.address
-                                                                .toString()),
-                                                      ]),
-                                                      TableRow(children: [
-                                                        buildRichText(
-                                                            "Priority: ",
-                                                            complain.priority
-                                                                .toString()),
-                                                        buildRichText(
-                                                            "Status: ",
-                                                            complain.status
-                                                                .toString()),
-                                                      ]),
-                                                      TableRow(children: [
-                                                        buildRichText(
-                                                            "Worker: ",
-                                                            complain.worker
-                                                                .toString()),
-                                                        buildRichText(
-                                                            "Service: ",
-                                                            complain.service
-                                                                .toString())
-                                                      ]),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )),
-                                        ),
+              padding: EdgeInsets.all(kDefaultPadding),
+              child: Column(
+                children: [
+                  SizedBox(height: kDefaultPadding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ComplaintDetails(total: total,pending: Pending,completed: Completed,rejected: Rejected,inprogress: InProgress,),
+                            SizedBox(height: kDefaultPadding),
+                            const Text(
+                              "Recent Complaints",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: kDefaultPadding),
+                            Card(
+                              color: Colors.blueGrey[50],
+                              elevation: 5,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 300,
+                                child: StreamBuilder<QuerySnapshot?>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('Complains').where('manager',isEqualTo: user!.email!)
+                                      .orderBy("timestamp", descending: true)
+                                      .limit(10)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      Text("Error");
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                        child: CircularProgressIndicator(),
                                       );
-                                    },
-                                  );
-                                },
+                                    }
+                                    if (snapshot.data?.docs.length == 0)
+                                      return Center(
+                                        child: Text("No Complaints"),
+                                      );
+                                    return ListView.builder(
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+
+                                        final Complains complain =
+                                            Complains.fromMap(
+                                                snapshot.data!.docs[index].data()
+                                                    as Map<String, dynamic>);
+                                        return GestureDetector(
+                                          onTap: (){
+
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complain,id: snapshot.data!.docs[index].id,)));
+
+                                          },
+                                          child: Card(
+                                            elevation: 5,
+                                            color: kSecondaryColor,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(12.0))),
+                                            child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                child: Column(
+                                                  children: [
+                                                    buildRichText("Title: ",
+                                                        complain.title.toString()),
+                                                    Table(
+                                                      children: [
+                                                        TableRow(children: [
+                                                          buildRichText(
+                                                              "Name: ",
+                                                              complain.username
+                                                                  .toString()),
+                                                          buildRichText(
+                                                              "Address: ",
+                                                              complain.address
+                                                                  .toString()),
+                                                        ]),
+                                                        TableRow(children: [
+                                                          buildRichText(
+                                                              "Priority: ",
+                                                              complain.priority
+                                                                  .toString()),
+                                                          buildRichText(
+                                                              "Status: ",
+                                                              complain.status
+                                                                  .toString()),
+                                                        ]),
+                                                        TableRow(children: [
+                                                          buildRichText(
+                                                              "Worker: ",
+                                                              complain.worker
+                                                                  .toString()),
+                                                          buildRichText(
+                                                              "Service: ",
+                                                              complain.service
+                                                                  .toString())
+                                                        ]),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                )),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => AdvanceSearch()));
-                              },
-                              child: Text("All Complaints")),
-                          if (Responsive.isMobile(context))
-                            SizedBox(height: kDefaultPadding),
-                          if (Responsive.isMobile(context)) ComplaintsSummary(total: total,pending: pending,completed: Completed,rejected: Rejected,inprogress: Inprogress,),
-                        ],
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AdvanceSearch(email: user!.email,)));
+                                },
+                                child: Text("All Complaints")),
+                            if (Responsive.isMobile(context))
+                              SizedBox(height: kDefaultPadding),
+                            if (Responsive.isMobile(context)) ComplaintsSummary(total: total,pending: Pending,completed: Completed,rejected: Rejected,inprogress: InProgress,),
+                          ],
+                        ),
                       ),
-                    ),
-                    if (!Responsive.isMobile(context))
-                      SizedBox(width: kDefaultPadding),
-                    // On Mobile means if the screen is less than 850 we dont want to show it
-                    if (!Responsive.isMobile(context))
-                      Expanded(
-                        flex: 2,
-                        child: ComplaintsSummary(total: total,pending: pending,completed: Completed,rejected: Rejected,inprogress: Inprogress,),
-                      ),
-                  ],
-                )
-              ],
+                      if (!Responsive.isMobile(context))
+                        SizedBox(width: kDefaultPadding),
+                      // On Mobile means if the screen is less than 850 we dont want to show it
+                      if (!Responsive.isMobile(context))
+                        Expanded(
+                          flex: 2,
+                          child: ComplaintsSummary(total: total,pending: Pending,completed: Completed,rejected: Rejected,inprogress: InProgress,),
+                        ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

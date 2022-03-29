@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Screens/Report/report.dart';
@@ -73,8 +72,9 @@ class DataSearch extends SearchDelegate<String> {
     itemBuilder: (context, index) {
     return  GestureDetector(
       onTap: (){
-        Complains complains = Complains.fromMap(snapshot.data!.docs[index].data() as Map<String, dynamic>);
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complains,id: snapshot.data!.docs[index].id,)));
+
+        Complains complains = Complains.fromMap(suggestions[index].data() as Map<String, dynamic>);
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complains,id: suggestions[index].id,)));
 
       },
       child: Card(
