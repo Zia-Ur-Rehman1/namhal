@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:namhal/Components/ComplaintTile.dart';
+import 'package:namhal/Constants/constants.dart';
+import 'package:namhal/Screens/Report/report.dart';
 import '/model/complaint.dart';
 import 'Components/searchData.dart';
 import 'package:flutter/material.dart';
 
 class AdvanceSearch extends StatefulWidget {
-  String? email;
-  AdvanceSearch({required this.email});
   @override
   _AdvanceSearchState createState() => _AdvanceSearchState();
 }
@@ -14,7 +13,7 @@ class AdvanceSearch extends StatefulWidget {
 class _AdvanceSearchState extends State<AdvanceSearch> {
   List<Complains> complains = [];
 
-  late Stream<QuerySnapshot> rightnow;
+  Stream<QuerySnapshot> rightnow=FirebaseFirestore.instance.collection('Complains').orderBy("timestamp", descending: true).snapshots();
   String? sorting;
   Map<String, dynamic>? data;
   final List<String> sortby = [ "Time", "Priority"];
@@ -22,8 +21,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).orderBy("timestamp", descending: true).snapshots();
-    rightnow=FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:widget.email.toString().substring(0, widget.email!.indexOf('@'))).orderBy("timestamp", descending: true).snapshots();
+
   }
 
   @override
@@ -38,7 +36,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
           IconButton(
               onPressed: () async {
                 final result =
-                    await showSearch(context: context, delegate: DataSearch(email: widget.email));
+                    await showSearch(context: context, delegate: DataSearch());
                 print(result);
               },
               icon: Icon(Icons.search))
@@ -62,11 +60,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).orderBy("timestamp", descending: true).snapshots();
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:widget.email.toString().substring(0, widget.email!.indexOf('@'))).orderBy("timestamp", descending: true).snapshots();
-
-
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').orderBy("startTime", descending: true).snapshots();
                                 });
                               },
                               child: Text("All"),
@@ -78,8 +72,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Pending").snapshots();
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:widget.email.toString().substring(0, widget.email!.indexOf('@'))).where("status",isEqualTo: "Pending").snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("status",isEqualTo: "Pending").snapshots();
 
                                 });
 
@@ -130,8 +123,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "InProgress").snapshots();
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:widget.email.toString().substring(0, widget.email!.indexOf('@'))).where("status",isEqualTo: "InProgress").snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("status",isEqualTo: "InProgress").snapshots();
 
                                 });
                               },
@@ -144,26 +136,11 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Completed").snapshots();
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:widget.email.toString().substring(0, widget.email!.indexOf('@'))).where("status",isEqualTo: "Completed").snapshots();
+                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("status",isEqualTo: "Completed").snapshots();
 
                                 });
                               },
                               child: Text("Completed"),
-                            ),
-                            padding: EdgeInsets.all(8.0),
-                            margin: EdgeInsets.all(10.0),
-                          ),
-                          Container(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Completed").snapshots();
-                                  rightnow=FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:widget.email.toString().substring(0, widget.email!.indexOf('@'))).where("status",isEqualTo: "Rejected").snapshots();
-
-                                });
-                              },
-                              child: Text("Rejected"),
                             ),
                             padding: EdgeInsets.all(8.0),
                             margin: EdgeInsets.all(10.0),
@@ -196,7 +173,48 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                       itemBuilder: (context, index) {
                         final Complains complain = Complains.fromMap(
                             snapshot.data!.docs[index].data() as Map<String, dynamic>);
-                        return ComplaintTile(complain: complain,id: snapshot.data!.docs[index].id ,);
+                        return GestureDetector(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(complains: complain,id: snapshot.data!.docs[index].id,)));
+                          },
+                          child: Card(
+                            elevation: 5,
+                            color: kSecondaryColor,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(12.0))),
+                            child: Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  children: [
+
+                                    buildRichText("Title: ",
+                                        complain.title.toString()),
+                                    Table(
+                                      children: [
+                                        TableRow(children: [
+                                          buildRichText("Name: ",
+                                              complain.username.toString()),
+                                          buildRichText("Address: ",
+                                              complain.address.toString()),
+                                        ]),
+                                        TableRow(children: [
+                                          buildRichText("Priority: ",
+                                              complain.priority.toString()),
+                                          buildRichText("Status: ",
+                                              complain.status.toString()),
+                                        ]),
+                                        TableRow(children: [
+                                          buildRichText("Worker: ",
+                                              complain.worker.toString()),
+                                          buildRichText("Service: ", complain.service.toString())
+                                        ]),
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        );
                       },
                     );
                   },
@@ -204,6 +222,27 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+  RichText buildRichText(String title, String subtitle) {
+    return RichText(
+      text: TextSpan(
+        text: title,
+        children: [
+          TextSpan(
+            text: subtitle,
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white54,
+            ),
+          ),
+        ],
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
       ),
     );

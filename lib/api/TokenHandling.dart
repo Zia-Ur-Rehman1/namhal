@@ -17,4 +17,17 @@ static Future GetToken(String? email,String? token ) async{
     });
   }
 }
+static Future<bool> CheckToken(String? email) async{
+  String? token;
+  await FirebaseFirestore.instance.collection('User').doc(email).get().then((
+      value) {
+    token = value.get('token');
+  });
+  if(token?.isEmpty??false){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
 }
