@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import '/model/complaint.dart';
 import 'Components/searchData.dart';
 import 'package:flutter/material.dart';
 
 class AdvanceSearch extends StatefulWidget {
-  String? email;
-  AdvanceSearch({required this.email});
   @override
   _AdvanceSearchState createState() => _AdvanceSearchState();
 }
@@ -18,15 +17,20 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
   String? sorting;
   Map<String, dynamic>? data;
   final List<String> sortby = [ "Time", "Priority"];
-
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  User? user;
+  String? username;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).orderBy("timestamp", descending: true).snapshots();
+    user = auth.currentUser;
+    username= user?.email.toString().substring(0, user?.email!.indexOf('@'));
+
+
+    // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:user?.email).orderBy("timestamp", descending: true).snapshots();
     rightnow = FirebaseFirestore.instance.collection('Complains').where(
-        "username", isEqualTo: widget.email.toString().substring(
-        0, widget.email!.indexOf('@')))
+        "username", isEqualTo: username)
         .orderBy("timestamp", descending: true)
         .snapshots();
   }
@@ -44,7 +48,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
               onPressed: () async {
                 final result =
                 await showSearch(context: context,
-                    delegate: DataSearch(email: widget.email));
+                    delegate: DataSearch(email: username));
                 print(result);
               },
               icon: Icon(Icons.search))
@@ -76,9 +80,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                       FirebaseFirestore.instance.collection(
                                           'Complains')
                                           .where("username",
-                                          isEqualTo: widget.email.toString()
-                                              .substring(
-                                              0, widget.email!.indexOf('@')))
+                                          isEqualTo:username)
                                           .orderBy(
                                           "timestamp", descending: true)
                                           .snapshots();
@@ -98,9 +100,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                       FirebaseFirestore.instance.collection(
                                           'Complains')
                                           .where("username",
-                                          isEqualTo: widget.email.toString()
-                                              .substring(
-                                              0, widget.email!.indexOf('@')))
+                                          isEqualTo: username)
                                           .where("status", isEqualTo: "Pending")
                                           .snapshots();
                                 });
@@ -156,9 +156,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                       FirebaseFirestore.instance.collection(
                                           'Complains')
                                           .where("username",
-                                          isEqualTo: widget.email.toString()
-                                              .substring(
-                                              0, widget.email!.indexOf('@')))
+                                          isEqualTo: username)
                                           .where(
                                           "status", isEqualTo: "InProgress")
                                           .snapshots();
@@ -178,9 +176,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                       FirebaseFirestore.instance.collection(
                                           'Complains')
                                           .where("username",
-                                          isEqualTo: widget.email.toString()
-                                              .substring(
-                                              0, widget.email!.indexOf('@')))
+                                          isEqualTo: username)
                                           .where(
                                           "status", isEqualTo: "Completed")
                                           .snapshots();
@@ -200,9 +196,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                       FirebaseFirestore.instance.collection(
                                           'Complains')
                                           .where("username",
-                                          isEqualTo: widget.email.toString()
-                                              .substring(
-                                              0, widget.email!.indexOf('@')))
+                                          isEqualTo: username)
                                           .where(
                                           "status", isEqualTo: "Rejected")
                                           .snapshots();

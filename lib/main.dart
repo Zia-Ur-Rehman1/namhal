@@ -10,7 +10,6 @@ import 'Screens/login.dart';
 import 'Utlities/Utils.dart';
 import 'providers/providers.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(message.data);
   print('Handling a background message ${message.messageId}');
   if (message.notification != null) {
     print('Message also contained a notification: ${message.notification}');
@@ -39,6 +38,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        //firebase User StreamProvider
+
+        // StreamProvider<User?>.value(value: , initialData: null),
+        StreamProvider<User?>.value(value: FirebaseAuth.instance.authStateChanges(), initialData: null,),
         ChangeNotifierProvider<add>(create: (_) => add()),
         ChangeNotifierProvider<ComplaintObject>(create: (_) => ComplaintObject()),
         ChangeNotifierProvider<Status>(create: (_) => Status()),

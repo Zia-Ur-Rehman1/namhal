@@ -34,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: formkey,
             child: Column(
+
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -103,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 20,
                 ),
                 ElevatedButton(
+
                   onPressed: signIn,
                   child: Text(
                     "Login",
@@ -111,12 +113,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ElevatedButton.styleFrom(
                     primary: Colors.blue,
 
+
                     onPrimary: Colors.white,
                     shadowColor: Colors.blueAccent,
-                    elevation: 3,
+                    elevation: 5,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0)),
-                    minimumSize: Size(250, 50), //////// HERE
+
                   ),
                 ),
               ],
