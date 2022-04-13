@@ -30,13 +30,13 @@ class ComplaintsCardGridView extends StatelessWidget {
       itemBuilder: (context, index) {
         ComplaintsStorageInfo info = ComplaintsDetails[index];
         if(info.title=="Pending"  )
-          info.numOfFiles=context.watch<Status>().pending;
+          info.numOfFiles=context.read<Status>().pending;
         else if(info.title=="Inprogress" )
-          info.numOfFiles=context.watch<Status>().InProgress;
+          info.numOfFiles=context.read<Status>().InProgress;
         else if(info.title=="Completed" )
-          info.numOfFiles=context.watch<Status>().completed;
+          info.numOfFiles=context.read<Status>().completed;
         else if(info.title=="Rejected" )
-          info.numOfFiles=context.watch<Status>().rejected;
+          info.numOfFiles=context.read<Status>().rejected;
         return ComplaintsInfoCard(info: ComplaintsDetails[index]);
       },
     );
