@@ -1,11 +1,14 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import '/model/complaint.dart';
 import 'Components/searchData.dart';
 import 'package:flutter/material.dart';
-
 class AdvanceSearch extends StatefulWidget {
+Stream<QuerySnapshot> passStream;
+
+  AdvanceSearch({required this.passStream});
   @override
   _AdvanceSearchState createState() => _AdvanceSearchState();
 }
@@ -29,10 +32,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
 
 
     // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:user?.email).orderBy("timestamp", descending: true).snapshots();
-    rightnow = FirebaseFirestore.instance.collection('Complains').where(
-        "username", isEqualTo: username)
-        .orderBy("timestamp", descending: true)
-        .snapshots();
+    rightnow = widget.passStream;
   }
 
   @override

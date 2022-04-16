@@ -5,7 +5,7 @@ import '/Constants/constants.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class Chart extends StatelessWidget {
+class Chart extends StatefulWidget {
 
 
   const Chart({
@@ -14,6 +14,12 @@ class Chart extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<Chart> createState() => _ChartState();
+}
+
+class _ChartState extends State<Chart> {
+  late int? touchedIndex;
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
@@ -21,6 +27,15 @@ class Chart extends StatelessWidget {
         children: [
           PieChart(
             PieChartData(
+              pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                setState(() {
+                  if (pieTouchResponse.clickHappened) {
+                    touchedIndex = -1;
+                  } else {
+                    touchedIndex=  pieTouchResponse.touchedSection?.touchedSectionIndex;
+                  }
+                });
+              }),
               sectionsSpace: 0,
               centerSpaceRadius: 70,
               startDegreeOffset: -90,
@@ -54,7 +69,9 @@ class Chart extends StatelessWidget {
   }
 
   getSection(double total, double pending, double completed, double rejected, double inprogress) {
+
     List<PieChartSectionData> sections = <PieChartSectionData>[];
+
     sections.add(
       PieChartSectionData(
         color: Colors.cyan,
@@ -90,7 +107,6 @@ class Chart extends StatelessWidget {
     );
     return sections;
   }
-
 }
 
 

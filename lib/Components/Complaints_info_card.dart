@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
 import 'ComplaintsModel.dart';
 import '../Constants/constants.dart';
 
@@ -19,7 +23,37 @@ class ComplaintsInfoCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          if(info.title== "Pending"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Pending").snapshots(),)));
+          }
+          else if(info.title== "Rejected"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Rejected").snapshots(),)));
+          }
+          else if(info.title== "Inprogress"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Inprogress").snapshots(),)));
+          }
+          else if(info.title== "Completed"){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Completed").snapshots(),)));
+          }
+          // Navigator.pushNamed(context, '/complaints_details', arguments: info);
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

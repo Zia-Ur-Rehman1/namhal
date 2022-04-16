@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
 import 'package:namhal/Screens/login.dart';
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
 class SideMenu extends StatelessWidget {
   const SideMenu({
     Key? key,
@@ -36,18 +40,20 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Complaints",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                          isEqualTo: context.read<Info>().username).snapshots(),)));
+            },
           ),
           DrawerListTile(
             title: "Tasks Progress",
             svgSrc: "assets/icons/menu_task.svg",
             press: () {},
           ),
-          DrawerListTile(
-            title: "Rejected Cmplaints",
-            svgSrc: "assets/icons/menu_doc.svg",
-            press: () {},
-          ),
+
           DrawerListTile(
             title: "Services",
             svgSrc: "assets/icons/menu_store.svg",

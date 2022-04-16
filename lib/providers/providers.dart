@@ -7,6 +7,9 @@ class add extends ChangeNotifier{
     address = newAddress;
     notifyListeners();
   }
+  getAddress(){
+    return address;
+  }
 
 }
 class ComplaintObject extends ChangeNotifier{
@@ -27,27 +30,6 @@ class Status extends ChangeNotifier{
   int rejected = 0;
   int completed = 0;
 
-  void incrementTotal(){
-    total++;
-    notifyListeners();
-  }
-  void incrementPending(){
-
-    pending++;
-    notifyListeners();
-  }
-  void incrementInProgress(){
-    InProgress++;
-    notifyListeners();
-  }
-  void incrementRejected(){
-    rejected++;
-    notifyListeners();
-  }
-  void incrementCompleted(){
-    completed++;
-    notifyListeners();
-  }
   void setTotal(int newTotal){
     total = newTotal;
     notifyListeners();
@@ -68,6 +50,47 @@ class Status extends ChangeNotifier{
     void setCompleted(int newCompleted){
     completed = newCompleted;
     notifyListeners();
+  }
+
+}
+class Info extends ChangeNotifier{
+  String username="";
+  String email="";
+  String password="";
+  String token="";
+  String role="";
+  void setUsername(String newUsername){
+    username = newUsername;
+    notifyListeners();
+  }
+  void setEmail(String newEmail){
+    email = newEmail;
+    notifyListeners();
+  }
+  void setPassword(String newPassword){
+    password = newPassword;
+    notifyListeners();
+  }
+  void setToken(String newToken){
+    token = newToken;
+    notifyListeners();
+  }
+  void setRole(String newRole){
+    role = newRole;
+    notifyListeners();
+  }
+//get username
+  getUsername(){
+    return username;
+  }
+  getEmail(){
+    return email;
+  }
+  getPassword(){
+    return password;
+  }
+  getToken(){
+    return token;
   }
 
 }

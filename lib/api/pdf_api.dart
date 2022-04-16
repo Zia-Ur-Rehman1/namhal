@@ -82,7 +82,7 @@ class PdfApi {
             ),
             child: Paragraph(
               padding: EdgeInsets.all(5),
-              text:complain.desc.toString(),
+              text:complain.desc!=null?complain.desc.toString():"---",
               style: TextStyle(fontSize: 14, font: font),
             ),
           ),
@@ -110,6 +110,18 @@ class PdfApi {
               text:complain.feedback!=null?complain.feedback.toString():"No Feedback",
               style: TextStyle(fontSize: 14, font: font),
             ),
+          ),
+          SizedBox(height: 10),
+          Paragraph(
+            margin: EdgeInsets.symmetric(vertical: 5),
+
+            text: "Rating ",
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          Paragraph(
+            margin: EdgeInsets.symmetric(vertical: 5),
+            text:complain.rating!=null?complain.rating.toString():"No Rating",
+            style: TextStyle(fontSize: 14, font: font),
           ),
           SizedBox(height: 10),
           Align(

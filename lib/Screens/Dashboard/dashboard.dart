@@ -37,6 +37,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     //get user by provider
     user = auth.currentUser;
+    FirebaseFirestore.instance.collection("User/").doc(user?.email).get().then((value) {
+      if(mounted) {
+        setState(() {
+          Provider.of<Info>(context, listen: false).setUsername(value.data()?['name']);
+        });
+      }
+    });
     Token.GetToken(user?.email!, token);
     NotifyUser().Notify();
     StreamListener();
@@ -44,9 +51,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> StreamListener() async {
     await FirebaseFirestore.instance
-      ..collection("Complains")
+      .collection("Complains")
           .where('username',
-              isEqualTo: user!.email!.substring(0, user!.email!.indexOf('@')))
+              // isEqualTo: context.read()?.read<Info>()?.getUsername())
+            isEqualTo: context.read<Info>().getUsername())
           .snapshots()
           .listen((event) {
         if (mounted) {
@@ -80,18 +88,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       drawer: const SideMenu(),
       backgroundColor: const Color(0xFFE5E5E5),
+
       appBar: AppBar(
         backgroundColor: Colors.blue,
+
         centerTitle: true,
         title: const Text("NAMHAL"),
+      actions: [
+      IconButton(
+        icon: const Icon(Icons.person),
+        onPressed: () {},
       ),
+      ],
+      ),
+
       body: Center(
+
         child: Scrollbar(
           //hover thickness
           interactive: true,
           radius: Radius.circular(10),
           showTrackOnHover: true,
-          isAlwaysShown: true,
           trackVisibility: true,
           child: SingleChildScrollView(
             //show scrolls
@@ -177,7 +194,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AdvanceSearch()));
+                                        builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                                            isEqualTo: context.read<Info>().username).snapshots(),)));
                               },
                               child: Text("View Complaints")),
                           if (Responsive.isMobile(context))

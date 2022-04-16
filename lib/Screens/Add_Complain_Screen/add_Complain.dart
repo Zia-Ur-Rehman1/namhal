@@ -207,7 +207,7 @@ class _AddComplainState extends State<AddComplain> {
 
                 ElevatedButton(
                     onPressed: setComplaint,
-                    child: Text("Add Complain"))
+                    child: Text("Confirm")),
                 //TODO Add image picker
               ],
             ),
@@ -261,7 +261,7 @@ class _AddComplainState extends State<AddComplain> {
       startDate: DateFormat.yMMMd().format(now),
       startTime: DateFormat().add_jm().format(now),
       service: selectedService,
-      address: context.read<add>().address,
+      address: context.read<add>().getAddress(),
 
       img: image!=null?url:"No Image Attached",);
 
