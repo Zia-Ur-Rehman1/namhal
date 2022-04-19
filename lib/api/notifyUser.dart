@@ -22,7 +22,7 @@ class NotifyUser {
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization':
-              'key=AAAAXApatyo:APA91bGQBsooKjdgs0v2g0dEdQg8RhmTKvJdX1llWdwCp05_U_bD8u1jyPAYqIhQ66vdUUKuiL-NIf9_ilm_hk5d_Q4Hmsa58lHTEmYeu1OsCciouZtpuID3jrHiKlcgSXk8X6q7Hbz5',
+              'key=',
         },
         body: jsonEncode(
           <String, dynamic>{
