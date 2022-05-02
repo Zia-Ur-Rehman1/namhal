@@ -45,11 +45,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
       }
     });
+    Future.delayed(Duration.zero,()=>StreamListener());
     Token.GetToken(user?.email!, token);
     NotifyUser().Notify();
 
     // WidgetsBinding.instance!.addPostFrameCallback((_) => StreamListener());
-    Future.delayed(Duration.zero,()=>StreamListener());
+
     //wait for function to build
 
   }
