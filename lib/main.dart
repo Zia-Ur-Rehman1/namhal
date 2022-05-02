@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
       providers: [
         //firebase User StreamProvider
 
-        // StreamProvider<User?>.value(value: FirebaseAuth.instance.authStateChanges(), initialData:,),
         ChangeNotifierProvider<add>(create: (_) => add()),
         ChangeNotifierProvider<Info>(create: (_) => Info()),
 
@@ -55,10 +54,9 @@ class MyApp extends StatelessWidget {
 
         theme: ThemeData.light().copyWith(
           primaryColor: kPrimaryColor,
-        scrollbarTheme: ScrollbarThemeData().copyWith(
+        scrollbarTheme: const ScrollbarThemeData().copyWith(
           thickness: MaterialStateProperty.all(5),
           thumbColor: MaterialStateProperty.all(kSecondaryColor),
-
         )
         ),
         home: StreamBuilder<User?>(

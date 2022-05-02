@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:namhal/Utlities/Utils.dart';
 import 'package:namhal/api/pdf_api.dart';
 import 'package:namhal/model/log.dart';
 import 'package:namhal/providers/providers.dart';
@@ -9,6 +11,7 @@ import '../../Constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Report extends StatefulWidget {
 
@@ -143,42 +146,7 @@ class _ReportState extends State<Report> {
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OutlinedButton.icon(
-                        onPressed: () async {
-                          await openDialog("Log");
-                          if (message.text.isNotEmpty) {
-                            AddLog(widget.id, message.text);
-                            message.clear();
-                          }
-                        },
-                        icon: Icon(Icons.add),
-                        label: Text("Add Log")),
-                    OutlinedButton.icon(
-                        onPressed: () async {
-                          await openDialog("Feedback");
-                          if (message.text.isNotEmpty) {
-                            FirebaseFirestore.instance
-                                .collection("Complains")
-                                .doc(widget.id)
-                                .update({
-                                  "feedback": message.text,
-                                })
-                                .then((value) => print("User Updated"))
-                                .catchError((error) =>
-                                    print("Failed to update user: $error"));
-                            setState(() {
-                              context.read<ComplaintObject>().complaint.feedback = message.text;
-                            });
-                            message.clear();
-                          }
-                        },
-                        icon: Icon(Icons.add),
-                        label: Text("Give Feedback")),
-                  ],
-                ),
+
                 Center(
                   child: isLoading ? CircularProgressIndicator() : SizedBox(),
                 ),
@@ -223,19 +191,18 @@ class _ReportState extends State<Report> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          setState(() {
-            isLoading = true;
-          });
-          final pdf = await PdfApi.generate(context.read<ComplaintObject>().complaint, widget.id);
-          setState(() {
-            isLoading = false;
-          });
-          PdfApi.openFile(pdf);
-        },
-        child: Icon(Icons.download),
+      //add circular fab widget
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        backgroundColor: Colors.blue,
+        activeBackgroundColor: Colors.redAccent,
+        children: [
+          Log(),
+          FeedBack(),
+          Download(),
+        ],
       ),
+
     );
   }
 
@@ -417,6 +384,60 @@ class _ReportState extends State<Report> {
       }, child: Text("Submit")),
     ],
   ));
+
+  SpeedDialChild FeedBack() => SpeedDialChild(
+      child: SvgPicture.asset("assets/icons/feedback.svg", height: 30,),
+      label: "Feedback",
+      backgroundColor: Colors.blue,
+      onTap: () async{
+        await openDialog("Feedback");
+        if (message.text.isNotEmpty) {
+          FirebaseFirestore.instance
+              .collection("Complains")
+              .doc(widget.id)
+              .update({
+            "feedback": message.text,
+          })
+              .then((value) => Utils.showSnackBar("Updated",Colors.green))
+              .catchError((error) =>
+              Utils.showSnackBar("Failed to update : $error",Colors.red));
+          setState(() {
+            context.read<ComplaintObject>().complaint.feedback = message.text;
+          });
+          message.clear();
+        }
+      }
+
+
+  );
+  SpeedDialChild Log() => SpeedDialChild(
+      child: SvgPicture.asset("assets/icons/log.svg", height: 30,),
+
+    label: "Log",
+    backgroundColor: Colors.blue,
+    onTap: () async{
+      await openDialog("Log");
+      if (message.text.isNotEmpty) {
+        AddLog(widget.id, message.text);
+        message.clear();
+      }
+    }
+  );
+SpeedDialChild Download() => SpeedDialChild(
+  child: Icon(Icons.file_download, color: Colors.blue,),
+  label: "Download",
+  backgroundColor: Colors.blue,
+  onTap: () async{
+    setState(() {
+            isLoading = true;
+          });
+          final pdf = await PdfApi.generate(context.read<ComplaintObject>().complaint, widget.id);
+          setState(() {
+            isLoading = false;
+          });
+          PdfApi.openFile(pdf);
+        },
+      );
 
 }
 

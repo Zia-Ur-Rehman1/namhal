@@ -44,6 +44,7 @@ dependencies:
   google_fonts: ^2.1.0
   flutter_svg: ^0.22.0
   fl_chart: ^0.36.1
+  flutter_speed_dial: ^6.0.0
   image_picker: ^0.8.4+4
   provider: ^6.0.2
   substring_highlight: ^1.0.33
