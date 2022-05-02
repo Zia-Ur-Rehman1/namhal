@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import 'package:namhal/Components/side_menu.dart';
 
@@ -46,19 +47,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
     Token.GetToken(user?.email!, token);
     NotifyUser().Notify();
-    StreamListener();
+
+    // WidgetsBinding.instance!.addPostFrameCallback((_) => StreamListener());
+    Future.delayed(Duration.zero,()=>StreamListener());
+    //wait for function to build
+
   }
 
-  Future<void> StreamListener() async {
-    await FirebaseFirestore.instance
+  void StreamListener()  {
+     FirebaseFirestore.instance
       .collection("Complains")
           .where('username',
               // isEqualTo: context.read()?.read<Info>()?.getUsername())
             isEqualTo: context.read<Info>().getUsername())
           .snapshots()
           .listen((event) {
-        if (mounted) {
-          setState(() {
             Pending = event.docs
                 .where((element) => element.data()['status'] == 'Pending')
                 .length;
@@ -78,9 +81,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 .setInProgress(InProgress);
             Provider.of<Status>(context, listen: false).setCompleted(Completed);
             Provider.of<Status>(context, listen: false).setRejected(Rejected);
-          });
-        }
       });
+    if(mounted) {
+      setState(() {});
+    }
   }
 
   @override

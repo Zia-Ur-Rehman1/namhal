@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:namhal/model/complaint.dart';
 import 'package:open_file/open_file.dart';
@@ -8,6 +7,7 @@ import 'package:pdf/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:printing/printing.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class PdfApi {
   static Future<File> generate(Complains complain, String id) async {
@@ -172,19 +172,20 @@ class PdfApi {
     required String name,
     required Document pdf,
   }) async {
-    final bytes = await pdf.save();
-
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/$name');
-
-    await file.writeAsBytes(bytes);
-
-    return file;
+    final status = await Permission.storage.request();
+    if (status.isGranted) {
+      final bytes = await pdf.save();
+      final dir = await getExternalStorageDirectory();
+      final file = File('${dir!.path}/$name''.pdf');
+      await file.writeAsBytes(bytes);
+      return file;
+    } else {
+      throw Exception('Permission denied');
+    }
   }
 
   static Future openFile(File file) async {
     final url = file.path;
-    print("File Path: $url");
     await OpenFile.open(url);
   }
 }
