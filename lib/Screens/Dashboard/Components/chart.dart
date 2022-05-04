@@ -57,7 +57,7 @@ class _ChartState extends State<Chart> {
                   ),
                 ),
                 Text(
-                  "out of "+'${(context.read<Status>().completed).toStringAsFixed(0)}' + " Total",
+                  "out of "+'${(context.read<Status>().total).toStringAsFixed(0)}' + " Total",
                   style: TextStyle(color: kSecondaryColor),
                 )
               ],

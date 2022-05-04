@@ -53,13 +53,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
        setState(() {
          Provider.of<Info>(context, listen: false).setUsername(value.data()?['name']);
        });
-       StreamListener();
-
+     StreamListener();
      }
    });
+
    Token.GetToken(user!.email!, token);
    NotifyUser().Notify();
-
 
  }
   void StreamListener()   {

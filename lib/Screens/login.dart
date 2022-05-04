@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
 import 'package:namhal/Utlities/Utils.dart';
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -14,6 +13,7 @@ TextEditingController pass = TextEditingController();
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _showPassword = false;
+  bool isLoading = false;
   final formkey = GlobalKey<FormState>();
 
   @override
@@ -131,32 +131,47 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn() async {
-
     final isValid = formkey.currentState!.validate();
     if (!isValid) return;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => Center(
-        child: CircularProgressIndicator(),
+        child: isLoading?  CircularProgressIndicator(): SizedBox(),
       ),
     );
 
     try {
+      if(mounted) {
+        setState(() {
+          isLoading = true;
+        });
+      }
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text.trim(),
         password: pass.text.trim(),
       );
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
+
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      if(mounted){
+        setState(() {
+          isLoading = false;
+        });
+      }
       return;
     }
 
 
-    Navigator.of(context).popUntil((route) => route.isFirst);
     Navigator.of(context).pushReplacement(
+
       MaterialPageRoute(
+
         //add dashboard and pass user object
         builder: (context) => DashboardScreen(),
       ),

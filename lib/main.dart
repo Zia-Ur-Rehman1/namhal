@@ -24,7 +24,6 @@ Future<void> main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   runApp(const MyApp());
 
 }
@@ -53,6 +52,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData.light().copyWith(
+          //material3
+
+
+
           primaryColor: kPrimaryColor,
         scrollbarTheme: const ScrollbarThemeData().copyWith(
           thickness: MaterialStateProperty.all(5),
