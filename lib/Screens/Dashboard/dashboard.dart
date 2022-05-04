@@ -38,27 +38,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    getUser();
+    //post call
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      getUser();
+    });
+
 
   }
 
  void getUser(){
    firestore.collection("User").doc(user!.email).get().then((value) {
      if(mounted) {
+       print("user data");
        setState(() {
          Provider.of<Info>(context, listen: false).setUsername(value.data()?['name']);
        });
+       StreamListener();
+
      }
    });
    Token.GetToken(user!.email!, token);
    NotifyUser().Notify();
-   StreamListener();
+
 
  }
   void StreamListener()   {
+    print("Stream Listener");
     firestore.collection("Complains")
           .where('username',
-            isEqualTo: user?.email.toString().substring(0, user?.email!.indexOf('@')))
+            isEqualTo: context.read<Info>().getUsername())
           .snapshots()
           .listen((event) {
             Pending = event.docs
