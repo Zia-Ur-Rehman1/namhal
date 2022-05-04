@@ -26,7 +26,7 @@ class _AddComplainState extends State<AddComplain> {
 
   final formKey = GlobalKey<FormState>();
 @override
-
+final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Map<String, String> serviceManager = {};
   var selectedService;
@@ -121,7 +121,7 @@ class _AddComplainState extends State<AddComplain> {
                       border: Border.all(color: Colors.blue, width: 2),
                       borderRadius: BorderRadius.circular(5)),
       child:   StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('Service').snapshots(),
+                    stream: firestore.collection('Service').snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text('Something went wrong');
@@ -248,7 +248,7 @@ class _AddComplainState extends State<AddComplain> {
       }
 
     CollectionReference complaint =
-    FirebaseFirestore.instance.collection('Complains');
+    firestore.collection('Complains');
     User user =  FirebaseAuth.instance.currentUser!;
     Complains complains = Complains(
       username: user.email!.substring(0, user.email!.indexOf('@')),
@@ -270,7 +270,7 @@ class _AddComplainState extends State<AddComplain> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
       String? token;
-      await FirebaseFirestore.instance.collection('User').doc(serviceManager[selectedService]).get().then((
+      await firestore.collection('User').doc(serviceManager[selectedService]).get().then((
           value) {
         token = value.get('token');
         print("Token exits $token");
@@ -282,7 +282,6 @@ class _AddComplainState extends State<AddComplain> {
         NotifyUser.sendPushMessage(token!,
             complains.title.toString() + "   " +
                 complains.service.toString(), complains.username.toString());
-
       }
       Utils.showSnackBar("Complaint Added Successfully",Colors.green);
     }).catchError((e) {

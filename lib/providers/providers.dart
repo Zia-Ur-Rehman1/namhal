@@ -29,7 +29,9 @@ class Status extends ChangeNotifier{
   int InProgress = 0;
   int rejected = 0;
   int completed = 0;
-
+  String toString(){
+    return "Total: $total, Pending: $pending, InProgress: $InProgress, Rejected: $rejected, Completed: $completed";
+  }
   void setTotal(int newTotal){
     total = newTotal;
     notifyListeners();
@@ -79,6 +81,7 @@ class Info extends ChangeNotifier{
     role = newRole;
     notifyListeners();
   }
+
 //get username
   getUsername(){
     return username;
@@ -92,5 +95,8 @@ class Info extends ChangeNotifier{
   getToken(){
     return token;
   }
-
+//to string
+  toString(){
+    return "Username: $username, Email: $email, Password: $password, Token: $token, Role: $role";
+  }
 }

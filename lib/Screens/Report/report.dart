@@ -28,7 +28,7 @@ class _ReportState extends State<Report> {
   bool isLoading = false;
   double rating = 0;
   TextEditingController message = TextEditingController();
-
+  final FirebaseFirestore firestore= FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -238,7 +238,7 @@ class _ReportState extends State<Report> {
         //add the listviewbuilder here of logs
         children: [
           StreamBuilder<QuerySnapshot?>(
-            stream: FirebaseFirestore.instance
+            stream: firestore
                 .collection('Logs')
                 .where("id", isEqualTo: widget.id)
                 .snapshots(),
@@ -379,20 +379,20 @@ class _ReportState extends State<Report> {
       ],),
     actions: [
       TextButton(onPressed: (){
-        FirebaseFirestore.instance.collection('Complains').doc(widget.id).update({'rating': context.read<ComplaintObject>().complaint.rating});
+        firestore.collection('Complains').doc(widget.id).update({'rating': context.read<ComplaintObject>().complaint.rating});
         Navigator.of(context).pop();
       }, child: Text("Submit")),
     ],
   ));
 
   SpeedDialChild FeedBack() => SpeedDialChild(
-      child: SvgPicture.asset("assets/icons/feedback.svg", height: 30,),
+      child: SvgPicture.asset("assets/icons/feedback.svg", color: Colors.white,height: 30,),
       label: "Feedback",
       backgroundColor: Colors.blue,
       onTap: () async{
         await openDialog("Feedback");
         if (message.text.isNotEmpty) {
-          FirebaseFirestore.instance
+          firestore
               .collection("Complains")
               .doc(widget.id)
               .update({
@@ -411,7 +411,7 @@ class _ReportState extends State<Report> {
 
   );
   SpeedDialChild Log() => SpeedDialChild(
-      child: SvgPicture.asset("assets/icons/log.svg", height: 30,),
+      child: SvgPicture.asset("assets/icons/log.svg", color: Colors.white,height: 30,),
 
     label: "Log",
     backgroundColor: Colors.blue,
@@ -424,7 +424,7 @@ class _ReportState extends State<Report> {
     }
   );
 SpeedDialChild Download() => SpeedDialChild(
-  child: Icon(Icons.file_download, color: Colors.blue,),
+  child: Icon(Icons.file_download, color: Colors.white,),
   label: "Download",
   backgroundColor: Colors.blue,
   onTap: () async{
