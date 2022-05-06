@@ -29,28 +29,28 @@ class ComplaintsInfoCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Pending").snapshots(),)));
+                        isEqualTo: context.read<Info>().user.name).where("status", isEqualTo: "Pending").snapshots(),)));
           }
           else if(info.title== "Rejected"){
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Rejected").snapshots(),)));
+                        isEqualTo: context.read<Info>().user.name).where("status", isEqualTo: "Rejected").snapshots(),)));
           }
           else if(info.title== "Inprogress"){
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Inprogress").snapshots(),)));
+                        isEqualTo: context.read<Info>().user.name).where("status", isEqualTo: "Inprogress").snapshots(),)));
           }
           else if(info.title== "Completed"){
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                        isEqualTo: context.read<Info>().username).where("status", isEqualTo: "Completed").snapshots(),)));
+                        isEqualTo: context.read<Info>().user.name).where("status", isEqualTo: "Completed").snapshots(),)));
           }
           // Navigator.pushNamed(context, '/complaints_details', arguments: info);
         },

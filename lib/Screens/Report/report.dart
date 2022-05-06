@@ -13,6 +13,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import 'Components/sheet.dart';
+
 class Report extends StatefulWidget {
 
   final String id;
@@ -29,6 +31,8 @@ class _ReportState extends State<Report> {
   double rating = 0;
   TextEditingController message = TextEditingController();
   final FirebaseFirestore firestore= FirebaseFirestore.instance;
+@override
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,6 +204,7 @@ class _ReportState extends State<Report> {
           Log(),
           FeedBack(),
           Download(),
+          Edit(),
         ],
       ),
 
@@ -411,7 +416,7 @@ class _ReportState extends State<Report> {
 
   );
   SpeedDialChild Log() => SpeedDialChild(
-      child: SvgPicture.asset("assets/icons/log.svg", color: Colors.white,height: 30,),
+      child: SvgPicture.asset("assets/icons/log.svg",color: Colors.white , height: 30,),
 
     label: "Log",
     backgroundColor: Colors.blue,
@@ -423,6 +428,8 @@ class _ReportState extends State<Report> {
       }
     }
   );
+//  SpeedDialChild edit
+
 SpeedDialChild Download() => SpeedDialChild(
   child: Icon(Icons.file_download, color: Colors.white,),
   label: "Download",
@@ -438,6 +445,15 @@ SpeedDialChild Download() => SpeedDialChild(
           PdfApi.openFile(pdf);
         },
       );
+  SpeedDialChild Edit()=> SpeedDialChild(
+      child: Icon(Icons.edit,color: Colors.white,),
+      label: "Edit",
+      backgroundColor: Colors.blue,
+      onTap: () async{
+        await showModalBottomSheet(context: context, builder:(context) =>  Sheet(id: widget.id,) );
+        setState(() {});
+      }
+  );
 
 }
 
@@ -453,10 +469,3 @@ AddLog(String id, String message) {
   );
   FirebaseFirestore.instance.collection('Logs').add(log.toJson());
 }
-DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-      value: item,
-      alignment: Alignment.center,
-      child: Text(
-        item,
-      ),
-    );

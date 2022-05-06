@@ -1,33 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:namhal/api/notifyUser.dart';
 
 class Token{
+static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+static late String token;
+static Future<String> CheckToken(String? email) async {
+  await _firestore.collection('User').doc(email).get().then((value) {
+       token = value.data()?['token'];
 
-static Future GetToken(String? email,String? token ) async{
-  await FirebaseFirestore.instance.collection('User').doc(email).get().then((
-      value) {
-    token = value.get('token');
-  });
-  if(token?.isEmpty??true){
-    token = await FirebaseMessaging.instance.getToken();
-    NotifyUser.requestPermission();
-    await FirebaseFirestore.instance.collection('User').doc(email).update({
-      'token':'$token'
-    });
-  }
-}
-static Future<bool> CheckToken(String? email) async{
-  String? token;
-  await FirebaseFirestore.instance.collection('User').doc(email).get().then((
-      value) {
-    token = value.get('token');
-  });
-  if(token?.isEmpty??false){
-    return true;
+
+     });
+  if(token.isNotEmpty){
+    return token;
   }
   else{
-    return false;
+    return "false";
   }
 }
+
+static Future UpdateToken(String? email) async{
+    await _firebaseMessaging.getToken().then((value) {
+      _firestore.collection('User').doc(email).update({'token': value});});
+  }
 }
+
+

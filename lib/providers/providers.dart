@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:namhal/model/UserObject.dart';
 import 'package:namhal/model/complaint.dart';
 
 class add extends ChangeNotifier{
@@ -12,17 +13,39 @@ class add extends ChangeNotifier{
   }
 
 }
-class ComplaintObject extends ChangeNotifier{
+class ComplaintObject extends ChangeNotifier {
   Complains complaint = Complains();
-  void setComplaint(Complains newComplaint){
+
+  void setComplaint(Complains newComplaint) {
     complaint = newComplaint;
     notifyListeners();
   }
-  getComplaint(){
+
+  getComplaint() {
     return complaint;
   }
 
+//set priority
+  setPriority(String newPriority) {
+    complaint.setPriority(newPriority);
+    notifyListeners();
+  }
+//  set status
+  setStatus(String newStatus) {
+    complaint.setStatus(newStatus);
+    notifyListeners();
+  }
+//  set worker
+  setWorker(String newWorker) {
+    complaint.setWorker(newWorker);
+    notifyListeners();
+  }
+  setService(String newService) {
+    complaint.setService(newService);
+    notifyListeners();
+  }
 }
+
 class Status extends ChangeNotifier{
   int total = 0;
   int pending = 0;
@@ -56,47 +79,14 @@ class Status extends ChangeNotifier{
 
 }
 class Info extends ChangeNotifier{
-  String username="";
-  String email="";
-  String password="";
-  String token="";
-  String role="";
-  void setUsername(String newUsername){
-    username = newUsername;
+  UserObject user = UserObject();
+  void setUser(UserObject newUser){
+    user = newUser;
     notifyListeners();
   }
-  void setEmail(String newEmail){
-    email = newEmail;
-    notifyListeners();
-  }
-  void setPassword(String newPassword){
-    password = newPassword;
-    notifyListeners();
-  }
-  void setToken(String newToken){
-    token = newToken;
-    notifyListeners();
-  }
-  void setRole(String newRole){
-    role = newRole;
-    notifyListeners();
+  getUser(){
+    return user;
   }
 
-//get username
-  getUsername(){
-    return username;
-  }
-  getEmail(){
-    return email;
-  }
-  getPassword(){
-    return password;
-  }
-  getToken(){
-    return token;
-  }
-//to string
-  toString(){
-    return "Username: $username, Email: $email, Password: $password, Token: $token, Role: $role";
-  }
+
 }

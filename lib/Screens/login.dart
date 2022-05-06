@@ -34,9 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: formkey,
             child: Column(
-
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
                     child: Image.asset(
@@ -103,23 +101,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
+                SizedBox(
+                  width: MediaQuery.of(context).size.width*0.95,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: signIn,
+                    child: Text(
+                      "Login",
+                      style: TextStyle(fontSize: 25, color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                      shadowColor: Colors.blueAccent,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0)),
 
-                  onPressed: signIn,
-                  child: Text(
-                    "Login",
-                    style: TextStyle(fontSize: 25, color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-
-
-                    onPrimary: Colors.white,
-                    shadowColor: Colors.blueAccent,
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0)),
-
+                    ),
                   ),
                 ),
               ],
@@ -167,11 +166,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-
+    Navigator.pop(context);
     Navigator.of(context).pushReplacement(
-
       MaterialPageRoute(
-
         //add dashboard and pass user object
         builder: (context) => DashboardScreen(),
       ),

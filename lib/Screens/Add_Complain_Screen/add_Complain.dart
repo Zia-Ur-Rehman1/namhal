@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
+import 'package:namhal/api/TokenHandling.dart';
 import 'package:namhal/api/notifyUser.dart';
 import '/providers/providers.dart';
 import '../../Utlities/Utils.dart';
@@ -41,9 +43,11 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       if (image == null) return;
       final imageTemporary = File(image.path);
-      setState(() {
-        this.image = imageTemporary;
-      });
+      if(mounted) {
+        setState(() {
+          this.image = imageTemporary;
+        });
+      }
     } on PlatformException catch (e) {
       Utils.showSnackBar("Failed to pick image: $e", Colors.red);
     }
@@ -163,9 +167,11 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                           value: selectedService,
                           items: serviceItem,
                           onChanged: (newValue) {
-                            setState(() {
-                              selectedService = newValue;
-                            });
+                            if(mounted) {
+                              setState(() {
+                                selectedService = newValue;
+                              });
+                            }
                           });
                     },
                   ),
@@ -255,7 +261,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
       title: _titleController.text,
       desc: _descriptionController.text,
       status: "Pending",
-      worker: "Not Assign",
+      worker: "---",
       timestamp: Timestamp.now(),
       manager: serviceManager[selectedService],
       startDate: DateFormat.yMMMd().format(now),
@@ -269,27 +275,24 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
       Navigator.of(context).popUntil((route) => route.isFirst);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-      String? token;
-      await firestore.collection('User').doc(serviceManager[selectedService]).get().then((
-          value) {
-        token = value.get('token');
-        print("Token exits $token");
-      });
-      if(token!.length>2) {
-        print("Token exits");
+     await sendNotification(complains);
 
-        NotifyUser().Notify();
-        NotifyUser.sendPushMessage(token!,
-            complains.title.toString() + "   " +
-                complains.service.toString(), complains.username.toString());
-      }
       Utils.showSnackBar("Complaint Added Successfully",Colors.green);
     }).catchError((e) {
       Navigator.pop(context);
       Utils.showSnackBar("Error Occured",Colors.red);
     });
   }
-
+Future<void> sendNotification(Complains complains ) async {
+    String? token;
+    token= await Token.CheckToken(complains.manager);
+    if(token!="false") {
+      NotifyUser.sendPushMessage(token,
+         "Complaind By: " + complains.username.toString() + "   Service: " +complains.service.toString(),
+         "Title: " + complains.title.toString() + "\n" + "Desc: " +complains.desc.toString(),
+      );
+    }
+}
 }
 
 

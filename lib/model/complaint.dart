@@ -30,9 +30,9 @@ class Complains {
     this.address,
     this.manager,
     this.img,
-    this.worker = "Not Assign",
-    this.status = "Not Approve",
-    this.priority = "Not Set",
+    this.worker = "---",
+    this.status,
+    this.priority = "---",
     this.startTime,
     this.startDate,
     this.endTime,
@@ -98,8 +98,22 @@ class Complains {
     // this.notification = map['notification'];
   }
 
+  setStatus(String status) {
+    this.status = status;
+  }
+  setPriority(String priority) {
+    this.priority = priority;
+  }
+  setWorker(String worker) {
+    this.worker = worker;
+  }
+  setService(String service) {
+    this.service = service;
+  }
   @override
   String toString() {
     return 'Complains{username: $username, title: $title, desc: $desc, service: $service, address: $address, img: $img, worker: $worker, status: $status, manager: $manager, priority: $priority, startTime: $startTime, startDate: $startDate, endTime: $endTime, endDate: $endDate, feedback: $feedback, timestamp: $timestamp, isComplete: $isComplete, reissue: $reissue, rating: $rating}';
   }
+
+
 }

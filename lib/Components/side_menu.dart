@@ -45,7 +45,7 @@ class SideMenu extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                          isEqualTo: context.read<Info>().username).snapshots(),)));
+                          isEqualTo: context.read<Info>().user.name).snapshots(),)));
             },
           ),
           DrawerListTile(

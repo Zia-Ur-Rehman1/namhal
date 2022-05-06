@@ -1,20 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
+import 'package:namhal/api/notifyUser.dart';
 import 'package:provider/provider.dart';
 
 import 'Screens/login.dart';
 import 'Utlities/Utils.dart';
 import 'providers/providers.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.messageId}');
-  if (message.notification != null) {
-    print('Message also contained a notification: ${message.notification}');
-  }
+  print("onBackgroundMessage: $message");
 }
+
 
 
 
@@ -23,7 +23,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main()  async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  NotifyUser().Notify();
   runApp(const MyApp());
 
 }

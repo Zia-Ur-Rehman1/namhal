@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import 'package:namhal/Components/side_menu.dart';
+import 'package:namhal/api/notifyUser.dart';
+import 'package:namhal/model/UserObject.dart';
 
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
 import 'package:namhal/Screens/Dashboard/Components/ComplaintDetails.dart';
 import 'package:namhal/api/TokenHandling.dart';
-import 'package:namhal/api/notifyUser.dart';
+import 'package:namhal/model/UserObject.dart';
 
 import 'package:namhal/model/complaint.dart';
 import 'package:provider/provider.dart';
@@ -26,9 +29,9 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   User? user = FirebaseAuth.instance.currentUser;
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? token;
-
   int Pending = 0;
   int InProgress = 0;
   int Completed = 0;
@@ -38,34 +41,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    //post call
+
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       getUser();
     });
-
+  }
+  Future<void> manageToken() async {
+    FirebaseMessaging.instance.onTokenRefresh.listen((token) {
+      print("Refreshed token: $token");
+      Token.UpdateToken(user?.email);
+    });
+    token=await Token.CheckToken(user?.email);
+    if(token=="false"){
+      Token.UpdateToken(user?.email);
+      Provider.of<Info>(context, listen: false).user.token=token;
+    }
 
   }
 
- void getUser(){
-   firestore.collection("User").doc(user!.email).get().then((value) {
+ Future<void> getUser() async{
+   await firestore.collection("User").doc(user!.email).get().then((value)  {
      if(mounted) {
-       print("user data");
        setState(() {
-         Provider.of<Info>(context, listen: false).setUsername(value.data()?['name']);
+         UserObject userObject = UserObject.fromJson(value.data());
+         Provider.of<Info>(context, listen: false).setUser(userObject);
        });
      StreamListener();
+     manageToken();
      }
    });
 
-   Token.GetToken(user!.email!, token);
-   NotifyUser().Notify();
 
- }
+  }
   void StreamListener()   {
-    print("Stream Listener");
     firestore.collection("Complains")
           .where('username',
-            isEqualTo: context.read<Info>().getUsername())
+            isEqualTo: context.read<Info>().user.name)
           .snapshots()
           .listen((event) {
             Pending = event.docs
@@ -149,8 +160,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           SizedBox(height: kDefaultPadding),
                           Card(
-                            color: Colors.blueGrey[50],
-                            elevation: 5,
+
+                            color: Colors.blueGrey[100],
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 300,
@@ -178,10 +189,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     return Center(
                                       child: Text("No Complaints"),
                                     );
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    print("done");
-                                  }
 
                                   return ListView.builder(
                                     itemCount: snapshot.data!.docs.length,
@@ -207,7 +214,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('username',
-                                            isEqualTo: context.read<Info>().username).snapshots(),)));
+                                            isEqualTo: context.read<Info>().user.name).snapshots(),)));
                               },
                               child: Text("View Complaints")),
                           if (Responsive.isMobile(context))
@@ -233,6 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
 }
 
 //complaints details

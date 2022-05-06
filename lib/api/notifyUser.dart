@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:namhal/Constants/constants.dart';
@@ -14,21 +15,21 @@ class NotifyUser {
     await loadFCM();
     await listenFCM();
   }
-  static Future<void> sendPushMessage(String token, String body, String title) async {
-    print("Send Push Message");
+  static Future<void> sendPushMessage(String token, String title, String body) async {
     try {
       await http.post(
         Uri.parse('https://fcm.googleapis.com/fcm/send'),
         headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization':
-              'key=',
+              'key=AAAAXApatyo:APA91bGQBsooKjdgs0v2g0dEdQg8RhmTKvJdX1llWdwCp05_U_bD8u1jyPAYqIhQ66vdUUKuiL-NIf9_ilm_hk5d_Q4Hmsa58lHTEmYeu1OsCciouZtpuID3jrHiKlcgSXk8X6q7Hbz5',
         },
         body: jsonEncode(
           <String, dynamic>{
             'notification': <String, dynamic>{
               'title': title,
               'body': body,
+
             },
             'priority': 'high',
             'data': <String, dynamic>{
@@ -58,10 +59,15 @@ class NotifyUser {
           notification.hashCode,
           notification.title,
           notification.body,
+          // desc
+
           NotificationDetails(
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
+              channelDescription: channel.description,
+              sound: channel.sound,
+              styleInformation: BigTextStyleInformation(""),
               playSound: true,
               priority: Priority.max,
               // TODO add a proper drawable resource to android, for now using
@@ -72,7 +78,6 @@ class NotifyUser {
         );
       }
     });
-
 
    }
 
