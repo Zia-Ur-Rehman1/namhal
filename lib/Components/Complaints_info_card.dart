@@ -19,8 +19,12 @@ class ComplaintsInfoCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
-        color: kSecondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        gradient: lg,
+        borderRadius: const BorderRadius.all(Radius.circular(25)),
+        border: Border.all(
+          color: Colors.white30,
+          width: 1,
+        ),
       ),
       child: InkWell(
         onTap: () {
@@ -66,7 +70,7 @@ class ComplaintsInfoCard extends StatelessWidget {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: info.color!.withOpacity(0.1),
+                    color: info.color?.withOpacity(0.3),
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
                   child: SvgPicture.asset(
@@ -80,7 +84,7 @@ class ComplaintsInfoCard extends StatelessWidget {
             Text(
               info.title!,
               maxLines: 1,
-              style: TextStyle(color: Colors.white),
+              style: rcT,
 
               overflow: TextOverflow.ellipsis,
             ),
@@ -89,10 +93,7 @@ class ComplaintsInfoCard extends StatelessWidget {
               children: [
                 Text(
                   "${info.numOfFiles} Files",
-                  style: Theme.of(context)
-                      .textTheme
-                      .caption!
-                      .copyWith(color: Colors.white70),
+                  style: rcST,
                 ),
               ],
             )

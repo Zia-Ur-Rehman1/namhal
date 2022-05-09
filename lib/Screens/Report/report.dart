@@ -29,6 +29,8 @@ class Report extends StatefulWidget {
 class _ReportState extends State<Report> {
   bool isLoading = false;
   double rating = 0;
+  IconData iconData= Icons.add;
+  IconData iconData2= Icons.close;
   TextEditingController message = TextEditingController();
   final FirebaseFirestore firestore= FirebaseFirestore.instance;
 @override
@@ -48,10 +50,15 @@ class _ReportState extends State<Report> {
               children: [
                 Card(
                   elevation: 5,
-                  color: kSecondaryColor,
+                  color: kSecondaryColor.withOpacity(0.5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12.0))),
                   child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(12.0)),
+                        gradient: lg,
+                      ),
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
@@ -94,22 +101,25 @@ class _ReportState extends State<Report> {
                 ),
                 Text(
                   "Description",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                )),
                 Container(
                   height: 200,
                   width: double.infinity,
-                  child: Card(
-                    elevation: 5,
-                    color: kSecondaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        context.read<ComplaintObject>().complaint.desc.toString(),
-                        style: TextStyle(fontSize: 15, color: Colors.white),
-                      ),
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(12.0)),
+                      gradient: lg,
+                    ),
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      context.read<ComplaintObject>().complaint.desc.toString(),
+                      style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -121,13 +131,12 @@ class _ReportState extends State<Report> {
                     textAlign: TextAlign.center,
                   ),
                   children: [
+                    context.read<ComplaintObject>().complaint.img != "No Image Attached"?
                     SizedBox(
-                        height: MediaQuery.of(context).size.height / 4,
+                        height: MediaQuery.of(context).size.height / 3,
                         width: MediaQuery.of(context).size.width / 1.2,
                         child: CachedNetworkImage(
-                          imageUrl: context.read<ComplaintObject>().complaint.img != "No Image Attached"
-                              ? context.read<ComplaintObject>().complaint.img.toString()
-                              : "No Image Attached",
+                          imageUrl: context.read<ComplaintObject>().complaint.img.toString(),
                           fit: BoxFit.cover,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
@@ -135,7 +144,7 @@ class _ReportState extends State<Report> {
                                       value: downloadProgress.progress),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
-                        )),
+                        )):Image.asset("assets/images/noImg.png",height: MediaQuery.of(context).size.height / 3,width: MediaQuery.of(context).size.width / 1.2,fit: BoxFit.cover,),
                   ],
                 ),
                 //make it on click to open menu
@@ -158,7 +167,7 @@ class _ReportState extends State<Report> {
                   padding: const EdgeInsets.only(right: 20),
                   child: Text(
                     "Feedback",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kPrimaryColor),
                   ),
                 ),
 
@@ -197,7 +206,8 @@ class _ReportState extends State<Report> {
       ),
       //add circular fab widget
       floatingActionButton: SpeedDial(
-        animatedIcon: AnimatedIcons.menu_close,
+        icon: iconData,
+        activeIcon: iconData2,
         backgroundColor: Colors.blue,
         activeBackgroundColor: Colors.redAccent,
         children: [
@@ -210,7 +220,6 @@ class _ReportState extends State<Report> {
 
     );
   }
-
   RichText buildRichText(String title, String subtitle) {
     return RichText(
       text: TextSpan(
@@ -218,25 +227,19 @@ class _ReportState extends State<Report> {
         children: [
           TextSpan(
             text: subtitle,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white54,
-            ),
+            style: rcST,
           ),
         ],
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+        style:rcT,
       ),
     );
   }
 
+
   Widget buildLog(BuildContext context) => ExpansionTile(
         title: Text(
           "Logs",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
           textAlign: TextAlign.center,
         ),
 

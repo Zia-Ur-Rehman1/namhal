@@ -216,6 +216,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                 ),
               ),
               Container(
+                margin: EdgeInsets.symmetric(horizontal: 5.0),
                 height: MediaQuery
                     .of(context)
                     .size

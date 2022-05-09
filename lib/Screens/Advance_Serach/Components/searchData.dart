@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Report/report.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
@@ -77,49 +78,48 @@ DataSearch({this.email});
         Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(id: suggestions[index].id,)));
 
       },
-      child: Card(
-        elevation: 5,
-        color: Colors.blueGrey,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        margin: EdgeInsets.all(8),
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-                Radius.circular(12.0))),
-        child: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+                Radius.circular(12.0)),
+            gradient: lg,
+          ),
+          padding: EdgeInsets.all(10),
+          child: Column(
             children: [
-            Text("Title: ",style: TextStyle(fontSize: 15,color: Colors.white,fontWeight: FontWeight.bold),),
-              SubstringHighlight(text: suggestions[index].get("title").toString(),textStyle: TextStyle( fontSize: 15,
-                color: Colors.white54, ),term: query,textStyleHighlight: TextStyle(fontSize: 15,
-                color: Colors.black,),),
-          ],),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Text("Title: ",style: TextStyle(fontSize: 15,color: kSecondaryColor,fontWeight: FontWeight.bold),),
+            SubstringHighlight(text: suggestions[index].get("title").toString(),textStyle: TextStyle( fontSize: 15,
+              color: Colors.white54, ),term: query,textStyleHighlight: TextStyle(fontSize: 15,
+              color: Colors.black,),),
+        ],),
 
-                Table(
-                  children: [
-                    TableRow(children: [
-                      buildRichText("Name: ",
-                          suggestions[index].get("username").toString()),
-                      buildRichText("Address: ",
-                          suggestions[index].get("address").toString()),
-                    ]),
-                    TableRow(children: [
-                      buildRichText("Priority: ",
-                          suggestions[index].get("priority").toString()),
-                      buildRichText("Status: ",
-                          suggestions[index].get("status").toString()),
-                    ]),
-                    TableRow(children: [
-                      buildRichText("Worker: ",
-                          suggestions[index].get("worker").toString()),
-                      buildRichText("Service: ", suggestions[index].get("service").toString())
-                    ]),
-                  ],
-                ),
-              ],
-            )),
-      ),
+              Table(
+                children: [
+                  TableRow(children: [
+                    buildRichText("Name: ",
+                        suggestions[index].get("username").toString()),
+                    buildRichText("Address: ",
+                        suggestions[index].get("address").toString()),
+                  ]),
+                  TableRow(children: [
+                    buildRichText("Priority: ",
+                        suggestions[index].get("priority").toString()),
+                    buildRichText("Status: ",
+                        suggestions[index].get("status").toString()),
+                  ]),
+                  TableRow(children: [
+                    buildRichText("Worker: ",
+                        suggestions[index].get("worker").toString()),
+                    buildRichText("Service: ", suggestions[index].get("service").toString())
+                  ]),
+                ],
+              ),
+            ],
+          )),
     );
       },
     );
@@ -132,17 +132,10 @@ DataSearch({this.email});
         children: [
           TextSpan(
             text: subtitle,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white54,
-            ),
+            style: rcST,
           ),
         ],
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+        style: rcT,
       ),
     );
   }

@@ -21,7 +21,8 @@ class ComplaintsSummary extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
-        color: Colors.blueGrey[100],
+        //linear gradient
+        gradient: lg,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(

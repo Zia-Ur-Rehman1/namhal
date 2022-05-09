@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,7 +6,7 @@ import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
 import 'package:namhal/api/notifyUser.dart';
 import 'package:provider/provider.dart';
-
+import 'package:namhal/Constants/constants.dart';
 import 'Screens/login.dart';
 import 'Utlities/Utils.dart';
 import 'providers/providers.dart';
@@ -61,7 +60,7 @@ class MyApp extends StatelessWidget {
           primaryColor: kPrimaryColor,
         scrollbarTheme: const ScrollbarThemeData().copyWith(
           thickness: MaterialStateProperty.all(5),
-          thumbColor: MaterialStateProperty.all(kSecondaryColor),
+          thumbColor: MaterialStateProperty.all(Colors.blueGrey),
         )
         ),
         home: StreamBuilder<User?>(

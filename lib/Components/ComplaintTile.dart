@@ -16,75 +16,68 @@ class ComplaintTile extends StatelessWidget {
         Provider.of<ComplaintObject>(context,listen: false).setComplaint(complain);
         Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(id:id)));
       },
-      child: Card(
-        elevation: 5,
-        color: kSecondaryColor,
-        shape: RoundedRectangleBorder(
+      child: Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
-                Radius.circular(12.0))),
-        child: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                buildRichText("Title: ",
-                    complain.title.toString()),
-                Table(
-                  children: [
-                    TableRow(children: [
-                      buildRichText(
-                          "Name: ",
-                          complain.username
-                              .toString()),
-                      buildRichText(
-                          "Address: ",
-                          complain.address
-                              .toString()),
-                    ]),
-                    TableRow(children: [
-                      buildRichText(
-                          "Priority: ",
-                          complain.priority
-                              .toString()),
-                      buildRichText(
-                          "Status: ",
-                          complain.status
-                              .toString()),
-                    ]),
-                    TableRow(children: [
-                      buildRichText(
-                          "Worker: ",
-                          complain.worker
-                              .toString()),
-                      buildRichText(
-                          "Service: ",
-                          complain.service
-                              .toString())
-                    ]),
-                  ],
-                ),
-              ],
-            )),
-      ),
+                Radius.circular(12.0)),
+            gradient: lg,
+          ),
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              buildRichText("Title: ",
+                  complain.title.toString()),
+              Table(
+                children: [
+                  TableRow(children: [
+                    buildRichText(
+                        "Name: ",
+                        complain.username
+                            .toString()),
+                    buildRichText(
+                        "Address: ",
+                        complain.address
+                            .toString()),
+                  ]),
+                  TableRow(children: [
+                    buildRichText(
+                        "Priority: ",
+                        complain.priority
+                            .toString()),
+                    buildRichText(
+                        "Status: ",
+                        complain.status
+                            .toString()),
+                  ]),
+                  TableRow(children: [
+                    buildRichText(
+                        "Worker: ",
+                        complain.worker
+                            .toString()),
+                    buildRichText(
+                        "Service: ",
+                        complain.service
+                            .toString())
+                  ]),
+                ],
+              ),
+            ],
+          )),
     );
   }
   RichText buildRichText(String title, String subtitle) {
     return RichText(
       text: TextSpan(
         text: title,
+        style: rcT,
         children: [
           TextSpan(
             text: subtitle,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white54,
-            ),
+            style: rcST,
           ),
         ],
-        style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
+
       ),
     );
   }

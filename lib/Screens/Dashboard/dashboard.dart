@@ -5,13 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import 'package:namhal/Components/side_menu.dart';
-import 'package:namhal/api/notifyUser.dart';
 import 'package:namhal/model/UserObject.dart';
 
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
 import 'package:namhal/Screens/Dashboard/Components/ComplaintDetails.dart';
 import 'package:namhal/api/TokenHandling.dart';
-import 'package:namhal/model/UserObject.dart';
 
 import 'package:namhal/model/complaint.dart';
 import 'package:provider/provider.dart';
@@ -110,7 +108,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const SideMenu(),
-      backgroundColor: const Color(0xFFE5E5E5),
+      backgroundColor: Colors.white,
 
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -160,8 +158,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           SizedBox(height: kDefaultPadding),
                           Card(
-
-                            color: Colors.blueGrey[100],
+                            elevation: 0,
+                            color: Colors.white.withOpacity(0.9),
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width,
                               height: 300,

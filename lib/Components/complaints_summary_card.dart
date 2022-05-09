@@ -6,6 +6,7 @@ import '../Constants/constants.dart';
 class ComplaintsSummaryCard extends StatelessWidget {
   const ComplaintsSummaryCard({
     Key? key,
+
     required this.title,
     required this.svgSrc,
     required this.color,
@@ -22,7 +23,7 @@ class ComplaintsSummaryCard extends StatelessWidget {
       margin: EdgeInsets.only(top: kDefaultPadding),
       padding: EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
-        border: Border.all(width: 2, color: kPrimaryColor.withOpacity(0.15)),
+        border: Border.all(width: 2, color: Colors.white38),
         borderRadius: const BorderRadius.all(
           Radius.circular(kDefaultPadding),
         ),
