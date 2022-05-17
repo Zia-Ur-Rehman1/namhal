@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
+import 'package:namhal/Screens/Profile/profile.dart';
 import 'package:namhal/api/notifyUser.dart';
 import 'package:provider/provider.dart';
 import 'package:namhal/Constants/constants.dart';

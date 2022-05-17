@@ -1,15 +1,15 @@
 class UserObject {
   String? name;
   String? email;
-  String? password;
+  String? pass;
   String? token;
-  UserObject({ this.name, this.email, this.password, this.token});
+  UserObject({ this.name, this.email, this.pass, this.token});
   //Tojson
   Map<String,dynamic> toJson() {
     return {
       "name": name,
       "email": email,
-      "password": password,
+      "pass": pass,
       "token": token,
     };
   }
@@ -19,13 +19,13 @@ class UserObject {
     return UserObject(
       name: json?['name'],
       email: json?['email'],
-      password: json?['password'],
+      pass: json?['pass'],
       token: json?['token'],
     );
   }
   @override
   String toString() {
-    return 'UserObject{ name: $name, email: $email, password: $password, token: $token}';
+    return 'UserObject{ name: $name, email: $email, password: $pass, token: $token}';
   }
 
 

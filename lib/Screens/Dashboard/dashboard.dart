@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import 'package:namhal/Components/side_menu.dart';
+import 'package:namhal/Screens/Profile/profile.dart';
 import 'package:namhal/model/UserObject.dart';
 
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
@@ -46,7 +47,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
   Future<void> manageToken() async {
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
-      print("Refreshed token: $token");
       Token.UpdateToken(user?.email);
     });
     token=await Token.CheckToken(user?.email);
@@ -118,7 +118,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
       actions: [
       IconButton(
         icon: const Icon(Icons.person),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        },
       ),
       ],
       ),
