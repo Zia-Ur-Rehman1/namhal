@@ -29,12 +29,18 @@ class Report extends StatefulWidget {
 class _ReportState extends State<Report> {
   bool isLoading = false;
   double rating = 0;
+  bool isComplete = false;
   IconData iconData= Icons.add;
   IconData iconData2= Icons.close;
   TextEditingController message = TextEditingController();
   final FirebaseFirestore firestore= FirebaseFirestore.instance;
 @override
-
+  initState() {
+    super.initState();
+   if(context.read<ComplaintObject>().complaint.status=="Completed"){
+     isComplete=true;
+   }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,7 +204,6 @@ class _ReportState extends State<Report> {
                 ),
                 buildRating(true),
                 //add rating here
-               OutlinedButton.icon(onPressed: showRating, icon:Text("Rate It!") , label: Icon(Icons.thumb_up_alt_outlined))
               ],
             ),
           ),
@@ -212,8 +217,10 @@ class _ReportState extends State<Report> {
         activeBackgroundColor: Colors.redAccent,
         children: [
           Log(),
-          FeedBack(),
           Download(),
+          isComplete? FeedBack():Empty(),
+          isComplete? RateIt():Empty(),
+
           Edit(),
         ],
       ),
@@ -418,6 +425,12 @@ class _ReportState extends State<Report> {
 
 
   );
+  SpeedDialChild RateIt() => SpeedDialChild(
+      child: Icon(Icons.thumb_up_alt_outlined,color: Colors.white, size: 30,),
+      label: "Rate It",
+      backgroundColor: Colors.blue,
+      onTap: showRating
+  );
   SpeedDialChild Log() => SpeedDialChild(
       child: SvgPicture.asset("assets/icons/log.svg",color: Colors.white , height: 30,),
 
@@ -432,7 +445,9 @@ class _ReportState extends State<Report> {
     }
   );
 //  SpeedDialChild edit
+SpeedDialChild Empty() => SpeedDialChild(
 
+);
 SpeedDialChild Download() => SpeedDialChild(
   child: Icon(Icons.file_download, color: Colors.white,),
   label: "Download",

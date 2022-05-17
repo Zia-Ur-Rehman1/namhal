@@ -47,7 +47,7 @@ class ComplaintsInfoCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                        isEqualTo: context.read<Info>().user.name).where("status", isEqualTo: "Inprogress").snapshots(),)));
+                        isEqualTo: context.read<Info>().user.name).where("status", isEqualTo: "InProgress").snapshots(),)));
           }
           else if(info.title== "Completed"){
             Navigator.push(
