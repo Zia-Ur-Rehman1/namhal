@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:namhal/Utlities/Utils.dart';
 import 'package:namhal/providers/providers.dart';
 import 'package:provider/provider.dart';
 class ProfilePage extends StatefulWidget {
@@ -76,12 +78,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: TextField(
                       enabled: editPass,
                       controller: _passwordController,
+
                       onChanged: (value){
                         context.read<Info>().user.pass=value;
                       //  update in firebase
-                        FirebaseFirestore.instance.collection("User").doc(context.read<Info>().user.email).update({
-                          'pass':value
-                        });
+
                       },
                       obscureText: !editPass,
                       decoration: InputDecoration(
@@ -111,7 +112,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     }, icon: Icon(Icons.edit,color: _color,),),
                   ),
                 ],),
+              editPass? ElevatedButton(onPressed: (){
+                String pass = _passwordController.text;
 
+                FirebaseAuth.instance.currentUser?.updatePassword(pass).then((value){
+                  print('password updated');
+                  Utils.showSnackBar("Password Updated", Colors.green);
+                }).catchError((e){
+                  Utils.showSnackBar("Error: $e", Colors.red);
+                });
+                FirebaseFirestore.instance.collection("User").doc(context.read<Info>().user.email).update({
+                  'pass': pass,
+                });
+                setState(() {
+                  editPass=false;
+                  _color=Colors.black;
+                });
+              }, child: Text("Update"),):SizedBox(),
               ],
             ),
           ),

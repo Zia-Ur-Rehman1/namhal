@@ -59,7 +59,7 @@ class PdfApi {
               ]),
               TableRow(children: [
                 buildRichText("EndDate: ", complain.endDate==null?"---":complain.endDate.toString()),
-                buildRichText("EndTime: ", complain.endTime==null?"---":complain.endDate.toString())
+                buildRichText("EndTime: ", complain.endTime==null?"---":complain.endTime.toString())
               ]),
 
             ],

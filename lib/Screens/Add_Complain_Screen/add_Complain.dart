@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -265,7 +264,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
       timestamp: Timestamp.now(),
       manager: serviceManager[selectedService],
       startDate: DateFormat.yMMMd().format(now),
-      startTime: DateFormat().add_jm().format(now),
+      startTime: DateFormat.jm().format(now),
       service: selectedService,
       address: context.read<add>().getAddress(),
 

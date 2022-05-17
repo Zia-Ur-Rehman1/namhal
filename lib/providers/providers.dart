@@ -44,6 +44,14 @@ class ComplaintObject extends ChangeNotifier {
     complaint.setService(newService);
     notifyListeners();
   }
+  setEndDate(String newEndDate) {
+    complaint.setEndDate(newEndDate);
+    notifyListeners();
+  }
+  setEndTime(String newEndTime) {
+    complaint.setEndTime(newEndTime);
+    notifyListeners();
+  }
 }
 
 class Status extends ChangeNotifier{

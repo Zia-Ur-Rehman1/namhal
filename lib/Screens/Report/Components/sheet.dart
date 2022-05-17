@@ -5,6 +5,7 @@ import 'package:namhal/api/TokenHandling.dart';
 import 'package:namhal/api/notifyUser.dart';
 import 'package:namhal/providers/providers.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 class Sheet extends StatefulWidget {
   final String id;
   const Sheet({Key? key,required this.id}) : super(key: key);
@@ -257,7 +258,21 @@ class _SheetState extends State<Sheet> {
 UpdateReport() async {
   selectedWorker??="---";
   selectedPriority ??= "---";
+if(selectedWorker!="---" && selectedStatus == "Pending" ){
+  selectedStatus="InProgress";
+}
+if(selectedStatus == "Completed"){
+  DateTime now = DateTime.now();
+  final endDate =DateFormat.yMMMd().format(now);
+  final endTime = DateFormat.jm().format(now);
+  firestore.collection("Complains").doc(widget.id).update({
+  "endDate": endDate,
+    "endTime":endTime,
+  });
 
+  Provider.of<ComplaintObject>(context, listen: false).setEndDate(endDate);
+  Provider.of<ComplaintObject>(context, listen: false).setEndTime(endTime);
+}
 firestore.collection("Complains").doc(widget.id).update({
 
   "status":selectedStatus,

@@ -110,6 +110,12 @@ class Complains {
   setService(String service) {
     this.service = service;
   }
+  setEndTime(String endTime) {
+    this.endTime = endTime;
+  }
+  setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
   @override
   String toString() {
     return 'Complains{username: $username, title: $title, desc: $desc, service: $service, address: $address, img: $img, worker: $worker, status: $status, manager: $manager, priority: $priority, startTime: $startTime, startDate: $startDate, endTime: $endTime, endDate: $endDate, feedback: $feedback, timestamp: $timestamp, isComplete: $isComplete, reissue: $reissue, rating: $rating}';
