@@ -222,7 +222,7 @@ class _ReportState extends State<Report> {
           isComplete? FeedBack():Empty(),
           isComplete? RateIt():Empty(),
 
-          Edit(),
+          // Edit(),
         ],
       ),
 

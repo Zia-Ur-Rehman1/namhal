@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
+import 'package:namhal/Screens/Profile/profile.dart';
 import 'package:namhal/Screens/login.dart';
 import 'package:namhal/providers/providers.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +16,7 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.blueGrey.withOpacity(0.7),
+      backgroundColor: kPrimaryColor.withOpacity(0.7),
       child: ListView(
         children: [
           DrawerHeader(
@@ -51,7 +53,12 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Tasks Progress",
             svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
           ),
 
           DrawerListTile(
