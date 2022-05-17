@@ -202,6 +202,7 @@ class _ReportState extends State<Report> {
                         side: BorderSide(color: Colors.blue, width: 2)),
                   ),
                 ),
+                //Show Rating
                 buildRating(true),
                 //add rating here
               ],
@@ -406,7 +407,7 @@ class _ReportState extends State<Report> {
       backgroundColor: Colors.blue,
       onTap: () async{
         await openDialog("Feedback");
-        if (message.text.isNotEmpty) {
+        if (message.text.isNotEmpty && message.text != context.read<ComplaintObject>().complaint.feedback.toString()) {
           firestore
               .collection("Complains")
               .doc(widget.id)

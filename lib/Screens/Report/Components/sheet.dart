@@ -20,6 +20,8 @@ class _SheetState extends State<Sheet> {
   String? selectedWorker;
   String? selectedStatus;
   String? selectedPriority;
+
+
   @override
   initState() {
     super.initState();
@@ -49,11 +51,11 @@ class _SheetState extends State<Sheet> {
         (
         child: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+
               Text("Update Complaint" ,textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
