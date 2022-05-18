@@ -8,8 +8,6 @@ static late String token;
 static Future<String> CheckToken(String? email) async {
   await _firestore.collection('User').doc(email).get().then((value) {
        token = value.data()?['token'];
-
-
      });
   if(token.isNotEmpty){
     return token;

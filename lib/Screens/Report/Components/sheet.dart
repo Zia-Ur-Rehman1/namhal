@@ -289,9 +289,9 @@ Provider.of<ComplaintObject>(context, listen: false).setPriority(selectedPriorit
 String token = await Token.CheckToken(context.read<ComplaintObject>().complaint.username.toString()+"@namal.edu.pk");
 if(token!="false") {
   NotifyUser.sendPushMessage(token,
-    "Complaind By: " + context.read<ComplaintObject>().complaint.username.toString() + "   Service: " +selectedService.toString(),
-    "Status: " + selectedStatus.toString() + " " + "Priority: " +selectedPriority.toString() +"\n"+
-    "Worker: " + selectedWorker.toString(),
+    "Title: " +context.read<ComplaintObject>().complaint.title.toString()+ "   Service: " +selectedService.toString(),
+    "StatusUpdated: " + selectedStatus.toString() + " " +  "Assigned To: " + selectedWorker.toString() +
+        "\nPriority: " +selectedPriority.toString() ,
   );
 }
 

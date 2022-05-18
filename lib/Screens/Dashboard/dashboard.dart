@@ -93,8 +93,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
   void StreamListener()   {
     firestore.collection("Complains")
-          .where('manager',
-            isEqualTo: context.read<Info>().user.email)
+          .where('username',
+            isEqualTo: context.read<Info>().user.name)
           .snapshots()
           .listen((event) {
             Pending = event.docs
@@ -193,9 +193,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: StreamBuilder<QuerySnapshot?>(
                                 stream: firestore
                                     .collection('Complains')
-                                    .where('manager',
-                                        isEqualTo: context.read<Info>().user.email)
-                                    // .collection('Complains').where('manager',isEqualTo: user?.email)
+                                    .where('username',
+                                        isEqualTo: context.read<Info>().user.name)
+
                                     .orderBy("timestamp", descending: true)
                                     .limit(10)
                                     .snapshots(),
@@ -237,7 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('manager',
+                                        builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('username',
                                             isEqualTo: context.read<Info>().user.email).snapshots(),)));
                               },
                               child: Text("View Complaints")),

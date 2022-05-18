@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:namhal/Utlities/Utils.dart';
+import 'package:namhal/api/TokenHandling.dart';
+import 'package:namhal/api/notifyUser.dart';
 import 'package:namhal/api/pdf_api.dart';
 import 'package:namhal/model/log.dart';
 import 'package:namhal/providers/providers.dart';
@@ -16,31 +18,34 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'Components/sheet.dart';
 
 class Report extends StatefulWidget {
-
   final String id;
 
-  const Report({Key? key, required this.id})
-      : super(key: key);
+  const Report({Key? key, required this.id}) : super(key: key);
 
   @override
   _ReportState createState() => _ReportState();
 }
 
 class _ReportState extends State<Report> {
+  bool isVisible = false;
   bool isLoading = false;
   double rating = 0;
   bool isComplete = false;
-  IconData iconData= Icons.add;
-  IconData iconData2= Icons.close;
+  IconData iconData = Icons.add;
+  IconData iconData2 = Icons.close;
   TextEditingController message = TextEditingController();
-  final FirebaseFirestore firestore= FirebaseFirestore.instance;
-@override
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  @override
   initState() {
     super.initState();
-   if(context.read<ComplaintObject>().complaint.status=="Completed"){
-     isComplete=true;
-   }
+    if (context.read<ComplaintObject>().complaint.status == "Completed") {
+      isComplete = true;
+    }
+    if(context.read<ComplaintObject>().complaint.reissue == 0){
+      isVisible = true;
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,40 +66,84 @@ class _ReportState extends State<Report> {
                       borderRadius: BorderRadius.all(Radius.circular(12.0))),
                   child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(12.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
                         gradient: lg,
                       ),
                       padding: EdgeInsets.all(10),
                       child: Column(
                         children: [
                           buildRichText(
-                              "Title: ", context.read<ComplaintObject>().complaint.title.toString()),
+                              "Title: ",
+                              context
+                                  .read<ComplaintObject>()
+                                  .complaint
+                                  .title
+                                  .toString()),
                           Table(
                             children: [
                               TableRow(children: [
-                                buildRichText("Name: ",
-                                    context.read<ComplaintObject>().complaint.username.toString()),
-                                buildRichText("Address: ",
-                                    context.read<ComplaintObject>().complaint.address.toString()),
+                                buildRichText(
+                                    "Name: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .username
+                                        .toString()),
+                                buildRichText(
+                                    "Address: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .address
+                                        .toString()),
                               ]),
                               TableRow(children: [
-                                buildRichText("Priority: ",
-                                    context.read<ComplaintObject>().complaint.priority.toString()),
-                                buildRichText("Status: ",
-                                    context.read<ComplaintObject>().complaint.status.toString()),
+                                buildRichText(
+                                    "Priority: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .priority
+                                        .toString()),
+                                buildRichText(
+                                    "Status: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .status
+                                        .toString()),
                               ]),
                               TableRow(children: [
-                                buildRichText("Worker: ",
-                                    context.read<ComplaintObject>().complaint.worker.toString()),
-                                buildRichText("Service: ",
-                                    context.read<ComplaintObject>().complaint.service.toString())
+                                buildRichText(
+                                    "Worker: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .worker
+                                        .toString()),
+                                buildRichText(
+                                    "Service: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .service
+                                        .toString())
                               ]),
                               TableRow(children: [
-                                buildRichText("Date: ",
-                                    context.read<ComplaintObject>().complaint.startDate.toString()),
-                                buildRichText("Time: ",
-                                    context.read<ComplaintObject>().complaint.startTime.toString())
+                                buildRichText(
+                                    "Date: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .startDate
+                                        .toString()),
+                                buildRichText(
+                                    "Time: ",
+                                    context
+                                        .read<ComplaintObject>()
+                                        .complaint
+                                        .startTime
+                                        .toString())
                               ]),
                             ],
                           ),
@@ -105,27 +154,28 @@ class _ReportState extends State<Report> {
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "Description",
-                  style: TextStyle(
+                Text("Description",
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                    color: kPrimaryColor,
-                )),
-                Container(
+                      color: kPrimaryColor,
+                    )),
+                SizedBox(
                   height: 200,
                   width: double.infinity,
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(12.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
                       gradient: lg,
                     ),
                     margin: EdgeInsets.all(10),
                     child: Text(
                       context.read<ComplaintObject>().complaint.desc.toString(),
-                      style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -137,20 +187,31 @@ class _ReportState extends State<Report> {
                     textAlign: TextAlign.center,
                   ),
                   children: [
-                    context.read<ComplaintObject>().complaint.img != "No Image Attached"?
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height / 3,
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        child: CachedNetworkImage(
-                          imageUrl: context.read<ComplaintObject>().complaint.img.toString(),
-                          fit: BoxFit.cover,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        )):Image.asset("assets/images/noImg.png",height: MediaQuery.of(context).size.height / 3,width: MediaQuery.of(context).size.width / 1.2,fit: BoxFit.cover,),
+                    context.read<ComplaintObject>().complaint.img !=
+                            "No Image Attached"
+                        ? SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 1.2,
+                            child: CachedNetworkImage(
+                              imageUrl: context
+                                  .read<ComplaintObject>()
+                                  .complaint
+                                  .img
+                                  .toString(),
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ))
+                        : Image.asset(
+                            "assets/images/noImg.png",
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 1.2,
+                            fit: BoxFit.cover,
+                          ),
                   ],
                 ),
                 //make it on click to open menu
@@ -173,7 +234,10 @@ class _ReportState extends State<Report> {
                   padding: const EdgeInsets.only(right: 20),
                   child: Text(
                     "Feedback",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: kPrimaryColor),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: kPrimaryColor),
                   ),
                 ),
 
@@ -187,9 +251,17 @@ class _ReportState extends State<Report> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Container(
-                          child: context.read<ComplaintObject>().complaint.feedback != null
+                          child: context
+                                      .read<ComplaintObject>()
+                                      .complaint
+                                      .feedback !=
+                                  null
                               ? Text(
-                            context.read<ComplaintObject>().complaint.feedback.toString(),
+                                  context
+                                      .read<ComplaintObject>()
+                                      .complaint
+                                      .feedback
+                                      .toString(),
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.black),
                                 )
@@ -205,7 +277,63 @@ class _ReportState extends State<Report> {
                 //Show Rating
                 buildRating(true),
                 //add rating here
-              ],
+                isComplete? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Visibility(
+                      visible:isVisible,
+                      replacement: SizedBox(),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                            ),
+                        onPressed: () async {
+                          await firestore.collection("Complains").doc(widget.id).update({
+                            "reissue": -1,
+                          });
+                          setState(() {
+                            isVisible = false;
+                          });
+                        }, child: Text("Accept"),
+
+                      ),
+
+                    ),
+                    Visibility(
+                      visible:isVisible,
+                      replacement: SizedBox(),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                          ),
+                          onPressed: () async {
+                            DateTime now = DateTime.now();
+                            await firestore.collection("Complains").doc(widget.id).update({
+                              "reissue": FieldValue.increment(1),
+                              "priority":"High",
+                              "endDate": null,
+                              "endTime": null,
+                              "startDate": DateFormat.yMMMd().format(now),
+                              "startTime": DateFormat.jm().format(now),
+                              "timestamp": Timestamp.now(),
+                              "status": "Pending",
+                            });
+                            String token = await Token.CheckToken(context.read<ComplaintObject>().complaint.manager);
+                            if(token!="false") {
+                              NotifyUser.sendPushMessage(token,
+                                "Complaind By: " + context.read<ComplaintObject>().complaint.username.toString() + "   Service: " +context.read<ComplaintObject>()
+                                  .complaint.service.toString(),
+                              "Title: "+context.read<ComplaintObject>().complaint.title.toString() +  "\nAlert : Complaint Re-Issued",
+                              );
+                            }
+                            setState(() {
+                              isVisible = false;
+                            });
+                          }, child: Text("Reject")),
+                    )
+                  ],
+                ):SizedBox(),
+              ], //children
             ),
           ),
         ),
@@ -219,15 +347,15 @@ class _ReportState extends State<Report> {
         children: [
           Log(),
           Download(),
-          // isComplete? FeedBack():Empty(),
-          // isComplete? RateIt():Empty(),
+          isComplete ? FeedBack() : Empty(),
+          isComplete ? RateIt() : Empty(),
 
-          Edit(),
+          // Edit(),
         ],
       ),
-
     );
   }
+
   RichText buildRichText(String title, String subtitle) {
     return RichText(
       text: TextSpan(
@@ -238,16 +366,18 @@ class _ReportState extends State<Report> {
             style: rcST,
           ),
         ],
-        style:rcT,
+        style: rcT,
       ),
     );
   }
 
-
   Widget buildLog(BuildContext context) => ExpansionTile(
         title: Text(
           "Logs",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
           textAlign: TextAlign.center,
         ),
 
@@ -331,10 +461,11 @@ class _ReportState extends State<Report> {
     message.dispose();
   }
 
-  Widget buildRating(bool gesture){
-    return     Center(
+  Widget buildRating(bool gesture) {
+    return Center(
       child: RatingBar.builder(
-        initialRating: context.read<ComplaintObject>().complaint.rating?.toDouble() ?? 0,
+        initialRating:
+            context.read<ComplaintObject>().complaint.rating?.toDouble() ?? 0,
         itemCount: 5,
         ignoreGestures: gesture,
         updateOnDrag: true,
@@ -383,97 +514,121 @@ class _ReportState extends State<Report> {
     );
   }
 
-  void showRating() => showDialog(context: context, builder: (context) => AlertDialog(
-    title: Text("Rate this Complain"),
-    content:  Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text("Please rate the quality of the service"),
-        SizedBox(height: 10,),
-        buildRating(false),
-      ],),
-    actions: [
-      TextButton(onPressed: (){
-        firestore.collection('Complains').doc(widget.id).update({'rating': context.read<ComplaintObject>().complaint.rating});
-        Navigator.of(context).pop();
-      }, child: Text("Submit")),
-    ],
-  ));
+  void showRating() => showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text("Rate this Complain"),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Please rate the quality of the service"),
+                SizedBox(
+                  height: 10,
+                ),
+                buildRating(false),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: ()  async {
+                    await firestore.collection('Complains').doc(widget.id).update({
+                      'rating': context.read<ComplaintObject>().complaint.rating
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Submit")),
+            ],
+          ));
 
   SpeedDialChild FeedBack() => SpeedDialChild(
-      child: SvgPicture.asset("assets/icons/feedback.svg", color: Colors.white,height: 30,),
+      child: SvgPicture.asset(
+        "assets/icons/feedback.svg",
+        color: Colors.white,
+        height: 30,
+      ),
       label: "Feedback",
       backgroundColor: Colors.blue,
-      onTap: () async{
+      onTap: () async {
         await openDialog("Feedback");
-        if (message.text.isNotEmpty && message.text != context.read<ComplaintObject>().complaint.feedback.toString()) {
-          firestore
+        if (message.text.isNotEmpty &&
+            message.text !=
+                context.read<ComplaintObject>().complaint.feedback.toString()) {
+        await  firestore
               .collection("Complains")
               .doc(widget.id)
               .update({
-            "feedback": message.text,
-          })
-              .then((value) => Utils.showSnackBar("Updated",Colors.green))
+                "feedback": message.text,
+              })
+              .then((value) => Utils.showSnackBar("Updated", Colors.green))
               .catchError((error) =>
-              Utils.showSnackBar("Failed to update : $error",Colors.red));
+                  Utils.showSnackBar("Failed to update : $error", Colors.red));
           setState(() {
             context.read<ComplaintObject>().complaint.feedback = message.text;
           });
           message.clear();
         }
-      }
-
-
-  );
+      });
   SpeedDialChild RateIt() => SpeedDialChild(
-      child: Icon(Icons.thumb_up_alt_outlined,color: Colors.white, size: 30,),
+      child: Icon(
+        Icons.thumb_up_alt_outlined,
+        color: Colors.white,
+        size: 30,
+      ),
       label: "Rate It",
       backgroundColor: Colors.blue,
-      onTap: showRating
-  );
+      onTap: showRating);
   SpeedDialChild Log() => SpeedDialChild(
-      child: SvgPicture.asset("assets/icons/log.svg",color: Colors.white , height: 30,),
-
-    label: "Log",
-    backgroundColor: Colors.blue,
-    onTap: () async{
-      await openDialog("Log");
-      if (message.text.isNotEmpty) {
-        AddLog(widget.id, message.text);
-        message.clear();
-      }
-    }
-  );
+      child: SvgPicture.asset(
+        "assets/icons/log.svg",
+        color: Colors.white,
+        height: 30,
+      ),
+      label: "Log",
+      backgroundColor: Colors.blue,
+      onTap: () async {
+        await openDialog("Log");
+        if (message.text.isNotEmpty) {
+          AddLog(widget.id, message.text);
+          message.clear();
+        }
+      });
 //  SpeedDialChild edit
-SpeedDialChild Empty() => SpeedDialChild(
-
-);
-SpeedDialChild Download() => SpeedDialChild(
-  child: Icon(Icons.file_download, color: Colors.white,),
-  label: "Download",
-  backgroundColor: Colors.blue,
-  onTap: () async{
-    setState(() {
+  SpeedDialChild Empty() => SpeedDialChild();
+  SpeedDialChild Download() => SpeedDialChild(
+        child: Icon(
+          Icons.file_download,
+          color: Colors.white,
+        ),
+        label: "Download",
+        backgroundColor: Colors.blue,
+        onTap: () async {
+          setState(() {
             isLoading = true;
           });
-          final pdf = await PdfApi.generate(context.read<ComplaintObject>().complaint, widget.id);
+          final pdf = await PdfApi.generate(
+              context.read<ComplaintObject>().complaint, widget.id);
           setState(() {
             isLoading = false;
           });
           PdfApi.openFile(pdf);
         },
       );
-  SpeedDialChild Edit()=> SpeedDialChild(
-      child: Icon(Icons.edit,color: Colors.white,),
+  SpeedDialChild Edit() => SpeedDialChild(
+      child: Icon(
+        Icons.edit,
+        color: Colors.white,
+      ),
       label: "Edit",
       backgroundColor: Colors.blue,
-      onTap: () async{
-        await showModalBottomSheet(context: context, builder:(context) =>  Sheet(id: widget.id,) );
+      onTap: () async {
+        await showModalBottomSheet(
+            context: context,
+            builder: (context) => Sheet(
+                  id: widget.id,
+                ));
         setState(() {});
-      }
-  );
-
+      });
 }
 
 AddLog(String id, String message) {
