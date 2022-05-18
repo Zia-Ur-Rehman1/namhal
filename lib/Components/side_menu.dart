@@ -25,7 +25,7 @@ class SideMenu extends StatelessWidget {
             children: [
               Image.asset("assets/images/logo.png",
                   width: 64, height: 65, cacheHeight: 64, cacheWidth: 64),
-              Text(
+              const Text(
                 "Namhal",
                 style: TextStyle(
                     fontSize: 20,
@@ -74,7 +74,7 @@ class SideMenu extends StatelessWidget {
             press: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
               );
             },
           ),
@@ -125,7 +125,7 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }

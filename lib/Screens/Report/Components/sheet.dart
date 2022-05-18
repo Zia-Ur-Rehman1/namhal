@@ -38,10 +38,10 @@ class _SheetState extends State<Sheet> {
   @override
   Widget build(BuildContext context) {
     return  Container(
-      color: Color(0xff757575),
+      color: const Color(0xff757575),
       child: Container
         (
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -57,8 +57,8 @@ class _SheetState extends State<Sheet> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
 
-              Text("Update Complaint" ,textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-              SizedBox(height: 20,),
+              const Text("Update Complaint" ,textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              const SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -66,17 +66,18 @@ class _SheetState extends State<Sheet> {
                   stream: firestore.collection('Service').snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return Text('Something went wrong');
+                      return const Text('Something went wrong');
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    if(snapshot.data?.docs.length==0)
-                      return Center(
+                    if(snapshot.data?.docs.isEmpty == true){
+                      return const Center(
                         child: Text("No Complaints"),
                       );
+                    }
 
                     List<DropdownMenuItem> serviceItem = [];
                     for (var element in snapshot.data!.docs) {
@@ -90,13 +91,13 @@ class _SheetState extends State<Sheet> {
                     }
                     return DropdownButtonHideUnderline(
                       child: DropdownButton<dynamic>(
-                          icon: Icon(Icons.arrow_drop_down_circle),
+                          icon: const Icon(Icons.arrow_drop_down_circle),
                           iconSize: 30,
                           elevation: 8,
                           isExpanded: false,
                           isDense: true,
 
-                          hint: Text("Select Service"),
+                          hint: const Text("Select Service"),
                           value: selectedService,
                           items: serviceItem,
                           onChanged: (newValue) {
@@ -111,18 +112,19 @@ class _SheetState extends State<Sheet> {
                     stream: firestore.collection('Priority').snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
-                        return Text('Something went wrong');
+                        return const Text('Something went wrong');
                       }
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      if(snapshot.data?.docs.length==0)
-                        return Center(
+                      if(snapshot.data?.docs.isEmpty == true) {
+                        return const Center(
                           child: Text("No Data"),
                         );
+                      }
 
                       List<DropdownMenuItem> serviceItem = [];
                       for (var element in snapshot.data!.docs) {
@@ -137,10 +139,10 @@ class _SheetState extends State<Sheet> {
                       return DropdownButtonHideUnderline(
                         child: DropdownButton<dynamic>(
                             borderRadius: BorderRadius.circular(8.0),
-                            icon: Icon(Icons.arrow_drop_down_circle),
+                            icon: const Icon(Icons.arrow_drop_down_circle),
                             iconSize: 30,
                             elevation: 8,
-                            hint: Text("Priority"),
+                            hint: const Text("Priority"),
                             value: selectedPriority,
                             items: serviceItem,
                             onChanged: (newValue) {
@@ -153,7 +155,7 @@ class _SheetState extends State<Sheet> {
                   ),
 
               ],),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
       Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -162,18 +164,19 @@ class _SheetState extends State<Sheet> {
             stream: firestore.collection('Status').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('Something went wrong');
+                return const Text('Something went wrong');
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              if(snapshot.data?.docs.length==0)
-                return Center(
+              if(snapshot.data?.docs.isEmpty == true) {
+                return const Center(
                   child: Text("No Data"),
                 );
+              }
 
               List<DropdownMenuItem> serviceItem = [];
               for (var element in snapshot.data!.docs) {
@@ -188,10 +191,10 @@ class _SheetState extends State<Sheet> {
               return DropdownButtonHideUnderline(
                 child: DropdownButton<dynamic>(
                     borderRadius: BorderRadius.circular(8.0),
-                    icon: Icon(Icons.arrow_drop_down_circle),
+                    icon: const Icon(Icons.arrow_drop_down_circle),
                     iconSize: 30,
                     elevation: 8,
-                    hint: Text("Status"),
+                    hint: const Text("Status"),
                     value: selectedStatus,
                     items: serviceItem,
                     onChanged: (newValue) {
@@ -206,18 +209,19 @@ class _SheetState extends State<Sheet> {
               stream: firestore.collection('Worker').where("service",isEqualTo: selectedService).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Text('Something went wrong');
+                  return const Text('Something went wrong');
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                if(snapshot.data?.docs.length==0)
-                  return Center(
+                if(snapshot.data?.docs.isEmpty == true) {
+                  return const Center(
                     child: Text("No Data"),
                   );
+                }
 
                 List<DropdownMenuItem> serviceItem = [];
                 for (var element in snapshot.data!.docs) {
@@ -232,10 +236,10 @@ class _SheetState extends State<Sheet> {
                 return DropdownButtonHideUnderline(
                   child: DropdownButton<dynamic>(
                       borderRadius: BorderRadius.circular(8.0),
-                      icon: Icon(Icons.arrow_drop_down_circle),
+                      icon: const Icon(Icons.arrow_drop_down_circle),
                       iconSize: 30,
                       elevation: 8,
-                      hint: Text("Worker"),
+                      hint: const Text("Worker"),
                       value: selectedWorker,
                       items: serviceItem,
                       onChanged: (newValue) {
@@ -249,8 +253,8 @@ class _SheetState extends State<Sheet> {
             ),
       ],),
             Container(
-                padding: EdgeInsets.all(20),
-                child: ElevatedButton(onPressed: UpdateReport, child: Text("Update") )),
+                padding: const EdgeInsets.all(20),
+                child: ElevatedButton(onPressed: UpdateReport, child: const Text("Update") )),
             ],),
         ),
       ),),

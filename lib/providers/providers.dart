@@ -60,6 +60,7 @@ class Status extends ChangeNotifier{
   int InProgress = 0;
   int rejected = 0;
   int completed = 0;
+  @override
   String toString(){
     return "Total: $total, Pending: $pending, InProgress: $InProgress, Rejected: $rejected, Completed: $completed";
   }

@@ -43,7 +43,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
 
 
       appBar: (AppBar(
-        title: Text("Advance Search"),
+        title: const Text("Advance Search"),
         centerTitle: true,
         actions: [
           IconButton(
@@ -53,7 +53,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                     delegate: DataSearch(email: username));
                 print(result);
               },
-              icon: Icon(Icons.search))
+              icon: const Icon(Icons.search))
         ],
       )),
       body: SafeArea(
@@ -61,7 +61,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: MediaQuery
                     .of(context)
                     .size
@@ -88,10 +88,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                           .snapshots();
                                 });
                               },
-                              child: Text("All"),
+                              child: const Text("All"),
                             ),
-                            padding: EdgeInsets.all(8.0),
-                            margin: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(10.0),
                           ),
                           Container(
                             child: ElevatedButton(
@@ -107,10 +107,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                           .snapshots();
                                 });
                               },
-                              child: Text("Pending"),
+                              child: const Text("Pending"),
                             ),
-                            padding: EdgeInsets.all(8.0),
-                            margin: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(10.0),
                           ),
                           // Container(
                           //   margin: EdgeInsets.all(10.0),
@@ -164,10 +164,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                           .snapshots();
                                 });
                               },
-                              child: Text("Inprogress"),
+                              child: const Text("Inprogress"),
                             ),
-                            padding: EdgeInsets.all(8.0),
-                            margin: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(10.0),
                           ),
                           Container(
                             child: ElevatedButton(
@@ -184,10 +184,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                           .snapshots();
                                 });
                               },
-                              child: Text("Completed"),
+                              child: const Text("Completed"),
                             ),
-                            padding: EdgeInsets.all(8.0),
-                            margin: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(10.0),
                           ),
                           Container(
                             child: ElevatedButton(
@@ -204,10 +204,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                           .snapshots();
                                 });
                               },
-                              child: Text("Rejected"),
+                              child: const Text("Rejected"),
                             ),
-                            padding: EdgeInsets.all(8.0),
-                            margin: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(8.0),
+                            margin: const EdgeInsets.all(10.0),
                           ),
                         ],
                       ),
@@ -216,7 +216,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                margin: const EdgeInsets.symmetric(horizontal: 5.0),
                 height: MediaQuery
                     .of(context)
                     .size
@@ -228,14 +228,15 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                       return Text('Error: ${snapshot.error}');
                     }
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    if (snapshot.data?.docs.length == 0)
-                      return Center(
+                    if (snapshot.data?.docs.isEmpty == true) {
+                      return const Center(
                         child: Text("No Complaints to View"),
                       );
+                    }
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {

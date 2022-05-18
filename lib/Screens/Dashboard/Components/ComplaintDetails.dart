@@ -18,7 +18,7 @@ class ComplaintDetails extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "Complaints Detail",
               style: TextStyle(
                 color: kSecondaryColor,
@@ -34,22 +34,22 @@ class ComplaintDetails extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => AddComplain()));
+                    context, MaterialPageRoute(builder: (_) => const AddComplain()));
 
               },
-              icon: Icon(Icons.add),
-              label: Text("Add Complain"),
+              icon: const Icon(Icons.add),
+              label: const Text("Add Complain"),
             ),
           ],
         ),
-        SizedBox(height: kDefaultPadding),
+        const SizedBox(height: kDefaultPadding),
         Responsive(
           mobile: ComplaintsCardGridView(
 
             crossAxisCount: _size.width < 650 ? 2 : 4,
             childAspectRatio: _size.width < 650 ? 1.3 : 1,
           ),
-          tablet: ComplaintsCardGridView(),
+          tablet: const ComplaintsCardGridView(),
           desktop: ComplaintsCardGridView(
             childAspectRatio: _size.width < 1400 ? 1.1 : 1.4,
           ),

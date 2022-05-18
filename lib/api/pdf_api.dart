@@ -66,7 +66,7 @@ class PdfApi {
           ),
           buildRichText("Managed By: ", complain.manager.toString()),
           Paragraph(
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             text: "Description ",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,font: bold),
           ),
@@ -81,7 +81,7 @@ class PdfApi {
               borderRadius: BorderRadius.circular(5),
             ),
             child: Paragraph(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               text:complain.desc!=null?complain.desc.toString():"---",
               style: TextStyle(fontSize: 14, font: font),
             ),
@@ -90,7 +90,7 @@ class PdfApi {
 
 
           Paragraph(
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
 
             text: "User Feedback ",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -106,20 +106,20 @@ class PdfApi {
               borderRadius: BorderRadius.circular(5),
             ),
             child: Paragraph(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               text:complain.feedback!=null?complain.feedback.toString():"No Feedback",
               style: TextStyle(fontSize: 14, font: font),
             ),
           ),
           SizedBox(height: 10),
           Paragraph(
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
 
             text: "Rating ",
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           ),
           Paragraph(
-            margin: EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 5),
             text:complain.rating!=null?complain.rating.toString():"No Rating",
             style: TextStyle(fontSize: 14, font: font),
           ),
@@ -130,12 +130,12 @@ class PdfApi {
                 ? UrlLink(
                 destination: complain.img.toString(),
                 child: Text('Attached Image',
-                    style: TextStyle(
+                    style: const TextStyle(
                       decoration: TextDecoration.underline,
                       color: PdfColors.blue,
                     )))
                 : Text("No Image Attached",
-                style: TextStyle(
+                style: const TextStyle(
                   decoration: TextDecoration.none,
                   color: PdfColors.black,
                 )),

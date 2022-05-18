@@ -30,7 +30,7 @@ List ComplaintsDetails = [
     title: "Pending",
     numOfFiles: 28,
     svgSrc: kSvg,
-    color: Color(0xFFFFA113),
+    color: const Color(0xFFFFA113),
     value: "pending",
   ),
   ComplaintsStorageInfo(

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:namhal/Constants/constants.dart';
@@ -67,7 +66,7 @@ class NotifyUser {
               channel.name,
               channelDescription: channel.description,
               sound: channel.sound,
-              styleInformation: BigTextStyleInformation(""),
+              styleInformation: const BigTextStyleInformation(""),
               playSound: true,
               priority: Priority.max,
               // TODO add a proper drawable resource to android, for now using

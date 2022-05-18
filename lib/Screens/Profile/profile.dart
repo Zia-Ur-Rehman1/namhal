@@ -31,22 +31,22 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
       ),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 AspectRatio(aspectRatio: 3/2, child: Image.asset('assets/images/user.png')),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 TextField(
                   enabled: false,
                   controller: _nameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     disabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
                     ),
@@ -56,12 +56,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
 
                 TextField(
                   enabled: false,
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     disabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
                     ),
@@ -70,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     labelText: 'Email',
                   ),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
 
                 Row(children: [
                   Expanded(
@@ -85,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                       },
                       obscureText: !editPass,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         disabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   editPass=false;
                   _color=Colors.black;
                 });
-              }, child: Text("Update"),):SizedBox(),
+              }, child: const Text("Update"),):const SizedBox(),
               ],
             ),
           ),

@@ -17,13 +17,13 @@ class ComplaintTile extends StatelessWidget {
         Navigator.push(context, MaterialPageRoute(builder: (context)=> Report(id:id)));
       },
       child: Container(
-          margin: EdgeInsets.symmetric(vertical: 5),
+          margin: const EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
                 Radius.circular(12.0)),
             gradient: lg,
           ),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               buildRichText("Title: ",

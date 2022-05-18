@@ -46,19 +46,19 @@ class _ChartState extends State<Chart> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: kDefaultPadding),
+                const SizedBox(height: kDefaultPadding),
                 Text(
                   //parse as int
-                  '${(context.read<Status>().completed).toStringAsFixed(0)}'+ " Completed",
-                  style: TextStyle(
+                  (context.read<Status>().completed).toStringAsFixed(0) + " Completed",
+                  style: const TextStyle(
                     color: kSecondaryColor,
                     fontWeight: FontWeight.w600,
                     height: 0.5,
                   ),
                 ),
                 Text(
-                  "out of "+'${(context.read<Status>().total).toStringAsFixed(0)}' + " Total",
-                  style: TextStyle(color: kSecondaryColor),
+                  "out of "+ ( context.read<Status>().total).toStringAsFixed(0) + " Total",
+                  style: const TextStyle(color: kSecondaryColor),
                 )
               ],
             ),
@@ -119,7 +119,7 @@ List<PieChartSectionData> paiChartSelectionDatas = [
     radius: 22,
   ),
   PieChartSectionData(
-    color: Color(0xFFFFA113),
+    color: const Color(0xFFFFA113),
     value: 15,
     showTitle: false,
     radius: 19,

@@ -31,8 +31,8 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Map<String, String> serviceManager = {};
   var selectedService;
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   File? image;
   String url = '';
   String? uservalue;
@@ -57,18 +57,18 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Complain"),
+        title: const Text("Add Complain"),
         centerTitle: true,
       ),
       body: Container(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         child: SingleChildScrollView(
           child: Form(
             key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
@@ -79,7 +79,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                   validator: (value) => value != null && value.length < 6
                       ? "Enter atleast 6 characters"
                       : null,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Title',
                     //show errors here
                     // errorText: 'Error message',
@@ -87,7 +87,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                     prefixIcon: Icon(Icons.title_outlined),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10.0,
                 ),
                 TextFormField(
@@ -102,7 +102,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                   //Normal textInputField will be displayed
                   maxLines: 3,
                   // when user presses enter it will adapt to it
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Description',
                     //show errors here
                     // errorText: 'Error message',
@@ -111,11 +111,11 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                   ),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Address(),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
@@ -127,18 +127,19 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                     stream: firestore.collection('Service').snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
-                        return Text('Something went wrong');
+                        return const Text('Something went wrong');
                       }
 
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
-                      if(snapshot.data?.docs.length==0)
-                        return Center(
+                      if(snapshot.data?.docs.isEmpty == true){
+                        return const Center(
                           child: Text("No Complaints"),
                         );
+                      }
 
                       List<DropdownMenuItem> serviceItem = [];
                       for (var element in snapshot.data!.docs) {
@@ -154,14 +155,14 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                       return DropdownButtonFormField<dynamic>(
 
                           menuMaxHeight: 300.0,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             prefixIcon: Icon(Icons.engineering_outlined),
                           ),
                           iconSize: 50,
                           elevation: 5,
                           isExpanded: false,
 
-                          hint: Text("Select Service"),
+                          hint: const Text("Select Service"),
                           isDense: true,
                           value: selectedService,
                           items: serviceItem,
@@ -187,11 +188,11 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                     ),
                   )
                 else
-                  Text(
+                  const Text(
                     "No Image Selected Yet!",
                     style: TextStyle(fontSize: 20),
                   ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -201,18 +202,18 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                         onPressed: () {
                           pickImage(ImageSource.camera);
                         },
-                        child: Icon(Icons.camera_alt_outlined)),
+                        child: const Icon(Icons.camera_alt_outlined)),
                     ElevatedButton(
                         onPressed: () {
                           pickImage(ImageSource.gallery);
                         },
-                        child: Icon(Icons.collections_bookmark_outlined)),
+                        child: const Icon(Icons.collections_bookmark_outlined)),
                   ],
                 ),
 
                 ElevatedButton(
                     onPressed: setComplaint,
-                    child: Text("Confirm")),
+                    child: const Text("Confirm")),
                 //TODO Add image picker
               ],
             ),
@@ -237,7 +238,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => Center(
+      builder: (context) => const Center(
         child: CircularProgressIndicator(),
       ),
     );

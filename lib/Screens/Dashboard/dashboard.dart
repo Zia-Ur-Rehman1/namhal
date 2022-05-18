@@ -143,7 +143,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProfilePage()),
+            MaterialPageRoute(builder: (context) => const ProfilePage()),
           );
         },
       ),
@@ -155,16 +155,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Scrollbar(
           //hover thickness
           interactive: true,
-          radius: Radius.circular(10),
+          radius: const Radius.circular(10),
           showTrackOnHover: true,
           trackVisibility: true,
           child: SingleChildScrollView(
             //show scrolls
 
-            padding: EdgeInsets.all(kDefaultPadding),
+            padding: const EdgeInsets.all(kDefaultPadding),
             child: Column(
               children: [
-                SizedBox(height: kDefaultPadding),
+                const SizedBox(height: kDefaultPadding),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -173,8 +173,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          ComplaintDetails(),
-                          SizedBox(height: kDefaultPadding),
+                          const ComplaintDetails(),
+                          const SizedBox(height: kDefaultPadding),
                           const Text(
                             "Complaints",
                             style: TextStyle(
@@ -183,7 +183,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 color: Colors.blueGrey),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: kDefaultPadding),
+                          const SizedBox(height: kDefaultPadding),
                           Card(
                             elevation: 0,
                             color: Colors.white.withOpacity(0.9),
@@ -201,18 +201,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) {
-                                    Text("Error");
+                                    const Text("Error");
                                   }
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return Center(
+                                    return const Center(
                                       child: CircularProgressIndicator(),
                                     );
                                   }
-                                  if (snapshot.data?.docs.length == 0)
-                                    return Center(
+                                  if (snapshot.data?.docs.isEmpty == true) {
+                                    return const Center(
                                       child: Text("No Complaints"),
                                     );
+                                  }
 
                                   return ListView.builder(
                                     itemCount: snapshot.data!.docs.length,
@@ -238,20 +239,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('username',
-                                            isEqualTo: context.read<Info>().user.email).snapshots(),)));
+                                            isEqualTo: context.read<Info>().user.name).snapshots(),)));
                               },
-                              child: Text("View Complaints")),
+                              child: const Text("View Complaints")),
                           if (Responsive.isMobile(context))
-                            SizedBox(height: kDefaultPadding),
-                          if (Responsive.isMobile(context)) ComplaintsSummary(),
+                            const SizedBox(height: kDefaultPadding),
+                          if (Responsive.isMobile(context)) const ComplaintsSummary(),
                         ],
                       ),
                     ),
                     if (!Responsive.isMobile(context))
-                      SizedBox(width: kDefaultPadding),
+                      const SizedBox(width: kDefaultPadding),
                     // On Mobile means if the screen is less than 850 we dont want to show it
                     if (!Responsive.isMobile(context))
-                      Expanded(
+                      const Expanded(
                         flex: 2,
                         child: ComplaintsSummary(),
                       ),

@@ -17,7 +17,7 @@ class ComplaintsInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(kDefaultPadding),
+      padding: const EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
         gradient: lg,
         borderRadius: const BorderRadius.all(Radius.circular(25)),
@@ -66,7 +66,7 @@ class ComplaintsInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: EdgeInsets.all(kDefaultPadding * 0.75),
+                  padding: const EdgeInsets.all(kDefaultPadding * 0.75),
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(

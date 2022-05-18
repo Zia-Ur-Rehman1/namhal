@@ -4,17 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
-import 'package:namhal/Screens/Profile/profile.dart';
 import 'package:namhal/api/notifyUser.dart';
 import 'package:provider/provider.dart';
-import 'package:namhal/Constants/constants.dart';
 import 'Screens/login.dart';
 import 'Utlities/Utils.dart';
 import 'providers/providers.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("onBackgroundMessage: $message");
-}
 
+}
 
 
 
@@ -54,10 +51,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         theme: ThemeData.light().copyWith(
-          //material3
+          appBarTheme: AppBarTheme(
+            color: btnColor,
 
-
-
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor:MaterialStateProperty.all(btnColor),
+            ),
+          ),
           primaryColor: kPrimaryColor,
         scrollbarTheme: const ScrollbarThemeData().copyWith(
           thickness: MaterialStateProperty.all(5),
@@ -67,14 +69,15 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting)
-              return Center(child: CircularProgressIndicator());
-            else if (snapshot.hasError)
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
               return Center(child: Utils.showSnackBar("Something went wrong", Colors.red));
-            else if (snapshot.hasData)
+            } else if (snapshot.hasData) {
               return DashboardScreen();
-            else
+            } else {
               return LoginScreen();
+            }
           },
         ),
       ),

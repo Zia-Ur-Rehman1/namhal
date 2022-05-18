@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import 'package:namhal/api/TokenHandling.dart';
 
 class Complains {
   String? username;
@@ -48,27 +46,27 @@ class Complains {
 
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['username'] = this.username;
-    data['title'] = this.title;
-    data['desc'] = this.desc;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['username'] = username;
+    data['title'] = title;
+    data['desc'] = desc;
 
-    data['service'] = this.service;
-    data['address'] = this.address;
-    data['manager'] = this.manager;
-    data['img'] = this.img;
-    data['timestamp'] = this.timestamp;
-    data['worker'] = this.worker;
-    data['status'] = this.status;
-    data['priority'] = this.priority;
-    data['startTime'] = this.startTime;
-    data['startDate'] = this.startDate;
-    data['endTime'] = this.endTime;
-    data['endDate'] = this.endDate;
-    data['feedback'] = this.feedback;
-    data['isComplete'] = this.isComplete;
-    data['reissue'] = this.reissue;
-    data['rating'] = this.rating;
+    data['service'] = service;
+    data['address'] = address;
+    data['manager'] = manager;
+    data['img'] = img;
+    data['timestamp'] = timestamp;
+    data['worker'] = worker;
+    data['status'] = status;
+    data['priority'] = priority;
+    data['startTime'] = startTime;
+    data['startDate'] = startDate;
+    data['endTime'] = endTime;
+    data['endDate'] = endDate;
+    data['feedback'] = feedback;
+    data['isComplete'] = isComplete;
+    data['reissue'] = reissue;
+    data['rating'] = rating;
     // data['notification'] = this.notification;
     return data;
   }
@@ -76,25 +74,25 @@ class Complains {
 
 
   Complains.fromMap(Map<String, dynamic> map) {
-    this.username = map['username'];
-    this.title = map['title'];
-    this.desc = map['desc'];
-    this.service = map['service'];
-    this.address = map['address'];
-    this.img = map['img'];
-    this.manager = map['manager'];
-    this.timestamp = map['timestamp'] as Timestamp;
-    this.worker = map['worker'];
-    this.status = map['status'];
-    this.priority = map['priority'];
-    this.startTime = map['startTime'];
-    this.startDate = map['startDate'];
-    this.endTime = map['endTime'];
-    this.endDate = map['endDate'];
-    this.feedback = map['feedback'];
-    this.isComplete = map['isComplete'] as bool;
-    this.reissue = map['reissue'] as int;
-    this.rating = map['rating'] as double;
+    username = map['username'];
+    title = map['title'];
+    desc = map['desc'];
+    service = map['service'];
+    address = map['address'];
+    img = map['img'];
+    manager = map['manager'];
+    timestamp = map['timestamp'] as Timestamp;
+    worker = map['worker'];
+    status = map['status'];
+    priority = map['priority'];
+    startTime = map['startTime'];
+    startDate = map['startDate'];
+    endTime = map['endTime'];
+    endDate = map['endDate'];
+    feedback = map['feedback'];
+    isComplete = map['isComplete'] as bool;
+    reissue = map['reissue'] as int;
+    rating = map['rating'] as double;
     // this.notification = map['notification'];
   }
 

@@ -20,8 +20,8 @@ class ComplaintsSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: kDefaultPadding),
-      padding: EdgeInsets.all(kDefaultPadding),
+      margin: const EdgeInsets.only(top: kDefaultPadding),
+      padding: const EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
         border: Border.all(width: 2, color: Colors.white38),
         borderRadius: const BorderRadius.all(
@@ -46,7 +46,7 @@ class ComplaintsSummaryCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(color: kSecondaryColor),
+                    style: const TextStyle(color: kSecondaryColor),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

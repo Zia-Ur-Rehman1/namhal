@@ -19,7 +19,7 @@ class ComplaintsSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(kDefaultPadding),
+      padding: const EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
         //linear gradient
         gradient: lg,
@@ -28,7 +28,7 @@ class ComplaintsSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             "Complaints Summary",
             style: TextStyle(
               color: kSecondaryColor,
@@ -36,8 +36,8 @@ class ComplaintsSummary extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: kDefaultPadding),
-          Chart(),
+          const SizedBox(height: kDefaultPadding),
+          const Chart(),
           ComplaintsSummaryCard(
             svgSrc: kSvg,
             title: "Total Complaints",
@@ -53,7 +53,7 @@ class ComplaintsSummary extends StatelessWidget {
           ComplaintsSummaryCard(
             svgSrc: kSvg,
             title: "Pending Complaints",
-            color: Color(0xFFFFA113),
+            color: const Color(0xFFFFA113),
             numOfFiles: context.read<Status>().pending,
           ),
           ComplaintsSummaryCard(

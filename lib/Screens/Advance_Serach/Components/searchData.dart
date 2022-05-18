@@ -17,7 +17,7 @@ DataSearch({this.email});
   @override
   List<Widget> buildActions(BuildContext context) => [
         IconButton(
-          icon: Icon(Icons.clear),
+          icon: const Icon(Icons.clear),
           onPressed: () {
             if (query.isEmpty) {
               close(context, "");
@@ -31,7 +31,7 @@ DataSearch({this.email});
 
   @override
   Widget buildLeading(BuildContext context) => IconButton(
-        icon: Icon(Icons.arrow_back),
+        icon: const Icon(Icons.arrow_back),
         onPressed: () => close(context, ""),
       );
 
@@ -40,11 +40,11 @@ DataSearch({this.email});
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.location_city, size: 150),
+            const Icon(Icons.location_city, size: 150),
             const SizedBox(height: 48),
             Text(
               query,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 64,
                 fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ DataSearch({this.email});
         // stream: FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo: email).snapshots(),
         builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -81,21 +81,21 @@ DataSearch({this.email});
 
       },
       child: Container(
-        margin: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
                 Radius.circular(12.0)),
             gradient: lg,
           ),
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          Text("Title: ",style: TextStyle(fontSize: 15,color: kSecondaryColor,fontWeight: FontWeight.bold),),
-            SubstringHighlight(text: suggestions[index].get("title").toString(),textStyle: TextStyle( fontSize: 15,
-              color: Colors.white54, ),term: query,textStyleHighlight: TextStyle(fontSize: 15,
+          const Text("Title: ",style: TextStyle(fontSize: 15,color: kSecondaryColor,fontWeight: FontWeight.bold),),
+            SubstringHighlight(text: suggestions[index].get("title").toString(),textStyle: const TextStyle( fontSize: 15,
+              color: Colors.white54, ),term: query,textStyleHighlight: const TextStyle(fontSize: 15,
               color: Colors.black,),),
         ],),
 

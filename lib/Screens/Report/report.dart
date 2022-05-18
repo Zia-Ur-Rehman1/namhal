@@ -50,26 +50,26 @@ class _ReportState extends State<Report> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Report"),
+        title: const Text("Report"),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Card(
                   elevation: 5,
                   color: kSecondaryColor.withOpacity(0.5),
-                  shape: RoundedRectangleBorder(
+                  shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12.0))),
                   child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
                         gradient: lg,
                       ),
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         children: [
                           buildRichText(
@@ -151,10 +151,10 @@ class _ReportState extends State<Report> {
                       )),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text("Description",
+                const Text("Description",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -164,15 +164,15 @@ class _ReportState extends State<Report> {
                   height: 200,
                   width: double.infinity,
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(12.0)),
                       gradient: lg,
                     ),
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: Text(
                       context.read<ComplaintObject>().complaint.desc.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           color: Colors.white,
                           fontWeight: FontWeight.w500),
@@ -181,7 +181,7 @@ class _ReportState extends State<Report> {
                 ),
 
                 ExpansionTile(
-                  title: Text(
+                  title: const Text(
                     "Image",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
@@ -204,7 +204,7 @@ class _ReportState extends State<Report> {
                                       CircularProgressIndicator(
                                           value: downloadProgress.progress),
                               errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+                                  const Icon(Icons.error),
                             ))
                         : Image.asset(
                             "assets/images/noImg.png",
@@ -223,15 +223,15 @@ class _ReportState extends State<Report> {
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
 
                 Center(
-                  child: isLoading ? CircularProgressIndicator() : SizedBox(),
+                  child: isLoading ? const CircularProgressIndicator() : const SizedBox(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
+                const Padding(
+                  padding: EdgeInsets.only(right: 20),
                   child: Text(
                     "Feedback",
                     style: TextStyle(
@@ -243,11 +243,11 @@ class _ReportState extends State<Report> {
 
                 Container(
                   height: 150,
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   width: double.infinity,
                   child: Card(
                     child: Padding(
-                      padding: EdgeInsets.all(12),
+                      padding: const EdgeInsets.all(12),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Container(
@@ -262,16 +262,16 @@ class _ReportState extends State<Report> {
                                       .complaint
                                       .feedback
                                       .toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 15, color: Colors.black),
                                 )
-                              : Text("No Feedback"),
+                              : const Text("No Feedback"),
                         ),
                       ),
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        side: BorderSide(color: Colors.blue, width: 2)),
+                        side: const BorderSide(color: Colors.blue, width: 2)),
                   ),
                 ),
                 //Show Rating
@@ -282,7 +282,7 @@ class _ReportState extends State<Report> {
                   children: [
                     Visibility(
                       visible:isVisible,
-                      replacement: SizedBox(),
+                      replacement: const SizedBox(),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
@@ -294,14 +294,14 @@ class _ReportState extends State<Report> {
                           setState(() {
                             isVisible = false;
                           });
-                        }, child: Text("Accept"),
+                        }, child: const Text("Accept"),
 
                       ),
 
                     ),
                     Visibility(
                       visible:isVisible,
-                      replacement: SizedBox(),
+                      replacement: const SizedBox(),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: Colors.red,
@@ -329,10 +329,10 @@ class _ReportState extends State<Report> {
                             setState(() {
                               isVisible = false;
                             });
-                          }, child: Text("Reject")),
+                          }, child: const Text("Reject")),
                     )
                   ],
-                ):SizedBox(),
+                ):const SizedBox(),
               ], //children
             ),
           ),
@@ -372,7 +372,7 @@ class _ReportState extends State<Report> {
   }
 
   Widget buildLog(BuildContext context) => ExpansionTile(
-        title: Text(
+        title: const Text(
           "Logs",
           style: TextStyle(
             fontSize: 20,
@@ -390,20 +390,21 @@ class _ReportState extends State<Report> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                Text("Error");
+                const Text("Error");
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              if (snapshot.data?.docs.length == 0)
-                return Center(
+              if (snapshot.data?.docs.isEmpty == true) {
+                return const Center(
                   child: Text("No Logs"),
                 );
+              }
               return ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   final Logs log = Logs.fromMap(snapshot.data!.docs[index]
@@ -415,7 +416,7 @@ class _ReportState extends State<Report> {
                         children: [
                           Text(
                             log.user.toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Text(log.date.toString()),
                           Text(log.time.toString()),
@@ -451,7 +452,7 @@ class _ReportState extends State<Report> {
                 onPressed: () {
                   Navigator.of(context).pop(message.text);
                 },
-                child: Text("Submit"),
+                child: const Text("Submit"),
               ),
             ],
           ));
@@ -473,32 +474,32 @@ class _ReportState extends State<Report> {
         itemBuilder: (context, index) {
           switch (index) {
             case 0:
-              return Icon(
+              return const Icon(
                 Icons.sentiment_very_dissatisfied,
                 color: Colors.red,
               );
             case 1:
-              return Icon(
+              return const Icon(
                 Icons.sentiment_dissatisfied,
                 color: Colors.orange,
               );
             case 2:
-              return Icon(
+              return const Icon(
                 Icons.sentiment_neutral,
                 color: Colors.amber,
               );
             case 3:
-              return Icon(
+              return const Icon(
                 Icons.sentiment_satisfied,
                 color: Colors.lightGreen,
               );
             case 4:
-              return Icon(
+              return const Icon(
                 Icons.sentiment_very_satisfied,
                 color: Colors.green,
               );
             default:
-              return Icon(
+              return const Icon(
                 Icons.sentiment_neutral,
                 color: Colors.green,
               );
@@ -517,13 +518,13 @@ class _ReportState extends State<Report> {
   void showRating() => showDialog(
       context: context,
       builder: (context) => AlertDialog(
-            title: Text("Rate this Complain"),
+            title: const Text("Rate this Complain"),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Please rate the quality of the service"),
-                SizedBox(
+                const Text("Please rate the quality of the service"),
+                const SizedBox(
                   height: 10,
                 ),
                 buildRating(false),
@@ -537,7 +538,7 @@ class _ReportState extends State<Report> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: Text("Submit")),
+                  child: const Text("Submit")),
             ],
           ));
 
@@ -570,7 +571,7 @@ class _ReportState extends State<Report> {
         }
       });
   SpeedDialChild RateIt() => SpeedDialChild(
-      child: Icon(
+      child: const Icon(
         Icons.thumb_up_alt_outlined,
         color: Colors.white,
         size: 30,
@@ -596,7 +597,7 @@ class _ReportState extends State<Report> {
 //  SpeedDialChild edit
   SpeedDialChild Empty() => SpeedDialChild();
   SpeedDialChild Download() => SpeedDialChild(
-        child: Icon(
+        child: const Icon(
           Icons.file_download,
           color: Colors.white,
         ),
@@ -615,7 +616,7 @@ class _ReportState extends State<Report> {
         },
       );
   SpeedDialChild Edit() => SpeedDialChild(
-      child: Icon(
+      child: const Icon(
         Icons.edit,
         color: Colors.white,
       ),

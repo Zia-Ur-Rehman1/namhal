@@ -18,7 +18,7 @@ class ComplaintsCardGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: ComplaintsDetails.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -29,14 +29,15 @@ class ComplaintsCardGridView extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         ComplaintsStorageInfo info = ComplaintsDetails[index];
-        if(info.title=="Pending"  )
+        if(info.title=="Pending"  ) {
           info.numOfFiles=context.read<Status>().pending;
-        else if(info.title=="Inprogress" )
+        } else if(info.title=="Inprogress" ) {
           info.numOfFiles=context.read<Status>().InProgress;
-        else if(info.title=="Completed" )
+        } else if(info.title=="Completed" ) {
           info.numOfFiles=context.read<Status>().completed;
-        else if(info.title=="Rejected" )
+        } else if(info.title=="Rejected" ) {
           info.numOfFiles=context.read<Status>().rejected;
+        }
         return ComplaintsInfoCard(info: ComplaintsDetails[index]);
       },
     );

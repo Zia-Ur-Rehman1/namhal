@@ -16,7 +16,7 @@ class _AddressState extends State<Address> {
   final FocusNode _focusNode = FocusNode();
   TextEditingController addressController = TextEditingController();
   late OverlayEntry _overlayEntry;
-  List<String> _hostel = [];
+  final List<String> _hostel = [];
   List<String> _filter = [];
   String serachText="";
   Timer? _debounce;
@@ -40,10 +40,10 @@ class _AddressState extends State<Address> {
 
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-        this._overlayEntry = this._createOverlayEntry();
-          Overlay.of(context)!.insert(this._overlayEntry);
+        _overlayEntry = _createOverlayEntry();
+          Overlay.of(context)!.insert(_overlayEntry);
       } else {
-        this._overlayEntry.remove();
+        _overlayEntry.remove();
       }
     });
   }
@@ -59,7 +59,7 @@ class _AddressState extends State<Address> {
               bottom: offset.dy,
               width: size.width,
               child: CompositedTransformFollower(
-                link: this._layerLink,
+                link: _layerLink,
                 showWhenUnlinked: false,
                 offset: Offset(0.0, size.height + 5.0),
                 child: Material(
@@ -68,7 +68,7 @@ class _AddressState extends State<Address> {
                       scrollDirection: Axis.vertical,
                       itemCount: _filter.length,
                       shrinkWrap: true,
-                      physics: AlwaysScrollableScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         return ListTile(
                           tileColor: Colors.grey.shade300,
@@ -90,13 +90,13 @@ class _AddressState extends State<Address> {
   @override
   Widget build(BuildContext context) {
     return CompositedTransformTarget(
-      link: this._layerLink,
+      link: _layerLink,
       child: TextFormField(
         autofocus: true,
         textInputAction: TextInputAction.next,
         controller: addressController,
-        focusNode: this._focusNode,
-        decoration: InputDecoration(
+        focusNode: _focusNode,
+        decoration: const InputDecoration(
           labelText: 'Address',
 
           border: OutlineInputBorder(),
