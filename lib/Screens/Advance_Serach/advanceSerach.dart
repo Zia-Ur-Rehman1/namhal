@@ -30,9 +30,9 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
     // TODO: implement initState
     super.initState();
     user = auth.currentUser;
-    username= user?.email.toString().substring(0, user?.email!.indexOf('@'));
+    // username= user?.email.toString().substring(0, user?.email!.indexOf('@'));
 
-
+    username= user?.email.toString();
     // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:user?.email).orderBy("timestamp", descending: true).snapshots();
     rightnow = widget.passStream;
   }
@@ -81,7 +81,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
-                                          .where("username",
+                                          .where("manager",
                                           isEqualTo:username)
                                           .orderBy(
                                           "timestamp", descending: true)
@@ -101,7 +101,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
-                                          .where("username",
+                                          .where("manager",
                                           isEqualTo: username)
                                           .where("status", isEqualTo: "Pending")
                                           .snapshots();
@@ -157,7 +157,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
-                                          .where("username",
+                                          .where("manager",
                                           isEqualTo: username)
                                           .where(
                                           "status", isEqualTo: "InProgress")
@@ -177,7 +177,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
-                                          .where("username",
+                                          .where("manager",
                                           isEqualTo: username)
                                           .where(
                                           "status", isEqualTo: "Completed")
@@ -197,7 +197,7 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
-                                          .where("username",
+                                          .where("manager",
                                           isEqualTo: username)
                                           .where(
                                           "status", isEqualTo: "Rejected")

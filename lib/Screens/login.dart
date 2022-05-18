@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
 import 'package:namhal/Utlities/Utils.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -130,6 +131,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future signIn() async {
+    bool check= await connection();
+    if(check == false) return;
     final isValid = formkey.currentState!.validate();
     if (!isValid) return;
     showDialog(
@@ -150,23 +153,29 @@ class _LoginScreenState extends State<LoginScreen> {
         email: email.text.trim(),
         password: pass.text.trim(),
       );
-      if(mounted){
-        setState(() {
-          isLoading = false;
-        });
-      }
+
 
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
+      Navigator.of(context, rootNavigator: true).pop();
       if(mounted){
         setState(() {
           isLoading = false;
         });
+
       }
       return;
     }
+   if(mounted){
+      setState(() {
+        isLoading = false;
 
-    Navigator.pop(context);
+      });
+
+    }
+    //if mounted then pop
+    // Navigator.of(context).pop();
+    Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         //add dashboard and pass user object
@@ -175,4 +184,16 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     Utils.showSnackBar("User Authorized", Colors.green);
   }
+Future<bool> connection() async{
+
+  ConnectivityResult result = await Connectivity().checkConnectivity();
+  if(result == ConnectivityResult.none)
+  {
+    Utils.showSnackBar("No Internet\n Kindly check your connection", Colors.orange);
+    return false;
+  }
+  else{
+    return true;
+  }
+}
 }

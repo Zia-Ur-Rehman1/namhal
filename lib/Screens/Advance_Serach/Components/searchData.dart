@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Constants/constants.dart';
 import 'package:namhal/Screens/Report/report.dart';
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 
 
@@ -56,7 +58,7 @@ DataSearch({this.email});
   Widget buildSuggestions(BuildContext context) {
   // stream builder
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo: email).snapshots(),
+      stream: FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:context.read<Info>().user.email).snapshots(),
         // stream: FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo: email).snapshots(),
         builder: (context, snapshot) {
         if (!snapshot.hasData) {

@@ -58,6 +58,7 @@ class _SheetState extends State<Sheet> {
             children: [
 
               Text("Update Complaint" ,textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -202,7 +203,7 @@ class _SheetState extends State<Sheet> {
             },
           ),
             StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Worker').where("service",isEqualTo: "Electrical").snapshots(),
+              stream: firestore.collection('Worker').where("service",isEqualTo: selectedService).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Text('Something went wrong');

@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:namhal/Components/ComplaintTile.dart';
 import 'package:namhal/Components/side_menu.dart';
 import 'package:namhal/Screens/Profile/profile.dart';
+import 'package:namhal/Utlities/Utils.dart';
 import 'package:namhal/model/UserObject.dart';
 
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
@@ -18,7 +19,7 @@ import '/Constants/constants.dart';
 import '/Responsive/responsive.dart';
 import '/providers/providers.dart';
 import 'package:flutter/material.dart';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'Components/ComplaintsSummary.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
   User? user = FirebaseAuth.instance.currentUser;
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -36,11 +38,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int Completed = 0;
   int Rejected = 0;
   int total = 0;
-
+  late StreamSubscription<ConnectivityResult> subscription;
   @override
   void initState() {
     super.initState();
-
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if(result == ConnectivityResult.none){
+        Utils.showSnackBar('No Internet Connection', Colors.orange);
+      }
+    });
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       getUser();
     });
@@ -58,7 +64,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
  Future<void> getUser() async{
-   await firestore.collection("User").doc(user!.email).get().then((value)  {
+   bool check= await connection();
+   if(check == false) return;
+      await firestore.collection("User").doc(user?.email).get().then((value)  {
      if(mounted) {
        setState(() {
          UserObject userObject = UserObject.fromJson(value.data());
@@ -71,10 +79,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
   }
+  Future<bool> connection() async{
+
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    if(result == ConnectivityResult.none)
+    {
+      Utils.showSnackBar("No Internet\n Kindly check your connection", Colors.orange);
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
   void StreamListener()   {
     firestore.collection("Complains")
-          .where('username',
-            isEqualTo: context.read<Info>().user.name)
+          .where('manager',
+            isEqualTo: context.read<Info>().user.email)
           .snapshots()
           .listen((event) {
             Pending = event.docs
@@ -108,6 +128,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const SideMenu(),
+
+
       backgroundColor: Colors.white,
 
       appBar: AppBar(
@@ -171,9 +193,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: StreamBuilder<QuerySnapshot?>(
                                 stream: firestore
                                     .collection('Complains')
-                                    .where('username',
-                                        isEqualTo: user?.email!.substring(
-                                            0, user?.email!.indexOf('@')))
+                                    .where('manager',
+                                        isEqualTo: context.read<Info>().user.email)
                                     // .collection('Complains').where('manager',isEqualTo: user?.email)
                                     .orderBy("timestamp", descending: true)
                                     .limit(10)
@@ -216,8 +237,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('username',
-                                            isEqualTo: context.read<Info>().user.name).snapshots(),)));
+                                        builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('manager',
+                                            isEqualTo: context.read<Info>().user.email).snapshots(),)));
                               },
                               child: Text("View Complaints")),
                           if (Responsive.isMobile(context))
@@ -243,7 +264,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
+@override
+  void dispose() {
+    super.dispose();
+    subscription.cancel();
+  }
 }
 
 //complaints details

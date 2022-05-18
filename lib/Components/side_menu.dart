@@ -46,18 +46,15 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
-                          isEqualTo: context.read<Info>().user.name).snapshots(),)));
+                      builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('manager',
+                          isEqualTo: context.read<Info>().user.email).snapshots(),)));
             },
           ),
           DrawerListTile(
             title: "Tasks Progress",
             svgSrc: "assets/icons/menu_task.svg",
             press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
+
             },
           ),
 
@@ -74,7 +71,12 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Profile",
             svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
           ),
           DrawerListTile(
             title: "Settings",
