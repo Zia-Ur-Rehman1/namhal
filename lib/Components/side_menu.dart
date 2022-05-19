@@ -50,24 +50,24 @@ class SideMenu extends StatelessWidget {
                           isEqualTo: context.read<Info>().user.email).snapshots(),)));
             },
           ),
-          DrawerListTile(
-            title: "Tasks Progress",
-            svgSrc: "assets/icons/menu_task.svg",
-            press: () {
+          // DrawerListTile(
+          //   title: "Tasks Progress",
+          //   svgSrc: "assets/icons/menu_task.svg",
+          //   press: () {
+          //
+          //   },
+          // ),
 
-            },
-          ),
-
-          DrawerListTile(
-            title: "Services",
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Notification",
-            svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
-          ),
+          // DrawerListTile(
+          //   title: "Services",
+          //   svgSrc: "assets/icons/menu_store.svg",
+          //   press: () {},
+          // ),
+          // DrawerListTile(
+          //   title: "Notification",
+          //   svgSrc: "assets/icons/menu_notification.svg",
+          //   press: () {},
+          // ),
           DrawerListTile(
             title: "Profile",
             svgSrc: "assets/icons/menu_profile.svg",
@@ -78,11 +78,11 @@ class SideMenu extends StatelessWidget {
               );
             },
           ),
-          DrawerListTile(
-            title: "Settings",
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
-          ),
+          // DrawerListTile(
+          //   title: "Settings",
+          //   svgSrc: "assets/icons/menu_setting.svg",
+          //   press: () {},
+          // ),
           DrawerListTile(
             title: "Logout",
             svgSrc: "assets/icons/menu_profile.svg",

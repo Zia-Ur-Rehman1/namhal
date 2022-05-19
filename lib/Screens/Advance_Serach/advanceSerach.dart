@@ -30,10 +30,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
     // TODO: implement initState
     super.initState();
     user = auth.currentUser;
+    // username= user?.email.toString();
     username= user?.email.toString().substring(0, user?.email!.indexOf('@'));
 
-    // username= user?.email.toString();
-    // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:user?.email).orderBy("timestamp", descending: true).snapshots();
+
     rightnow = widget.passStream;
   }
 
@@ -77,7 +77,6 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).orderBy("timestamp", descending: true).snapshots();
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
@@ -97,7 +96,6 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Pending").snapshots();
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
@@ -112,48 +110,10 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             padding: const EdgeInsets.all(8.0),
                             margin: const EdgeInsets.all(10.0),
                           ),
-                          // Container(
-                          //   margin: EdgeInsets.all(10.0),
-                          //   height: 40,
-                          //   decoration: BoxDecoration(
-                          //       color: Colors.blue,
-                          //       shape: BoxShape.rectangle,
-                          //       borderRadius:
-                          //           BorderRadius.all(Radius.circular(5.0))),
-                          //   padding: EdgeInsets.symmetric(horizontal: 5.0),
-                          //   child: DropdownButton(
-                          //     underline: SizedBox(),
-                          //     dropdownColor: Colors.blue,
-                          //     hint: Text(
-                          //       "Sort By",
-                          //       style: TextStyle(color: Colors.white),
-                          //     ),
-                          //     value: sorting,
-                          //     icon: Icon(
-                          //       Icons.arrow_drop_down_circle_outlined,
-                          //       color: Colors.white,
-                          //     ),
-                          //     onChanged: (String? newValue) {
-                          //       setState(() {
-                          //         sorting = newValue;
-                          //       });
-                          //     },
-                          //     items: sortby.map((valueItem) {
-                          //       return DropdownMenuItem(
-                          //         value: valueItem,
-                          //         child: Text(
-                          //           valueItem,
-                          //           style: TextStyle(color: Colors.white),
-                          //         ),
-                          //       );
-                          //     }).toList(),
-                          //   ),
-                          // ),
                           Container(
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "InProgress").snapshots();
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
@@ -173,7 +133,6 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Completed").snapshots();
                                   rightnow =
                                       firestore.collection(
                                           'Complains')
@@ -193,7 +152,6 @@ class _AdvanceSearchState extends State<AdvanceSearch> {
                             child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  // rightnow=FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:widget.email).where("status",isEqualTo: "Completed").snapshots();
                                   rightnow =
                                       firestore.collection(
                                           'Complains')

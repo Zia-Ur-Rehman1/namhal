@@ -42,6 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if(result == ConnectivityResult.none){
         Utils.showSnackBar('No Internet Connection', Colors.orange);
@@ -160,7 +161,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           trackVisibility: true,
           child: SingleChildScrollView(
             //show scrolls
-
             padding: const EdgeInsets.all(kDefaultPadding),
             child: Column(
               children: [

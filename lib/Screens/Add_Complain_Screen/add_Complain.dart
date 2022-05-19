@@ -182,8 +182,8 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
                     elevation: 5,
                     child: Image.file(
                       image!,
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: 200,
+                      height: MediaQuery.of(context).size.height / 3,
+                      width: MediaQuery.of(context).size.width / 1.2,
                       fit: BoxFit.cover,
                     ),
                   )

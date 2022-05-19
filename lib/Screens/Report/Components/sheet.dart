@@ -22,10 +22,12 @@ class _SheetState extends State<Sheet> {
   String? selectedStatus;
   String? selectedPriority;
 
-
+  Map<String,String> workerMap = Map();
   @override
   initState() {
     super.initState();
+
+
     selectedService = context.read<ComplaintObject>().complaint.service;
     selectedStatus = context.read<ComplaintObject>().complaint.status;
     if( context.read<ComplaintObject>().complaint.worker != "---" ){
@@ -206,7 +208,7 @@ class _SheetState extends State<Sheet> {
             },
           ),
             StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Worker').where("service",isEqualTo: selectedService).snapshots(),
+              stream: firestore.collection('Worker').where("service",isEqualTo: "Electrical").where("is_available",isEqualTo: true).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Something went wrong');
@@ -224,7 +226,10 @@ class _SheetState extends State<Sheet> {
                 }
 
                 List<DropdownMenuItem> serviceItem = [];
+
+
                 for (var element in snapshot.data!.docs) {
+                  workerMap[element.get('name')] = element.id;
                   serviceItem.add(
                     DropdownMenuItem(
                       child: Text(element.get('name')),
@@ -279,12 +284,12 @@ if(selectedStatus == "Completed"){
   Provider.of<ComplaintObject>(context, listen: false).setEndTime(endTime);
 }
 firestore.collection("Complains").doc(widget.id).update({
-
   "status":selectedStatus,
   "worker":selectedWorker,
   "priority":selectedPriority,
   "service":selectedService,
 }).then((value) => Utils.showSnackBar( "Updated Successfully",Colors.green)).catchError((onError) => Utils.showSnackBar("Failed to update user: $onError",Colors.red));
+
 Provider.of<ComplaintObject>(context, listen: false).setService(selectedService.toString());
 Provider.of<ComplaintObject>(context, listen: false).setWorker(selectedWorker.toString());
 Provider.of<ComplaintObject>(context, listen: false).setStatus(selectedStatus.toString());
@@ -294,12 +299,19 @@ String token = await Token.CheckToken(context.read<ComplaintObject>().complaint.
 if(token!="false") {
   NotifyUser.sendPushMessage(token,
     "Title: " +context.read<ComplaintObject>().complaint.title.toString()+ "   Service: " +selectedService.toString(),
-    "StatusUpdated: " + selectedStatus.toString() + " " +  "Assigned To: " + selectedWorker.toString() +
+    "StatusUpdated: " + selectedStatus.toString() +  "\tAssigned To: " + selectedWorker.toString() +
         "\nPriority: " +selectedPriority.toString() ,
   );
 }
 
 Navigator.pop(context);
+  }
+  AssignWorker() {
+    if (selectedWorker != "---") {
+      firestore.collection("Worker").doc(workerMap[selectedWorker]).update({
+        "task_assigned": FieldValue.increment(1),
+      });
+    }
   }
 }
 
