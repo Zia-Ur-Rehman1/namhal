@@ -1,18 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
-import 'package:namhal/Screens/Worker_Screens/add_Worker.dart';
 import 'package:namhal/Utlities/Utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-class LoginScreen extends StatefulWidget {
+class AddManager extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _AddManagerState createState() => _AddManagerState();
 }
 
 TextEditingController email = TextEditingController();
 TextEditingController pass = TextEditingController();
 
-class _LoginScreenState extends State<LoginScreen> {
+class _AddManagerState extends State<AddManager> {
   bool _showPassword = false;
   bool isLoading = false;
   final formkey = GlobalKey<FormState>();
@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: const Text('Add Manager'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -39,10 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Flexible(
                     child: Image.asset(
-                  'assets/images/logo.png',
-                )),
+                      'assets/images/logo.png',
+                    )),
                 Text(
-                  "Namhal",
+                  "Add Manager",
                   style: TextStyle(
                       color: Colors.green.shade500,
                       fontSize: 30,
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         onPressed: () {
                           setState(
-                              () => _showPassword = !_showPassword);
+                                  () => _showPassword = !_showPassword);
                         },
                       ),
                     ),
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: signIn,
                     child: const Text(
-                      "Login",
+                      "Add Manager",
                       style: TextStyle(fontSize: 25, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -150,11 +150,10 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading = true;
         });
       }
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text.trim(),
         password: pass.text.trim(),
       );
-
 
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
@@ -167,15 +166,21 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       return;
     }
-   if(mounted){
+    if(mounted){
       setState(() {
         isLoading = false;
 
       });
 
     }
-    //if mounted then pop
-    // Navigator.of(context).pop();
+    FirebaseFirestore.instance.collection("Manager").doc(email.text.trim()).set(
+      {
+        "email": email.text.trim(),
+        "pass":pass.text.trim(),
+        "name":email.text.trim().substring(0, email.text.trim().indexOf('@')),
+        "token":"0",
+      }
+    );
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
@@ -183,18 +188,18 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) => DashboardScreen(),
       ),
     );
-    Utils.showSnackBar("User Authorized", Colors.green);
+    Utils.showSnackBar("Manager Added", Colors.green);
   }
-Future<bool> connection() async{
+  Future<bool> connection() async{
 
-  ConnectivityResult result = await Connectivity().checkConnectivity();
-  if(result == ConnectivityResult.none)
-  {
-    Utils.showSnackBar("No Internet\n Kindly check your connection", Colors.orange);
-    return false;
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    if(result == ConnectivityResult.none)
+    {
+      Utils.showSnackBar("No Internet\n Kindly check your connection", Colors.orange);
+      return false;
+    }
+    else{
+      return true;
+    }
   }
-  else{
-    return true;
-  }
-}
 }

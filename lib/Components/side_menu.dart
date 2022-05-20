@@ -3,8 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:namhal/Constants/constants.dart';
+import 'package:namhal/Screens/AddUser.dart';
+import 'package:namhal/Screens/Address/AddAddress.dart';
 import 'package:namhal/Screens/Advance_Serach/advanceSerach.dart';
+import 'package:namhal/Screens/Manager_Screens/add_manager.dart';
 import 'package:namhal/Screens/Profile/profile.dart';
+import 'package:namhal/Screens/Service_Screens/add_service.dart';
+import 'package:namhal/Screens/Worker_Screens/add_Worker.dart';
 import 'package:namhal/Screens/login.dart';
 import 'package:namhal/providers/providers.dart';
 import 'package:provider/provider.dart';
@@ -50,24 +55,57 @@ class SideMenu extends StatelessWidget {
                           isEqualTo: context.read<Info>().user.email).snapshots(),)));
             },
           ),
-          // DrawerListTile(
-          //   title: "Tasks Progress",
-          //   svgSrc: "assets/icons/menu_task.svg",
-          //   press: () {
-          //
-          //   },
-          // ),
+          DrawerListTile(
+            title: "Workers",
+            svgSrc: "assets/icons/worker.svg",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddWorker(),));
+            },
+          ),
+          DrawerListTile(
+            title: "Manager",
+            svgSrc: "assets/icons/manager.svg",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddManager(),));
+            },
+          ),
+          DrawerListTile(
+            title: "Services",
+            svgSrc: "assets/icons/service.svg",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddServiceScreen(),));
+            },
+          ),
+          DrawerListTile(
+            title: "Add User",
+            svgSrc: "assets/icons/menu_profile.svg",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddUser(),));
+            },
+          ),
+          DrawerListTile(
+            title: "Address",
+            svgSrc: "assets/icons/home.svg",
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddAddress(),));
+            },
+          ),
 
-          // DrawerListTile(
-          //   title: "Services",
-          //   svgSrc: "assets/icons/menu_store.svg",
-          //   press: () {},
-          // ),
-          // DrawerListTile(
-          //   title: "Notification",
-          //   svgSrc: "assets/icons/menu_notification.svg",
-          //   press: () {},
-          // ),
           DrawerListTile(
             title: "Profile",
             svgSrc: "assets/icons/menu_profile.svg",
@@ -85,7 +123,7 @@ class SideMenu extends StatelessWidget {
           // ),
           DrawerListTile(
             title: "Logout",
-            svgSrc: "assets/icons/menu_profile.svg",
+            svgSrc: "assets/icons/logout.svg",
             press: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.of(context).popUntil((route) => route.isFirst);
@@ -120,7 +158,7 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       leading: SvgPicture.asset(
         svgSrc,
-        color: Colors.white54,
+        color: Colors.white,
         height: 20,
       ),
       title: Text(

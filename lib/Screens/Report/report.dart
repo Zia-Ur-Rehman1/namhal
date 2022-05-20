@@ -347,10 +347,10 @@ class _ReportState extends State<Report> {
         children: [
           Log(),
           Download(),
-          isComplete ? FeedBack() : Empty(),
-          isComplete ? RateIt() : Empty(),
+          // isComplete ? FeedBack() : Empty(),
+          // isComplete ? RateIt() : Empty(),
 
-          // Edit(),
+          Edit(),
         ],
       ),
     );

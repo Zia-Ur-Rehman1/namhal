@@ -22,7 +22,7 @@ class _SheetState extends State<Sheet> {
   String? selectedStatus;
   String? selectedPriority;
 
-  Map<String,String> workerMap = Map();
+
   @override
   initState() {
     super.initState();
@@ -208,7 +208,7 @@ class _SheetState extends State<Sheet> {
             },
           ),
             StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('Worker').where("service",isEqualTo: "Electrical").where("is_available",isEqualTo: true).snapshots(),
+              stream: firestore.collection('Worker').where("service",isEqualTo: selectedService).where("is_available",isEqualTo: true).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Something went wrong');
@@ -229,7 +229,6 @@ class _SheetState extends State<Sheet> {
 
 
                 for (var element in snapshot.data!.docs) {
-                  workerMap[element.get('name')] = element.id;
                   serviceItem.add(
                     DropdownMenuItem(
                       child: Text(element.get('name')),
@@ -296,6 +295,7 @@ Provider.of<ComplaintObject>(context, listen: false).setStatus(selectedStatus.to
 Provider.of<ComplaintObject>(context, listen: false).setPriority(selectedPriority.toString());
 
 String token = await Token.CheckToken(context.read<ComplaintObject>().complaint.username.toString()+"@namal.edu.pk");
+print(token);
 if(token!="false") {
   NotifyUser.sendPushMessage(token,
     "Title: " +context.read<ComplaintObject>().complaint.title.toString()+ "   Service: " +selectedService.toString(),
@@ -307,8 +307,8 @@ if(token!="false") {
 Navigator.pop(context);
   }
   AssignWorker() {
-    if (selectedWorker != "---") {
-      firestore.collection("Worker").doc(workerMap[selectedWorker]).update({
+    if (selectedWorker != "---" &&   context.read<ComplaintObject>().complaint.worker.toString() != "---") {
+      firestore.collection("Worker").doc(selectedWorker.toString()+"@namal.edu.pk").update({
         "task_assigned": FieldValue.increment(1),
       });
     }

@@ -1,19 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
-import 'package:namhal/Screens/Worker_Screens/add_Worker.dart';
 import 'package:namhal/Utlities/Utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-class LoginScreen extends StatefulWidget {
+class AddAddress extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _AddAddressState createState() => _AddAddressState();
 }
 
-TextEditingController email = TextEditingController();
-TextEditingController pass = TextEditingController();
+TextEditingController address = TextEditingController();
+TextEditingController location = TextEditingController();
 
-class _LoginScreenState extends State<LoginScreen> {
-  bool _showPassword = false;
+class _AddAddressState extends State<AddAddress> {
+
   bool isLoading = false;
   final formkey = GlobalKey<FormState>();
 
@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login Page'),
+        title: const Text('Add Address'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -39,10 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Flexible(
                     child: Image.asset(
-                  'assets/images/logo.png',
-                )),
+                      'assets/images/logo.png',
+                    )),
                 Text(
-                  "Namhal",
+                  "Add Address",
                   style: TextStyle(
                       color: Colors.green.shade500,
                       fontSize: 30,
@@ -53,18 +53,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
                     autofocus: true,
-                    controller: email,
+                    controller: address,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     autofillHints: const [AutofillHints.username],
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'User Name',
-                        hintText: 'abc@namal.edu.pk'),
+                        labelText: 'Address',
+                        hintText: 'Dorm-G-01/Block-A-01'),
                     validator: (value) {
-                      if (!RegExp("^[a-zA-Z0-9+_.-]+@namal.edu.pk")
+                      if (!RegExp("^[a-zA-Z]+-[a-zA-Z]+-[0-9-]")
                           .hasMatch(value!)) {
-                        return ("Please Enter a valid email ");
+                        return ("Enter Correct Format ");
                       }
                       return null;
                     },
@@ -73,28 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: TextFormField(
-                    controller: pass,
                     autofocus: true,
-                    autofillHints: const [AutofillHints.password],
-                    textInputAction: TextInputAction.done,
-                    obscureText: !_showPassword,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.security),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _showPassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: _showPassword ? Colors.blue : Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(
-                              () => _showPassword = !_showPassword);
-                        },
-                      ),
-                    ),
+                    controller: location,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    autofillHints: const [AutofillHints.username],
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Location',
+                        hintText: 'Hostel/University'),
                     validator: (value) => value != null && value.length < 6
                         ? "Enter atleast 6 characters"
                         : null,
@@ -109,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ElevatedButton(
                     onPressed: signIn,
                     child: const Text(
-                      "Login",
+                      "Add User",
                       style: TextStyle(fontSize: 25, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -150,11 +137,12 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading = true;
         });
       }
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email.text.trim(),
-        password: pass.text.trim(),
+      FirebaseFirestore.instance.collection("Address").add(
+          {
+            "address": address.text.trim(),
+            "location": location.text.trim(),
+          }
       );
-
 
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message.toString(), Colors.red);
@@ -167,15 +155,14 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       return;
     }
-   if(mounted){
+    if(mounted){
       setState(() {
         isLoading = false;
 
       });
 
     }
-    //if mounted then pop
-    // Navigator.of(context).pop();
+   
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
@@ -183,18 +170,18 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context) => DashboardScreen(),
       ),
     );
-    Utils.showSnackBar("User Authorized", Colors.green);
+    Utils.showSnackBar("Address Added", Colors.green);
   }
-Future<bool> connection() async{
+  Future<bool> connection() async{
 
-  ConnectivityResult result = await Connectivity().checkConnectivity();
-  if(result == ConnectivityResult.none)
-  {
-    Utils.showSnackBar("No Internet\n Kindly check your connection", Colors.orange);
-    return false;
+    ConnectivityResult result = await Connectivity().checkConnectivity();
+    if(result == ConnectivityResult.none)
+    {
+      Utils.showSnackBar("No Internet\n Kindly check your connection", Colors.orange);
+      return false;
+    }
+    else{
+      return true;
+    }
   }
-  else{
-    return true;
-  }
-}
 }
