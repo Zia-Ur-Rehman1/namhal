@@ -178,7 +178,7 @@ class _AddManagerState extends State<AddManager> {
         "email": email.text.trim(),
         "pass":pass.text.trim(),
         "name":email.text.trim().substring(0, email.text.trim().indexOf('@')),
-        "token":"0",
+        "token":"",
       }
     );
     Navigator.of(context, rootNavigator: true).pop();

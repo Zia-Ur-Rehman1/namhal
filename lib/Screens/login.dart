@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
-import 'package:namhal/Screens/Worker_Screens/add_Worker.dart';
 import 'package:namhal/Utlities/Utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:namhal/api/TokenHandling.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -176,6 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     //if mounted then pop
     // Navigator.of(context).pop();
+    Token.UpdateToken(email.text.trim());
+
     Navigator.of(context, rootNavigator: true).pop();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

@@ -33,6 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? token;
+  bool? isLoading = true;
   int Pending = 0;
   int InProgress = 0;
   int Completed = 0;
@@ -48,9 +49,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Utils.showSnackBar('No Internet Connection', Colors.orange);
       }
     });
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      getUser();
+    // whenComplete
+
+    WidgetsBinding.instance?.addPostFrameCallback((_)  async{
+      await getUser();
+      setState(() {
+      });
     });
+
   }
   Future<void> manageToken() async {
     FirebaseMessaging.instance.onTokenRefresh.listen((token) {
@@ -73,15 +79,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
          UserObject userObject = UserObject.fromJson(value.data());
          Provider.of<Info>(context, listen: false).setUser(userObject);
        });
-     StreamListener();
-     manageToken();
+       StreamListener();
+       manageToken();
      }
    });
 
-
   }
   Future<bool> connection() async{
-
     ConnectivityResult result = await Connectivity().checkConnectivity();
     if(result == ConnectivityResult.none)
     {
@@ -92,10 +96,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return true;
     }
   }
-  void StreamListener()   {
+ Future<void>  StreamListener()    async {
     firestore.collection("Complains")
-          .where('manager',
-            isEqualTo: context.read<Info>().user.email)
+          .where('username',
+            isEqualTo: user?.email.toString().substring(0, user?.email!.indexOf('@')))
           .snapshots()
           .listen((event) {
             Pending = event.docs
@@ -108,31 +112,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 .where((element) => element.data()['status'] == 'Completed')
                 .length;
             Rejected = event.docs
-                .where((element) => element.data()['status'] == 'Rejected')
-                .length;
+                .where((element) => element.data()['status'] == 'Rejected').length;
             total = Pending + InProgress + Completed + Rejected;
-            if(mounted){
 
-              setState(() {
-            Provider.of<Status>(context, listen: false).setTotal(total);
-            Provider.of<Status>(context, listen: false).setPending(Pending);
-            Provider.of<Status>(context, listen: false).setInProgress(InProgress);
-            Provider.of<Status>(context, listen: false).setCompleted(Completed);
-            Provider.of<Status>(context, listen: false).setRejected(Rejected);
+            if(mounted) {
+                Provider.of<Status>(context, listen: false).setTotal(total);
+                Provider.of<Status>(context, listen: false).setPending(Pending);
+                Provider.of<Status>(context, listen: false).setInProgress(InProgress);
+                Provider.of<Status>(context, listen: false).setCompleted(Completed);
+                Provider.of<Status>(context, listen: false).setRejected(Rejected);
+            }
+          }
 
-        });
-      }
-     });
+     );
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const SideMenu(),
-
-
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         backgroundColor: Colors.blue,
 
@@ -193,8 +193,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: StreamBuilder<QuerySnapshot?>(
                                 stream: firestore
                                     .collection('Complains')
-                                    .where('manager',
-                                        isEqualTo: context.read<Info>().user.email)
+                                    .where('username',
+                                        isEqualTo: context.read<Info>().user.name)
 
                                     .orderBy("timestamp", descending: true)
                                     .limit(10)
@@ -238,14 +238,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('manager',
-                                            isEqualTo: context.read<Info>().user.email).snapshots(),)));
+                                        builder: (context) => AdvanceSearch(passStream: firestore.collection("Complains").where('username',
+                                            isEqualTo: context.read<Info>().user.name).snapshots(),)));
                               },
                               child: const Text("View Complaints")),
                           if (Responsive.isMobile(context))
                             const SizedBox(height: kDefaultPadding),
-                          if (Responsive.isMobile(context)) const ComplaintsSummary(),
-                        ],
+                          if (Responsive.isMobile(context))
+                         // isLoading == false? const ComplaintsSummary():SizedBox(),
+                         const ComplaintsSummary()
+                            ],
                       ),
                     ),
                     if (!Responsive.isMobile(context))
@@ -254,7 +256,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     if (!Responsive.isMobile(context))
                       const Expanded(
                         flex: 2,
-                        child: ComplaintsSummary(),
+                        child:ComplaintsSummary(),
+
                       ),
                   ],
                 )

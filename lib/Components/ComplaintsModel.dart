@@ -21,30 +21,30 @@ class ComplaintsStorageInfo {
 List ComplaintsDetails = [
   ComplaintsStorageInfo(
     title: "Rejected",
-    numOfFiles: 5,
+    numOfFiles: 0,
     svgSrc: kSvg,
     color: Colors.red,
     value: "total",
   ),
   ComplaintsStorageInfo(
     title: "Pending",
-    numOfFiles: 28,
+    numOfFiles: 0,
     svgSrc: kSvg,
     color: const Color(0xFFFFA113),
     value: "pending",
   ),
   ComplaintsStorageInfo(
     title: "Inprogress",
-    numOfFiles: 78,
+    numOfFiles: 0,
     svgSrc: kSvg,
     color: Colors.cyan,
-    value: "inprogress",
+    value: "Inprogress",
   ),
   ComplaintsStorageInfo(
     title: "Completed",
-    numOfFiles: 8,
+    numOfFiles: 0,
     svgSrc: kSvg,
     color: Colors.green,
-    value: "complete",
+    value: "Completed",
   ),
 ];

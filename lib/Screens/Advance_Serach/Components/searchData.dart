@@ -58,7 +58,7 @@ DataSearch({this.email});
   Widget buildSuggestions(BuildContext context) {
   // stream builder
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo:context.read<Info>().user.email).snapshots(),
+      stream: FirebaseFirestore.instance.collection('Complains').where("username",isEqualTo:context.read<Info>().user.email).snapshots(),
         // stream: FirebaseFirestore.instance.collection('Complains').where("manager",isEqualTo: email).snapshots(),
         builder: (context, snapshot) {
         if (!snapshot.hasData) {

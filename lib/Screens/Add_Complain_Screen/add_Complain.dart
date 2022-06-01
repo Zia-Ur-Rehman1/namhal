@@ -280,7 +280,7 @@ final FirebaseFirestore firestore = FirebaseFirestore.instance;
       Utils.showSnackBar("Complaint Added Successfully",Colors.green);
     }).catchError((e) {
       Navigator.pop(context);
-      Utils.showSnackBar("Error Occured",Colors.red);
+      Utils.showSnackBar("Error Occurred",Colors.red);
     });
   }
 Future<void> sendNotification(Complains complains ) async {
@@ -288,7 +288,7 @@ Future<void> sendNotification(Complains complains ) async {
     token= await Token.CheckToken(complains.manager);
     if(token!="false") {
       NotifyUser.sendPushMessage(token,
-         "Complaind By: " + complains.username.toString() + "   Service: " +complains.service.toString(),
+         "Complained By: " + complains.username.toString() + "   Service: " +complains.service.toString(),
          "Title: " + complains.title.toString() + "\n" + "Desc: " +complains.desc.toString(),
       );
     }

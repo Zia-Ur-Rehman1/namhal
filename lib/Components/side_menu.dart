@@ -51,60 +51,60 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('manager',
-                          isEqualTo: context.read<Info>().user.email).snapshots(),)));
+                      builder: (context) => AdvanceSearch(passStream: FirebaseFirestore.instance.collection("Complains").where('username',
+                          isEqualTo: context.read<Info>().user.name).snapshots(),)));
             },
           ),
-          DrawerListTile(
-            title: "Workers",
-            svgSrc: "assets/icons/worker.svg",
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddWorker(),));
-            },
-          ),
-          DrawerListTile(
-            title: "Manager",
-            svgSrc: "assets/icons/manager.svg",
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddManager(),));
-            },
-          ),
-          DrawerListTile(
-            title: "Services",
-            svgSrc: "assets/icons/service.svg",
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddServiceScreen(),));
-            },
-          ),
-          DrawerListTile(
-            title: "Add User",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddUser(),));
-            },
-          ),
-          DrawerListTile(
-            title: "Address",
-            svgSrc: "assets/icons/home.svg",
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddAddress(),));
-            },
-          ),
+          // DrawerListTile(
+          //   title: "Workers",
+          //   svgSrc: "assets/icons/worker.svg",
+          //   press: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => AddWorker(),));
+          //   },
+          // ),
+          // DrawerListTile(
+          //   title: "Manager",
+          //   svgSrc: "assets/icons/manager.svg",
+          //   press: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => AddManager(),));
+          //   },
+          // ),
+          // DrawerListTile(
+          //   title: "Services",
+          //   svgSrc: "assets/icons/service.svg",
+          //   press: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => AddServiceScreen(),));
+          //   },
+          // ),
+          // DrawerListTile(
+          //   title: "Add User",
+          //   svgSrc: "assets/icons/menu_profile.svg",
+          //   press: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => AddUser(),));
+          //   },
+          // ),
+          // DrawerListTile(
+          //   title: "Address",
+          //   svgSrc: "assets/icons/home.svg",
+          //   press: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => AddAddress(),));
+          //   },
+          // ),
 
           DrawerListTile(
             title: "Profile",
@@ -147,6 +147,7 @@ class DrawerListTile extends StatelessWidget {
     required this.svgSrc,
     required this.press,
   }) : super(key: key);
+
 
   final String title, svgSrc;
   final VoidCallback press;

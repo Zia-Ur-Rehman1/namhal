@@ -27,19 +27,10 @@ class _ChartState extends State<Chart> {
         children: [
           PieChart(
             PieChartData(
-              pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                setState(() {
-                  if (pieTouchResponse.clickHappened) {
-                    touchedIndex = -1;
-                  } else {
-                    touchedIndex=  pieTouchResponse.touchedSection?.touchedSectionIndex;
-                  }
-                });
-              }),
               sectionsSpace: 0,
               centerSpaceRadius: 70,
               startDegreeOffset: -90,
-              sections:getSection(context.read<Status>().total.toDouble(), context.read<Status>().pending.toDouble(), context.read<Status>().completed.toDouble(), context.read<Status>().rejected.toDouble(), context.read<Status>().InProgress.toDouble()),
+              sections:getSection(Provider.of<Status>(context, listen: true).total.toDouble(), context.read<Status>().pending.toDouble(), context.read<Status>().completed.toDouble(), context.read<Status>().rejected.toDouble(), context.read<Status>().InProgress.toDouble()),
             ),
           ),
           Positioned.fill(

@@ -38,7 +38,7 @@ class _ReportState extends State<Report> {
   @override
   initState() {
     super.initState();
-    if (context.read<ComplaintObject>().complaint.status == "Completed") {
+    if (context.read<ComplaintObject>().complaint.status == "Completed" || context.read<ComplaintObject>().complaint.status == "Rejected") {
       isComplete = true;
     }
     if(context.read<ComplaintObject>().complaint.reissue == 0){
@@ -347,10 +347,9 @@ class _ReportState extends State<Report> {
         children: [
           Log(),
           Download(),
-          // isComplete ? FeedBack() : Empty(),
-          // isComplete ? RateIt() : Empty(),
-
-          Edit(),
+          isComplete ? FeedBack() : Empty(),
+          isComplete ? RateIt() : Empty(),
+           // Edit(),
         ],
       ),
     );

@@ -295,7 +295,6 @@ Provider.of<ComplaintObject>(context, listen: false).setStatus(selectedStatus.to
 Provider.of<ComplaintObject>(context, listen: false).setPriority(selectedPriority.toString());
 
 String token = await Token.CheckToken(context.read<ComplaintObject>().complaint.username.toString()+"@namal.edu.pk");
-print(token);
 if(token!="false") {
   NotifyUser.sendPushMessage(token,
     "Title: " +context.read<ComplaintObject>().complaint.title.toString()+ "   Service: " +selectedService.toString(),

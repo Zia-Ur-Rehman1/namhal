@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../Constants/constants.dart';
 import 'chart.dart';
 import '/providers/providers.dart';
-
 class ComplaintsSummary extends StatelessWidget {
-
 
   const ComplaintsSummary({
 
@@ -19,6 +17,7 @@ class ComplaintsSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       padding: const EdgeInsets.all(kDefaultPadding),
       decoration: BoxDecoration(
         //linear gradient
@@ -28,6 +27,9 @@ class ComplaintsSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+
+      // Utils.showSnackBar(context),
           const Text(
             "Complaints Summary",
             style: TextStyle(
@@ -42,11 +44,11 @@ class ComplaintsSummary extends StatelessWidget {
             svgSrc: kSvg,
             title: "Total Complaints",
             color: kPrimaryColor,
-            numOfFiles: context.read<Status>().total,
+            numOfFiles: Provider.of<Status>(context, listen: true).total,
           ),
           ComplaintsSummaryCard(
             svgSrc: kSvg,
-            title: "In progress Complaints",
+            title: "InProgress Complaints",
             color: Colors.cyan,
             numOfFiles: context.read<Status>().InProgress,
           ),

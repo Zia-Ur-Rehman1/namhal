@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:namhal/Screens/Dashboard/dashboard.dart';
 import 'package:namhal/Utlities/Utils.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:namhal/providers/providers.dart';
+import 'package:provider/provider.dart';
 class AddWorker extends StatefulWidget {
   @override
   _AddWorkerState createState() => _AddWorkerState();
@@ -107,7 +109,7 @@ class _AddWorkerState extends State<AddWorker> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance.collection('Service').snapshots(),
+                      stream: FirebaseFirestore.instance.collection('Service').where("manager",isEqualTo: context.read<Info>().user.email).snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return const Text('Something went wrong');
